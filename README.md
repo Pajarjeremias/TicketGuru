@@ -24,8 +24,8 @@ käyttäjäryhmät.
 -   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
 -   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
     (use case diagram) tai käyttäjätarinoina.
-    
-Käyttäjätarinat:
+
+###Käyttäjätarinat:
 
 **Niinkuin** tapahtumanjärjestäjä, **haluan** tarkistaa liput ovella helposti, **jotta** voin merkitä käytetyt liput ja estää väärinkäytökset.
 
