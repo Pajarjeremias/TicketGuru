@@ -24,23 +24,24 @@ käyttäjäryhmät.
 -   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
 -   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
     (use case diagram) tai käyttäjätarinoina.
+    
 Käyttäjätarinat:
 
-Niinkuin tapahtumanjärjestäjä, haluan tarkistaa liput ovella helposti, jotta voin merkitä käytetyt liput ja estää väärinkäytökset.
+**Niinkuin** tapahtumanjärjestäjä, **haluan** tarkistaa liput ovella helposti, **jotta** voin merkitä käytetyt liput ja estää väärinkäytökset.
 
-Niinkuin lipputoimiston työntekijä, haluan nähdä myyntiraportit, jotta voin seurata myynnin kehitystä.
+**Niinkuin** lipputoimiston työntekijä, **haluan** nähdä myyntiraportit, **jotta** voin seurata myynnin kehitystä.
 
-Niinkuin lipunmyyjä, haluan tulostaa loput ennakkomyynnistä ylijääneet liput, jotta voin myydä ne tapahtuman ovella.
+**Niinkuin** lipunmyyjä, **haluan** tulostaa loput ennakkomyynnistä ylijääneet liput, **jotta** voin myydä ne tapahtuman ovella.
 
-Niinkuin lipputoimiston työntekijä, haluan pystyä hallinnoimaan tapahtumia järjestelmässä, jotta voin hallita lippuja sekä päivittää tapahtumatietoja.
+**Niinkuin** lipputoimiston työntekijä, **haluan** pystyä hallinnoimaan tapahtumia järjestelmässä, **jotta** voin hallita lippuja sekä päivittää tapahtumatietoja.
 
-Niinkuin asiakas, haluan mahdollisuuden maksaa liput eri maksutavoilla, jotta voin valita itselleni sopivan maksutavan.
+**Niinkuin** asiakas, **haluan** mahdollisuuden maksaa liput eri maksutavoilla, **jotta** voin valita itselleni sopivan maksutavan.
 
-Niinkuin tapahtuman järjestäjä, haluan määritellä erilaisia lipputyyppejä, jotta osaan tarjota oikeanlaisia hintoja eläkeläisille, lapsille sekä opiskelijoille.
+**Niinkuin** tapahtuman järjestäjä, **haluan** määritellä erilaisia lipputyyppejä, **jotta** osaan tarjota oikeanlaisia hintoja eläkeläisille, lapsille sekä opiskelijoille.
 
-Niinkuin järjestelmän ylläpitäjä, haluan määritellä eri käyttäjärooleja, jotta voin hallita järjestelmän käyttöoikeuksia turvallisesti.
+**Niinkuin** järjestelmän ylläpitäjä, **haluan** määritellä eri käyttäjärooleja, **jotta** voin hallita järjestelmän käyttöoikeuksia turvallisesti.
 
-Niinkuin lipunmyyjä, haluan myydä ja tulostaa liput asiakkalle vaivattomasti, jotta asiakas saa ostoksensa sujuvasti.
+**Niinkuin** lipunmyyjä, **haluan** myydä ja tulostaa liput asiakkalle vaivattomasti, **jotta** asiakas saa ostoksensa sujuvasti.
 
 Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
 tietoa ja keskittyä siihen.
