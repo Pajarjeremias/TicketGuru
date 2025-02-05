@@ -1,6 +1,7 @@
-# Projektin nimi
+# TicketGuru
 
-Tiimi: Etunimi Sukunimi, Etunimi Sukunimi
+Scrummerit4ever: Antti Varis, Matias Nisonen, Roosa Vuorela,
+Timo Lampinen, Jeremias Pajari
 
 ## Johdanto
 
