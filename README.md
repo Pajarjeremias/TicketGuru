@@ -18,14 +18,46 @@ tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti pä�
 ## Järjestelmän määrittely
 
 Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
-toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja kuvataan järjestelmän
+toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, sekä kuvataan järjestelmän
 käyttäjäryhmät.
 
--   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
 -   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
     (use case diagram) tai käyttäjätarinoina.
 
-### Käyttäjätarinat:
+### Käyttäjäryhmät
+
+**1. Tapahatumanjärjestäjä / toimisto**
+
+Taho, joka järjestää tapahtuman ja käyttää tapahtuman lipunmyynnissä apuna TicketGuru -ohjelmistoa. Tämä sisältää mm:
+- Uuden tapahtuman määrittäminen ja sen luominen järjestelmään
+- Jo olemassa olevan tapahtuman tietojen muuttaminen
+- Myyntiraportttien tarkastelu
+
+**2. Lipunmyyjä**
+
+Henkilö, joka myy tapahtuman ovella lippuja asiakkaille. Mahdollisesti tapahtumanjärjestäjän työntekijä.
+- Myy jäljelle jääneitä lippuja asiakkaille tapahtuman yhteydessä
+- Tulostaa ostetun lipun asiakkaalle
+- Tulostaa myymättä jääneet liput tapahtuman ovella
+
+
+**3. Asiakas**
+
+Henkilö, joka ostaa lipun tapahtumaan.
+
+**4. Järjestelmän ylläpitäjä**
+
+Henkilö/taho, joka vastaa ohjelmiston teknisestä ylläpidosta. Esim. käyttäjäryhmien- ja oikeuksien määrittelemisestä.
+
+**5. Tulostin**
+
+Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväksi.
+
+### Käyttötapauskaavio
+
+Katso yst. käyttäjäroolit.png
+
+### Käyttäjätarinat
 
 **Niinkuin** tapahtumanjärjestäjä, **haluan** tarkistaa liput ovella helposti, **jotta** voin merkitä käytetyt liput ja estää väärinkäytökset.
 
