@@ -26,30 +26,34 @@ käyttäjäryhmät.
 
 ### Käyttäjäryhmät
 
-**1. Tapahatumanjärjestäjä / toimisto**
+**1. Tapahatumanjärjestäjä**
 
 Taho, joka järjestää tapahtuman ja käyttää tapahtuman lipunmyynnissä apuna TicketGuru -ohjelmistoa. Tämä sisältää mm:
 - Uuden tapahtuman määrittäminen ja sen luominen järjestelmään
 - Jo olemassa olevan tapahtuman tietojen muuttaminen
 - Myyntiraportttien tarkastelu
 
-**2. Lipunmyyjä**
+**2. Lipunmyyjä lipunmyyntipisteessä**
 
-Henkilö, joka myy tapahtuman ovella lippuja asiakkaille. Mahdollisesti tapahtumanjärjestäjän työntekijä.
-- Myy jäljelle jääneitä lippuja asiakkaille tapahtuman yhteydessä
+Henkilö, joka myy tapahtuman ovella lippuja asiakkaille lipunmyyntipisteessä.
 - Tulostaa ostetun lipun asiakkaalle
 - Tulostaa myymättä jääneet liput tapahtuman ovella
+  
+**3. Henkilökunta ovella**
+  
+Henkilö, joka työskentelee tapahtuman ovella.
+- Myy jäljelle jääneitä lippuja asiakkaille ovella
+- Merkitsee lipun käytetyksi
 
+**4. Asiakas**
 
-**3. Asiakas**
+Henkilö, joka ostaa lipun tapahtumaan lipunmyyntipisteestä tai ovelta.
 
-Henkilö, joka ostaa lipun tapahtumaan.
-
-**4. Järjestelmän ylläpitäjä**
+**5. Järjestelmän ylläpitäjä**
 
 Henkilö/taho, joka vastaa ohjelmiston teknisestä ylläpidosta. Esim. käyttäjäryhmien- ja oikeuksien määrittelemisestä.
 
-**5. Tulostin**
+**6. Tulostin**
 
 Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväksi.
 
