@@ -55,9 +55,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 ### Käyttötapauskaavio
 
-Katso yst. käyttäjäroolit.png
-
-!(Kuva)[./käyttäjäroolit.png]
+![käyttötapauskaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/k%C3%A4ytt%C3%A4j%C3%A4roolit.png)
 
 ### Käyttäjätarinat
 
