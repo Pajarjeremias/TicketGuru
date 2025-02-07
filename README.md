@@ -57,6 +57,8 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 Katso yst. käyttäjäroolit.png
 
+!(Kuva)[./käyttäjäroolit.png]
+
 ### Käyttäjätarinat
 
 **Tapahtumajärjestäjänä**, **haluan** tarkistaa liput ovella helposti, **jotta** voin merkitä käytetyt liput ja estää väärinkäytökset.
