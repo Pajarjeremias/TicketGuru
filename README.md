@@ -89,11 +89,6 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 
 
-
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
-
-Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
-
 ## Tietokanta
 
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
