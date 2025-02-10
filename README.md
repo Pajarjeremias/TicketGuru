@@ -78,8 +78,6 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 ## Käyttöliittymä
 
-![alt text](https://https://github.com/Pajarjeremias/TicketGuru/blob/develop/tgimage1.png "Käyttöliittymä ja lippujen myynti")
-
 **Käyttöliittymä ja lippujen myynti**
 ![alt text](tgimage1.png "Käyttöliittymä ja lippujen myynti")
 
