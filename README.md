@@ -107,9 +107,9 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > nimimerkki | varchar(30) |  Tilin nimimerkki
 > avatar | int FK | Tilin avatar, viittaus [avatar](#Avatar)-tauluun
 > kayttaja | int FK | Viittaus käyttäjään [käyttäjä](#Kayttaja)-taulussa
-
-> ###_Jarjestajat_
-> _Jarjetajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
+>
+> ### _Jarjestajat_
+> _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
@@ -118,8 +118,8 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > Yhteyshenkilo_id | int FK | Viittaus [Kayttajat](#Kayttajat)-taulun kayttaja_id:hen
 > Katuosoite | varchar(30) | Järjestäjä organisaation toimipisteen osoite
 > Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
-
-> ###_Postitoimipaikat_
+>
+> ### _Postitoimipaikat_
 > _Postitoimipaikat-taulu sisältää postitoimipaikkoja._
 >
 > Kenttä | Tyyppi | Kuvaus
