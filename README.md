@@ -108,6 +108,26 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > avatar | int FK | Tilin avatar, viittaus [avatar](#Avatar)-tauluun
 > kayttaja | int FK | Viittaus käyttäjään [käyttäjä](#Kayttaja)-taulussa
 
+> ###_Jarjestajat_
+> _Jarjetajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Jarjestaja_id | int PK | [Jarjestajat](#Jarjestajat)-taulun yksilöivä  tunniste ja samalla primary key
+> Nimi | Varchar(30) | Järjestäjä organisaation nimi
+> Yhteyshenkilo_id | int FK | Viittaus [Kayttajat](#Kayttajat)-taulun kayttaja_id:hen
+> Katuosoite | varchar(30) | Järjestäjä organisaation toimipisteen osoite
+> Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
+
+> ###_Postitoimipaikat_
+> _Postitoimipaikat-taulu sisältää postitoimipaikkoja._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Postinumero | int PK | [Postitoimipaikat](#Postitoimipaikat)-taulun yksilöivä avain
+> Postitoimipaikka | varchar(30) | Postitoimipaikan paikkakunta
+> Maa | varchar(30) | Postitoimipaikan maa
+
 ## Tekninen kuvaus
 
 Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
