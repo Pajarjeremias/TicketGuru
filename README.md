@@ -5,51 +5,86 @@ Timo Lampinen, Jeremias Pajari
 
 ## Johdanto
 
-Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, mikä on projektin aihe,
-kuka on asiakas (käyttäjä), mitä hän haluaa ja saa järjestelmältä, mitä
-tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti päättyy.
+TicketGuru on lipunmyyntijärjestelmä, joka on suunniteltu helpottamaan lipunmyyntitoimistojen arkea. Järjestelmä tehostaa lippujen myyntiä, lippujen tulostamista ja niiden tarkastamista tapahtumissaan. TicketGuru-järjestelmä palvelee lipputoimiston eri käyttäjäryhmiä, kuten lipunmyyjiä, tapahtumajärjestäjiä, henkilökuntaa ovella sekä asiakkaita. 
 
--   Järjestelmän tarkoitus ja tiivis kuvaus siitä, mistä on kyse ja kenelle järjestelmä on tarkoitettu.
--   Toteutus- ja toimintaympäristö lyhyesti:  
-    -   Palvelinpuolen ratkaisut ja teknologiat (esim. palvelinteknologia, mikä tietokantajärjestelmä on käytössä)
-    -   Käyttöliittymäratkaisut ja teknologiat (esim. päätelaitteet: puhelin,
-    täppäri, desktop)
+TicketGuru mahdollistaa tapahtuman luomisen ja hallinnan, myyntiraporttien tarkastelun sekä lippujen myynnin. Liput voidaan merkitä käytetyiksi ovella. Myyntipisteessä järjestelmä tukee lippujen tulostamista asikkailleen. Ennakkomyynnistä ylijääneet liput voidaan tulostaa ovelle myytäviksi. Asiakas voi ostaa lipun itselleen lipunmyyntipisteeltä tai tapahtuman ovelta.  
+
+TicketGuru hyödyntää Javaa toimiakseen. Käyttöliittymä on responsiivinen ja toteutetaan nykyaikaisia työkaluja, kuten Reactia käyttämällä. Käyttöliittymää on selkeä navigoida ja sisältää keskeiset toiminnot. Eri käyttäjäryhmille on omat näkymät. Järjestelmän tiedot tallennetaan relaatiotietokantaan.  
+
 
 ## Järjestelmän määrittely
 
 Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
-toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja kuvataan järjestelmän
+toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, sekä kuvataan järjestelmän
 käyttäjäryhmät.
 
--   Lyhyt kuvaus käyttäjäryhmistä (rooleista)
--   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
-    (use case diagram) tai käyttäjätarinoina.
-Käyttäjätarinat:
+### Käyttäjäryhmät
 
-Niinkuin tapahtumanjärjestäjä, haluan tarkistaa liput ovella helposti, jotta voin merkitä käytetyt liput ja estää väärinkäytökset.
+**1. Tapahatumanjärjestäjä**
 
-Niinkuin lipputoimiston työntekijä, haluan nähdä myyntiraportit, jotta voin seurata myynnin kehitystä.
+Taho, joka järjestää tapahtuman ja käyttää tapahtuman lipunmyynnissä apuna TicketGuru -ohjelmistoa. Tämä sisältää mm:
+- Uuden tapahtuman määrittäminen ja sen luominen järjestelmään
+- Jo olemassa olevan tapahtuman tietojen muuttaminen
+- Myyntiraportttien tarkastelu
 
-Niinkuin lipunmyyjä, haluan tulostaa loput ennakkomyynnistä ylijääneet liput, jotta voin myydä ne tapahtuman ovella.
+**2. Lipunmyyjä lipunmyyntipisteessä**
 
-Niinkuin lipputoimiston työntekijä, haluan pystyä hallinnoimaan tapahtumia järjestelmässä, jotta voin hallita lippuja sekä päivittää tapahtumatietoja.
+Henkilö, joka myy tapahtuman ovella lippuja asiakkaille lipunmyyntipisteessä.
+- Tulostaa ostetun lipun asiakkaalle
+- Tulostaa myymättä jääneet liput tapahtuman ovella
+  
+**3. Henkilökunta ovella**
+  
+Henkilö, joka työskentelee tapahtuman ovella.
+- Myy jäljelle jääneitä lippuja asiakkaille ovella
+- Merkitsee lipun käytetyksi
 
-Niinkuin asiakas, haluan mahdollisuuden maksaa liput eri maksutavoilla, jotta voin valita itselleni sopivan maksutavan.
+**4. Asiakas**
 
-Niinkuin tapahtuman järjestäjä, haluan määritellä erilaisia lipputyyppejä, jotta osaan tarjota oikeanlaisia hintoja eläkeläisille, lapsille sekä opiskelijoille.
+Henkilö, joka ostaa lipun tapahtumaan lipunmyyntipisteestä tai ovelta.
 
-Niinkuin järjestelmän ylläpitäjä, haluan määritellä eri käyttäjärooleja, jotta voin hallita järjestelmän käyttöoikeuksia turvallisesti.
+**5. Järjestelmän ylläpitäjä**
 
-Niinkuin lipunmyyjä, haluan myydä ja tulostaa liput asiakkalle vaivattomasti, jotta asiakas saa ostoksensa sujuvasti.
+Henkilö/taho, joka vastaa ohjelmiston teknisestä ylläpidosta. Esim. käyttäjäryhmien- ja oikeuksien määrittelemisestä.
 
-Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
-tietoa ja keskittyä siihen.
+**6. Tulostin**
+
+Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväksi.
+
+### Käyttötapauskaavio
+
+![käyttötapauskaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/k%C3%A4ytt%C3%A4j%C3%A4roolit.png)
+
+### Käyttäjätarinat
+
+**Tapahtumajärjestäjänä**, **haluan** tarkistaa liput ovella helposti, **jotta** voin merkitä käytetyt liput ja estää väärinkäytökset.
+
+**Lipputoimiston työntekijänä**, **haluan** nähdä myyntiraportit, **jotta** voin seurata myynnin kehitystä.
+
+**Lippumyyjänä**, **haluan** tulostaa loput ennakkomyynnistä ylijääneet liput, **jotta** voin myydä ne tapahtuman ovella.
+
+**Lipputoimiston työntekijänä**, **haluan** pystyä hallinnoimaan tapahtumia järjestelmässä, **jotta** voin hallita lippuja sekä päivittää tapahtumatietoja.
+
+**Asiakkaana**, **haluan** mahdollisuuden maksaa liput eri maksutavoilla, **jotta** voin valita itselleni sopivan maksutavan.
+
+**Tapahtuman järjestäjänä**, **haluan** määritellä erilaisia lipputyyppejä, **jotta** osaan tarjota oikeanlaisia hintoja eläkeläisille, lapsille sekä opiskelijoille.
+
+**Järjestelmän ylläpitäjänä**, **haluan** määritellä eri käyttäjärooleja, **jotta** voin hallita järjestelmän käyttöoikeuksia turvallisesti.
+
+**Lippumyyjänä**, **haluan** myydä ja tulostaa liput asiakkalle vaivattomasti, **jotta** asiakas saa ostoksensa sujuvasti.
 
 ## Käyttöliittymä
 
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
+**Käyttöliittymä ja lippujen myynti**
+![alt text](tgimage1.png "Käyttöliittymä ja lippujen myynti")
 
-Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
+**Tapahtumien muokkaminen ja lisääminen**
+![alt text](tgimage2.png "Käyttöliittymä ja lippujen myynti")
+
+**Myyntiraportit**
+![alt text](tgimage3.png "Käyttöliittymä ja lippujen myynti")
+
+
 
 ## Tietokanta
 
@@ -60,6 +95,8 @@ määritykset. Tietokanta kuvataan käyttäen jotain kuvausmenetelmää, joko ER
 Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
 tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
+
+![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokaavio.png)
 
 > ### _Tilit_
 > _Tilit-taulu sisältää käyttäjätilit. Käyttäjällä voi olla monta tiliä. Tili kuuluu aina vain yhdelle käyttäjälle._
