@@ -127,6 +127,37 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > Postinumero | int PK | [Postitoimipaikat](#Postitoimipaikat)-taulun yksilöivä avain
 > Postitoimipaikka | varchar(30) | Postitoimipaikan paikkakunta
 > Maa | varchar(30) | Postitoimipaikan maa
+>
+> ### _Lipputyypit_
+> _Lipputyypit-taulu sisältää lipputyyppien vaihtoehdot._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Lipputyyppi_id | int PK | Lipputyypin yksilöivä avain/id
+> Lipputyyppi | varchar(30) | Lipptyypin nimi, esim. aikuinen, eläkeläinen, opsikelija, lapsi
+> 
+> ### _Tilat_
+> _Tilat-taulu sisältää lippujen eri tila-vaihtoehdot._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Tila_id | int PK | Tilan yksilöivä avain/id
+> Tila | varchar(30) | Tilan nimi, esim. myymättä, myyty, tarkastettu, peruttu
+>
+> ### _Liput_
+> _Liput-taulu sisältää yksilölliset liput. Jokainen lippu liittyy vain yhteen tapahtumaan, tyyppiin, lipputyyppiin, tilaan ja käyttäjään._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Lippu_id | int PK | Lipun yksilöivä avain/id
+> Tapahtuma_id | int FK | Tapahtuma, johon lippu liittyy, viittaus [Tapahtumat](#Tapahtumat)-tauluun
+> Tyyppi_id | int FK | Lipun tyyppi, viittaus [Lipputyypit](#Lipputyypit)-tauluun
+> Hinta | int | Lipun perushinta
+> Tila_id | int FK | Lipun tila, viittaus [Tilat](#Tilat)-tauluun
+> Tarkastanut_id | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
+> Tarkistus_pvm | date | Päivämäärä, jolloin lippu on tarkasettu ovella, eli käytetty
+>
+
 
 ## Tekninen kuvaus
 
