@@ -157,7 +157,29 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > Tarkastanut_id | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
 > Tarkistus_pvm | date | Päivämäärä, jolloin lippu on tarkasettu ovella, eli käytetty
 >
-
+> ### _Tapahtumat_
+> _Tapahtumat-taulu sisältää tapahtumat, jotka järjestetään tietyssä paikassa tietyllä päivämäärällä. Tapahtumalla on myös kuvaus ja viittaus järjestäjään. Tapahtumilla on yksilöivät tunnisteet._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Tapahtuma_id | int PK | [Tapahtumat](#Tapahtumat)-taulun yksilöivä tunnisste ja samalla primary key
+> Nimi | Varchar(200) | Tapahtuman nimi
+> Paivamaara | date | Päivämäärä ja kellonaika, jolloin tapahtuma alkaa
+> Kuvaus | varchar(2500) | Tapahtuman kuvaus
+> Tapahtumapaikka | int FK | Viittaus [Tapahtumapaikat](#Tapahtumapaikat)-taulun, Tapahtumapaikka_id avaimeen
+> Jarjestaja_id | int FK | Tapahtuman järjestäjä. Viittaus [Jarjestajat](#jarjestajat)-tauluun
+>
+> ### _Tapahtumapaikat_
+> _Tapahtumapaikat-taulu sisältää paikat, joissa tapahtumat järjestetään. Nimen lisäksi se sisältää osoitteen, viittauksen postinumerotauluun ja ihmisten maksimimäärän._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Tapahtumapaikka_id | int PK | [Tapahtumapaikat](#Tapahtumapaikat)-taulun yksilöivä tunnisste ja samalla primary key
+> Nimi | Varchar(200) | Paikan nimi
+> Katuosoite | varchar(30) | Tapahtumapaikan osoite
+> Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
+> Maksimi_osallistujat | int | Maksimimmäärä, mitä paikassa saa olla ihmisiä mukaanlukien esiintyjät, henkilökunta ja lipun ostajat
+>
 
 ## Tekninen kuvaus
 
