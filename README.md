@@ -98,16 +98,6 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 
 ![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokaavio.png)
 
-> ### _Tilit_
-> _Tilit-taulu sisältää käyttäjätilit. Käyttäjällä voi olla monta tiliä. Tili kuuluu aina vain yhdelle käyttäjälle._
->
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
-> id | int PK | Tilin id
-> nimimerkki | varchar(30) |  Tilin nimimerkki
-> avatar | int FK | Tilin avatar, viittaus [avatar](#Avatar)-tauluun
-> kayttaja | int FK | Viittaus käyttäjään [käyttäjä](#Kayttaja)-taulussa
->
 > ### _Jarjestajat_
 > _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
 >
@@ -180,6 +170,30 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
 > Maksimi_osallistujat | int | Maksimimmäärä, mitä paikassa saa olla ihmisiä mukaanlukien esiintyjät, henkilökunta ja lipun ostajat
 >
+> ### _Kayttajat_
+> _Kayttajat-taulu sisältää tietoa liittyen yksittäiseen käyttäjään. Käyttäjiä voivat olla esim. lipunmyyjä, asiakas sekä ylläpitäjä._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Kayttaja_id | int, autonumber, PK, not null | Yksiloiva tunniste ja primary key.
+> Kayttajatunnus | varchar(100), not null | Käyttäjätunnus
+> Salasana_hash | varchar(60), not null | Salasanan hash
+> Etunimi | varchar(100) | Käyttäjän etunimi
+> Sukunimi | varchar(100) | Käyttäjän sukunimi
+> Puh_nro | varchar(20) | Käyttäjän puhelinnumero
+> Email | varchar(100) | Käyttäjän sähköpostiosoite
+> Katuosoite | varchar(100) | Käyttäjän katuosoite
+> Postinumero | varchar(6), FK | Käyttäjän postinumero, viittaus [Postitoimipaikat](#postitoimipaikat)-tauluun
+> Kayttajatyyppi_id | int, not null, FK | Käyttäjän tyyppi, viittaus [Käyttäjätyypit](#kayttajatyypit)-tauluun
+>
+> ### Kayttajatyypit
+> Kayttajatyypit-taulu sisältää tietoa erilaisista kayttajatyypeista.
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Kayttajatyyppi_id | int, autonumber, PK, not null | Yksilöivä tunniste ja primary key
+> Kayttajatyyppi | varchar(20), not null |  Kayttajatyypin nimi esim. asiakas, lipuntarkastaja, lipunmyyjä tai ylläpitäjä.
+> Kuvaus | varchar(500) | Vapaaehtoinen kuvaus käyttäjätyypille
 
 ## Tekninen kuvaus
 
