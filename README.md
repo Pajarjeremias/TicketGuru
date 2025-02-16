@@ -5,15 +5,12 @@ Timo Lampinen, Jeremias Pajari
 
 ## Johdanto
 
-Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, mikä on projektin aihe,
-kuka on asiakas (käyttäjä), mitä hän haluaa ja saa järjestelmältä, mitä
-tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti päättyy.
+TicketGuru on lipunmyyntijärjestelmä, joka on suunniteltu helpottamaan lipunmyyntitoimistojen arkea. Järjestelmä tehostaa lippujen myyntiä, lippujen tulostamista ja niiden tarkastamista tapahtumissaan. TicketGuru-järjestelmä palvelee lipputoimiston eri käyttäjäryhmiä, kuten lipunmyyjiä, tapahtumajärjestäjiä, henkilökuntaa ovella sekä asiakkaita. 
 
--   Järjestelmän tarkoitus ja tiivis kuvaus siitä, mistä on kyse ja kenelle järjestelmä on tarkoitettu.
--   Toteutus- ja toimintaympäristö lyhyesti:  
-    -   Palvelinpuolen ratkaisut ja teknologiat (esim. palvelinteknologia, mikä tietokantajärjestelmä on käytössä)
-    -   Käyttöliittymäratkaisut ja teknologiat (esim. päätelaitteet: puhelin,
-    täppäri, desktop)
+TicketGuru mahdollistaa tapahtuman luomisen ja hallinnan, myyntiraporttien tarkastelun sekä lippujen myynnin. Liput voidaan merkitä käytetyiksi ovella. Myyntipisteessä järjestelmä tukee lippujen tulostamista asikkailleen. Ennakkomyynnistä ylijääneet liput voidaan tulostaa ovelle myytäviksi. Asiakas voi ostaa lipun itselleen lipunmyyntipisteeltä tai tapahtuman ovelta.  
+
+TicketGuru hyödyntää Javaa toimiakseen. Käyttöliittymä on responsiivinen ja toteutetaan nykyaikaisia työkaluja, kuten Reactia käyttämällä. Käyttöliittymää on selkeä navigoida ja sisältää keskeiset toiminnot. Eri käyttäjäryhmille on omat näkymät. Järjestelmän tiedot tallennetaan relaatiotietokantaan.  
+
 
 ## Järjestelmän määrittely
 
@@ -21,68 +18,73 @@ Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Jär
 toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, sekä kuvataan järjestelmän
 käyttäjäryhmät.
 
--   Käyttäjäroolit ja roolien tarvitsemat toiminnot, esim. käyttötapauskaaviona
-    (use case diagram) tai käyttäjätarinoina.
-
 ### Käyttäjäryhmät
 
-**1. Tapahatumanjärjestäjä / toimisto**
+**1. Tapahatumanjärjestäjä**
 
 Taho, joka järjestää tapahtuman ja käyttää tapahtuman lipunmyynnissä apuna TicketGuru -ohjelmistoa. Tämä sisältää mm:
 - Uuden tapahtuman määrittäminen ja sen luominen järjestelmään
 - Jo olemassa olevan tapahtuman tietojen muuttaminen
 - Myyntiraportttien tarkastelu
 
-**2. Lipunmyyjä**
+**2. Lipunmyyjä lipunmyyntipisteessä**
 
-Henkilö, joka myy tapahtuman ovella lippuja asiakkaille. Mahdollisesti tapahtumanjärjestäjän työntekijä.
-- Myy jäljelle jääneitä lippuja asiakkaille tapahtuman yhteydessä
+Henkilö, joka myy tapahtuman ovella lippuja asiakkaille lipunmyyntipisteessä.
 - Tulostaa ostetun lipun asiakkaalle
 - Tulostaa myymättä jääneet liput tapahtuman ovella
+  
+**3. Henkilökunta ovella**
+  
+Henkilö, joka työskentelee tapahtuman ovella.
+- Myy jäljelle jääneitä lippuja asiakkaille ovella
+- Merkitsee lipun käytetyksi
 
+**4. Asiakas**
 
-**3. Asiakas**
+Henkilö, joka ostaa lipun tapahtumaan lipunmyyntipisteestä tai ovelta.
 
-Henkilö, joka ostaa lipun tapahtumaan.
-
-**4. Järjestelmän ylläpitäjä**
+**5. Järjestelmän ylläpitäjä**
 
 Henkilö/taho, joka vastaa ohjelmiston teknisestä ylläpidosta. Esim. käyttäjäryhmien- ja oikeuksien määrittelemisestä.
 
-**5. Tulostin**
+**6. Tulostin**
 
 Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväksi.
 
 ### Käyttötapauskaavio
 
-Katso yst. käyttäjäroolit.png
+![käyttötapauskaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/k%C3%A4ytt%C3%A4j%C3%A4roolit.png)
 
 ### Käyttäjätarinat
 
-**Niinkuin** tapahtumanjärjestäjä, **haluan** tarkistaa liput ovella helposti, **jotta** voin merkitä käytetyt liput ja estää väärinkäytökset.
+**Tapahtumajärjestäjänä**, **haluan** tarkistaa liput ovella helposti, **jotta** voin merkitä käytetyt liput ja estää väärinkäytökset.
 
-**Niinkuin** lipputoimiston työntekijä, **haluan** nähdä myyntiraportit, **jotta** voin seurata myynnin kehitystä.
+**Lipputoimiston työntekijänä**, **haluan** nähdä myyntiraportit, **jotta** voin seurata myynnin kehitystä.
 
-**Niinkuin** lipunmyyjä, **haluan** tulostaa loput ennakkomyynnistä ylijääneet liput, **jotta** voin myydä ne tapahtuman ovella.
+**Lippumyyjänä**, **haluan** tulostaa loput ennakkomyynnistä ylijääneet liput, **jotta** voin myydä ne tapahtuman ovella.
 
-**Niinkuin** lipputoimiston työntekijä, **haluan** pystyä hallinnoimaan tapahtumia järjestelmässä, **jotta** voin hallita lippuja sekä päivittää tapahtumatietoja.
+**Lipputoimiston työntekijänä**, **haluan** pystyä hallinnoimaan tapahtumia järjestelmässä, **jotta** voin hallita lippuja sekä päivittää tapahtumatietoja.
 
-**Niinkuin** asiakas, **haluan** mahdollisuuden maksaa liput eri maksutavoilla, **jotta** voin valita itselleni sopivan maksutavan.
+**Asiakkaana**, **haluan** mahdollisuuden maksaa liput eri maksutavoilla, **jotta** voin valita itselleni sopivan maksutavan.
 
-**Niinkuin** tapahtuman järjestäjä, **haluan** määritellä erilaisia lipputyyppejä, **jotta** osaan tarjota oikeanlaisia hintoja eläkeläisille, lapsille sekä opiskelijoille.
+**Tapahtuman järjestäjänä**, **haluan** määritellä erilaisia lipputyyppejä, **jotta** osaan tarjota oikeanlaisia hintoja eläkeläisille, lapsille sekä opiskelijoille.
 
-**Niinkuin** järjestelmän ylläpitäjä, **haluan** määritellä eri käyttäjärooleja, **jotta** voin hallita järjestelmän käyttöoikeuksia turvallisesti.
+**Järjestelmän ylläpitäjänä**, **haluan** määritellä eri käyttäjärooleja, **jotta** voin hallita järjestelmän käyttöoikeuksia turvallisesti.
 
-**Niinkuin** lipunmyyjä, **haluan** myydä ja tulostaa liput asiakkalle vaivattomasti, **jotta** asiakas saa ostoksensa sujuvasti.
-
-Kuvauksissa kannattaa harkita, mikä on toteuttajalle ja asiakkaalle oleellista
-tietoa ja keskittyä siihen.
+**Lippumyyjänä**, **haluan** myydä ja tulostaa liput asiakkalle vaivattomasti, **jotta** asiakas saa ostoksensa sujuvasti.
 
 ## Käyttöliittymä
 
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
+**Käyttöliittymä ja lippujen myynti**
+![alt text](tgimage1.png "Käyttöliittymä ja lippujen myynti")
 
-Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
+**Tapahtumien muokkaminen ja lisääminen**
+![alt text](tgimage2.png "Käyttöliittymä ja lippujen myynti")
+
+**Myyntiraportit**
+![alt text](tgimage3.png "Käyttöliittymä ja lippujen myynti")
+
+
 
 ## Tietokanta
 
@@ -94,6 +96,8 @@ Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
 tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
 attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
 
+![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokaavio.png)
+
 > ### _Tilit_
 > _Tilit-taulu sisältää käyttäjätilit. Käyttäjällä voi olla monta tiliä. Tili kuuluu aina vain yhdelle käyttäjälle._
 >
@@ -103,6 +107,79 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > nimimerkki | varchar(30) |  Tilin nimimerkki
 > avatar | int FK | Tilin avatar, viittaus [avatar](#Avatar)-tauluun
 > kayttaja | int FK | Viittaus käyttäjään [käyttäjä](#Kayttaja)-taulussa
+>
+> ### _Jarjestajat_
+> _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Jarjestaja_id | int PK | [Jarjestajat](#Jarjestajat)-taulun yksilöivä  tunniste ja samalla primary key
+> Nimi | Varchar(30) | Järjestäjä organisaation nimi
+> Yhteyshenkilo_id | int FK | Viittaus [Kayttajat](#Kayttajat)-taulun kayttaja_id:hen
+> Katuosoite | varchar(30) | Järjestäjä organisaation toimipisteen osoite
+> Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
+>
+> ### _Postitoimipaikat_
+> _Postitoimipaikat-taulu sisältää postitoimipaikkoja._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Postinumero | int PK | [Postitoimipaikat](#Postitoimipaikat)-taulun yksilöivä avain
+> Postitoimipaikka | varchar(30) | Postitoimipaikan paikkakunta
+> Maa | varchar(30) | Postitoimipaikan maa
+>
+> ### _Lipputyypit_
+> _Lipputyypit-taulu sisältää lipputyyppien vaihtoehdot._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Lipputyyppi_id | int PK | Lipputyypin yksilöivä avain/id
+> Lipputyyppi | varchar(30) | Lipptyypin nimi, esim. aikuinen, eläkeläinen, opsikelija, lapsi
+> 
+> ### _Tilat_
+> _Tilat-taulu sisältää lippujen eri tila-vaihtoehdot._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Tila_id | int PK | Tilan yksilöivä avain/id
+> Tila | varchar(30) | Tilan nimi, esim. myymättä, myyty, tarkastettu, peruttu
+>
+> ### _Liput_
+> _Liput-taulu sisältää yksilölliset liput. Jokainen lippu liittyy vain yhteen tapahtumaan, tyyppiin, lipputyyppiin, tilaan ja käyttäjään._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Lippu_id | int PK | Lipun yksilöivä avain/id
+> Tapahtuma_id | int FK | Tapahtuma, johon lippu liittyy, viittaus [Tapahtumat](#Tapahtumat)-tauluun
+> Tyyppi_id | int FK | Lipun tyyppi, viittaus [Lipputyypit](#Lipputyypit)-tauluun
+> Hinta | int | Lipun perushinta
+> Tila_id | int FK | Lipun tila, viittaus [Tilat](#Tilat)-tauluun
+> Tarkastanut_id | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
+> Tarkistus_pvm | date | Päivämäärä, jolloin lippu on tarkasettu ovella, eli käytetty
+>
+> ### _Tapahtumat_
+> _Tapahtumat-taulu sisältää tapahtumat, jotka järjestetään tietyssä paikassa tietyllä päivämäärällä. Tapahtumalla on myös kuvaus ja viittaus järjestäjään. Tapahtumilla on yksilöivät tunnisteet._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Tapahtuma_id | int PK | [Tapahtumat](#Tapahtumat)-taulun yksilöivä tunnisste ja samalla primary key
+> Nimi | Varchar(200) | Tapahtuman nimi
+> Paivamaara | date | Päivämäärä ja kellonaika, jolloin tapahtuma alkaa
+> Kuvaus | varchar(2500) | Tapahtuman kuvaus
+> Tapahtumapaikka | int FK | Viittaus [Tapahtumapaikat](#Tapahtumapaikat)-taulun, Tapahtumapaikka_id avaimeen
+> Jarjestaja_id | int FK | Tapahtuman järjestäjä. Viittaus [Jarjestajat](#jarjestajat)-tauluun
+>
+> ### _Tapahtumapaikat_
+> _Tapahtumapaikat-taulu sisältää paikat, joissa tapahtumat järjestetään. Nimen lisäksi se sisältää osoitteen, viittauksen postinumerotauluun ja ihmisten maksimimäärän._
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Tapahtumapaikka_id | int PK | [Tapahtumapaikat](#Tapahtumapaikat)-taulun yksilöivä tunnisste ja samalla primary key
+> Nimi | Varchar(200) | Paikan nimi
+> Katuosoite | varchar(30) | Tapahtumapaikan osoite
+> Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
+> Maksimi_osallistujat | int | Maksimimmäärä, mitä paikassa saa olla ihmisiä mukaanlukien esiintyjät, henkilökunta ja lipun ostajat
+>
 
 ## Tekninen kuvaus
 
