@@ -1,4 +1,4 @@
-package projekti.demo.domain;
+package projekti.demo.model;
 
 import java.util.Date;
 
@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotEmpty;
 
 
 
@@ -23,6 +24,7 @@ public class Lippu {
     @Column(name = "lippu_id", nullable = false, updatable = false)
     private Long lippu_id;
 
+    @NotEmpty(message = "Hinta on pakollinen")
     @Column(name = "hinta")
     private Long hinta;
 
@@ -31,14 +33,17 @@ public class Lippu {
 
     @ManyToOne
     @JoinColumn(name="tapahtuma_id")
+    @NotEmpty(message = "Tapahtuma on pakollinen")
     private Tapahtuma tapahtuma;
 
     @ManyToOne
     @JoinColumn(name="tila_id")
+    @NotEmpty(message = "Tila on pakollinen")
     private Tila tila;
 
     @ManyToOne
     @JoinColumn(name="lipputyyppi_id")
+    @NotEmpty(message = "Lipputyyppi on pakollinen")
     private Lipputyyppi lipputyyppi;
 
     @ManyToOne

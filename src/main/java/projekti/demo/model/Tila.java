@@ -1,4 +1,4 @@
-package projekti.demo.domain;
+package projekti.demo.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -17,7 +19,10 @@ public class Tila {
     private Long id;
 
 
+    @NotEmpty(message = "Tilan nimi on pakollinen")
+    @Size(max = 30, message = "Maksimipituus 30 merkkiä")
     @Column(name = "tila", nullable = false, unique = true)
+    
     private String tila;
 
     public Tila() {
