@@ -114,7 +114,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> Postinumero | int PK | [Postitoimipaikat](#Postitoimipaikat)-taulun yksilöivä avain
+> Postinumero | varchar PK | [Postitoimipaikat](#Postitoimipaikat)-taulun yksilöivä avain
 > Postitoimipaikka | varchar(30) | Postitoimipaikan paikkakunta
 > Maa | varchar(30) | Postitoimipaikan maa
 >
