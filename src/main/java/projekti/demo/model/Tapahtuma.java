@@ -15,14 +15,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 @Entity
-public class Tapahtumat {
+@Table(name="Tapahtumat")
+public class Tapahtuma {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int tapahtuma_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long tapahtuma_id;
 
     @Column(name = "Nimi")
     @NotEmpty(message = "Tapahtumalla täytyy olla nimi")
@@ -39,7 +41,7 @@ public class Tapahtumat {
 
     @JsonIgnoreProperties("tapahtumat")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtumat")
-    private List<Tapahtumapaikat> tapahtumapaikat;
+    private List<Tapahtumapaikka> tapahtumapaikka;
 
     @ManyToOne
     @JsonIgnore
@@ -47,21 +49,21 @@ public class Tapahtumat {
     private Jarjestajat jarjestajat;
 
     // constructorit
-    public Tapahtumat() {
+    public Tapahtuma() {
     }
 
-    public Tapahtumat(String nimi, LocalDateTime paivamaara, String kuvaus) {
+    public Tapahtuma(String nimi, LocalDateTime paivamaara, String kuvaus) {
         this.nimi = nimi;
         this.paivamaara = paivamaara;
         this.kuvaus = kuvaus;
     }
 
-    public Tapahtumat(String nimi, LocalDateTime paivamaara, String kuvaus,
-            List<Tapahtumapaikat> tapahtumapaikat, Jarjestajat jarjestajat) {
+    public Tapahtuma(String nimi, LocalDateTime paivamaara, String kuvaus,
+            List<Tapahtumapaikka> tapahtumapaikka, Jarjestajat jarjestajat) {
         this.nimi = nimi;
         this.paivamaara = paivamaara;
         this.kuvaus = kuvaus;
-        this.tapahtumapaikat = tapahtumapaikat;
+        this.tapahtumapaikka = tapahtumapaikka;
         this.jarjestajat = jarjestajat;
     }
 
@@ -90,12 +92,12 @@ public class Tapahtumat {
         this.kuvaus = kuvaus;
     }
 
-    public List<Tapahtumapaikat> getTapahtumapaikat() {
-        return tapahtumapaikat;
+    public List<Tapahtumapaikka> getTapahtumapaikka() {
+        return tapahtumapaikka;
     }
 
-    public void setTapahtumapaikat(List<Tapahtumapaikat> tapahtumapaikat) {
-        this.tapahtumapaikat = tapahtumapaikat;
+    public void setTapahtumapaikat(List<Tapahtumapaikka> tapahtumapaikka) {
+        this.tapahtumapaikka = tapahtumapaikka;
     }
 
     public Jarjestajat getJarjestajat() {
@@ -106,15 +108,15 @@ public class Tapahtumat {
         this.jarjestajat = jarjestajat;
     }
 
-    public int getTapahtuma_id() {
+    public Long getTapahtuma_id() {
         return tapahtuma_id;
     }
 
     @Override
     public String toString() {
-        if (this.tapahtumapaikat != null) {
+        if (this.tapahtumapaikka != null) {
             return "Tapahtumat [Tapahtuma_id=" + tapahtuma_id + ", Nimi=" + nimi + ", Paivamaara=" + paivamaara
-                    + ", Kuvaus=" + kuvaus + ", tapahtumapaikat=" + tapahtumapaikat + "]";
+                    + ", Kuvaus=" + kuvaus + ", tapahtumapaikat=" + tapahtumapaikka + "]";
         } else {
             return "Tapahtumat [Tapahtuma_id=" + tapahtuma_id + ", Nimi=" + nimi + ", Paivamaara=" + paivamaara
                     + ", Kuvaus=" + kuvaus + "]";

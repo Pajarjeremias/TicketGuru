@@ -14,15 +14,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import jakarta.persistence.CascadeType;
 
 @Entity
-public class Tapahtumapaikat {
+@Table(name="Tapahtumapaikat")
+public class Tapahtumapaikka {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int tapahtumapaikka_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long tapahtumapaikka_id;
 
     @Column(name = "Nimi")
     @NotEmpty(message = "paikalla täytyy olla nimi")
@@ -48,25 +50,25 @@ public class Tapahtumapaikat {
 
 
 
-    public Tapahtumapaikat() {
+    public Tapahtumapaikka() {
     }
 
-    public Tapahtumapaikat(String nimi) {
+    public Tapahtumapaikka(String nimi) {
         this.nimi = nimi;
     }
 
-    public Tapahtumapaikat(String nimi, String katuosoite) {
+    public Tapahtumapaikka(String nimi, String katuosoite) {
         this.nimi = nimi;
         this.katuosoite = katuosoite;
     }
 
-    public Tapahtumapaikat(String nimi, String katuosoite, Postitoimipaikat postinumero) {
+    public Tapahtumapaikka(String nimi, String katuosoite, Postitoimipaikat postinumero) {
         this.nimi = nimi;
         this.katuosoite = katuosoite;
         this.postinumero = postinumero;
     }
 
-        public Tapahtumapaikat(String nimi,String katuosoite, Postitoimipaikat postinumero,
+        public Tapahtumapaikka(String nimi,String katuosoite, Postitoimipaikat postinumero,
             int maksimi_osallistujat, Tapahtumat tapahtumat) {
         this.nimi = nimi;
         this.katuosoite = katuosoite;
@@ -116,7 +118,7 @@ public class Tapahtumapaikat {
         this.tapahtumat = tapahtumat;
     }
 
-    public int getTapahtumapaikka_id() {
+    public long getTapahtumapaikka_id() {
         return tapahtumapaikka_id;
     }
 

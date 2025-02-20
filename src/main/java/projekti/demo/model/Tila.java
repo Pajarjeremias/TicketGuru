@@ -9,23 +9,22 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-
 @Entity
-@Table(name="Tilat")
+@Table(name = "Tilat")
 public class Tila {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tila_id")
     private Long tila_id;
 
-
     @NotEmpty(message = "Tilan nimi on pakollinen")
     @Size(max = 30, message = "Maksimipituus 30 merkkiä")
     @Column(name = "tila", nullable = false, unique = true)
-    
+
     private String tila;
 
-    // halutaanko tänne myös lista lipuista? Eli voi hakea mitä lippuja on esim. Tarkastettu tilassa?
+    // halutaanko tänne myös lista lipuista? Eli voi hakea mitä lippuja on esim.
+    // Tarkastettu tilassa?
 
     public Tila() {
         super();
@@ -57,16 +56,4 @@ public class Tila {
         return "Tila [id=" + id + ", tila=" + tila + "]";
     }
 
-    
 }
-
-
-
-
-
-
-
-    
-
-
-
