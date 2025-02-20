@@ -11,12 +11,12 @@ import jakarta.validation.constraints.Size;
 
 
 @Entity
-@Table(name="tilat")
+@Table(name="Tilat")
 public class Tila {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tila_id", nullable = false, updatable = false)
-    private Long id;
+    @Column(name = "tila_id")
+    private Long tila_id;
 
 
     @NotEmpty(message = "Tilan nimi on pakollinen")
@@ -24,6 +24,8 @@ public class Tila {
     @Column(name = "tila", nullable = false, unique = true)
     
     private String tila;
+
+    // halutaanko tänne myös lista lipuista? Eli voi hakea mitä lippuja on esim. Tarkastettu tilassa?
 
     public Tila() {
         super();

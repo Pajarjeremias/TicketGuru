@@ -11,12 +11,12 @@ import jakarta.validation.constraints.Size;
 
 
 @Entity
-@Table(name="lipputyypit")
+@Table(name="Lipputyypit")
 
 public class Lipputyyppi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lipputyyppi_id", nullable = false, updatable = false)
+    @Column(name = "lipputyyppi_id")
     private Long lipputyyppi_id;
 
 
@@ -24,6 +24,8 @@ public class Lipputyyppi {
     @Size(max = 30, message = "Maksimipituus 30 merkkiä")
     @Column(name = "lipputyyppi", nullable = false, unique = true)
     private String lipputyyppi;
+
+    // halutaanko tänne myös lista lipuista? Eli voi hakea mitkä liput ovat tyypiltään esim. Aikuisten lippuja? 
 
     public Lipputyyppi() {
         super();
@@ -59,9 +61,6 @@ public class Lipputyyppi {
     public String toString() {
         return "Lipputyyppi [lipputyyppi_id=" + lipputyyppi_id + ", lipputyyppi=" + lipputyyppi + "]";
     }
-
-    
-
     
 }
 
