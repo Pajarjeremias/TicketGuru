@@ -1,4 +1,4 @@
-package projekti.demo.domain;
+package projekti.demo.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
