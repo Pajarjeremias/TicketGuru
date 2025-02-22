@@ -107,7 +107,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 > Nimi | Varchar(30) | Järjestäjä organisaation nimi
 > Yhteyshenkilo_id | int FK | Viittaus [Kayttajat](#Kayttajat)-taulun kayttaja_id:hen
 > Katuosoite | varchar(30) | Järjestäjä organisaation toimipisteen osoite
-> Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
+> Postinumero | varchar FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
 >
 > ### _Postitoimipaikat_
 > _Postitoimipaikat-taulu sisältää postitoimipaikkoja._
