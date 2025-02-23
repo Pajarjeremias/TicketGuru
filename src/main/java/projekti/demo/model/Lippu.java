@@ -1,6 +1,6 @@
 package projekti.demo.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +28,7 @@ public class Lippu {
     private Long hinta;
 
     @Column(name = "tarkistus_pvm")
-    private Date tarkistus_pvm;
+    private LocalDateTime tarkistus_pvm;
 
     @ManyToOne
     @JoinColumn(name="tapahtuma_id")
@@ -53,7 +53,7 @@ public class Lippu {
         super();
     }
 
-    public Lippu(Long hinta, Date tarkistus_pvm, Tapahtuma tapahtuma, Tila tila, Lipputyyppi lipputyyppi,
+    public Lippu(Long hinta, LocalDateTime tarkistus_pvm, Tapahtuma tapahtuma, Tila tila, Lipputyyppi lipputyyppi,
         Kayttaja tarkastaja) {
         this.hinta = hinta;
         this.tarkistus_pvm = tarkistus_pvm;
@@ -71,11 +71,11 @@ public class Lippu {
         this.hinta = hinta;
     }
 
-    public Date getTarkistus_pvm() {
+    public LocalDateTime getTarkistus_pvm() {
         return tarkistus_pvm;
     }
 
-    public void setTarkistus_pvm(Date tarkistus_pvm) {
+    public void setTarkistus_pvm(LocalDateTime tarkistus_pvm) {
         this.tarkistus_pvm = tarkistus_pvm;
     }
 
@@ -116,7 +116,6 @@ public class Lippu {
         return "Lippu [lippu_id=" + lippu_id + ", hinta=" + hinta + ", tarkistus_pvm=" + tarkistus_pvm + ", tapahtuma="
                 + tapahtuma + ", tila=" + tila + ", lipputyyppi=" + lipputyyppi + ", tarkastaja=" + tarkastaja + "]";
     }
-                */
 
     
 }

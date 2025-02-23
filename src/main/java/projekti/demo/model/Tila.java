@@ -36,11 +36,11 @@ public class Tila {
     }
 
     public Long getId() {
-        return id;
+        return this.tila_id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.tila_id = id;
     }
 
     public String getTila() {
@@ -53,7 +53,7 @@ public class Tila {
 
     @Override
     public String toString() {
-        return "Tila [id=" + id + ", tila=" + tila + "]";
+        return "Tila [id=" + tila_id + ", tila=" + tila + "]";
     }
 
 }
