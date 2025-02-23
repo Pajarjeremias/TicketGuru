@@ -20,7 +20,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.persistence.CascadeType;
 
 @Entity
-@Table(name="Tapahtumapaikat")
+@Table(name = "Tapahtumapaikat")
 public class Tapahtumapaikka {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class Tapahtumapaikka {
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "postinumero")
-    private Postitoimipaikat postinumero;
+    private Postitoimipaikka postinumero;
 
     @Column(name = "kapasitettti")
     private int maksimi_osallistujat;
@@ -46,9 +46,7 @@ public class Tapahtumapaikka {
     @JsonIgnoreProperties("tapahtumapaikat")
     @ManyToOne
     @JoinColumn(name = "tapahtumat_id")
-    private Tapahtumat tapahtumat;
-
-
+    private Tapahtuma tapahtuma;
 
     public Tapahtumapaikka() {
     }
@@ -62,21 +60,20 @@ public class Tapahtumapaikka {
         this.katuosoite = katuosoite;
     }
 
-    public Tapahtumapaikka(String nimi, String katuosoite, Postitoimipaikat postinumero) {
+    public Tapahtumapaikka(String nimi, String katuosoite, Postitoimipaikka postinumero) {
         this.nimi = nimi;
         this.katuosoite = katuosoite;
         this.postinumero = postinumero;
     }
 
-        public Tapahtumapaikka(String nimi,String katuosoite, Postitoimipaikat postinumero,
-            int maksimi_osallistujat, Tapahtumat tapahtumat) {
+    public Tapahtumapaikka(String nimi, String katuosoite, Postitoimipaikka postinumero,
+            int maksimi_osallistujat, Tapahtuma tapahtuma) {
         this.nimi = nimi;
         this.katuosoite = katuosoite;
         this.postinumero = postinumero;
         this.maksimi_osallistujat = maksimi_osallistujat;
-        this.tapahtumat = tapahtumat;
+        this.tapahtuma = tapahtuma;
     }
-
 
     public String getNimi() {
         return nimi;
@@ -94,11 +91,11 @@ public class Tapahtumapaikka {
         this.katuosoite = katuosoite;
     }
 
-    public Postitoimipaikat getPostinumero() {
+    public Postitoimipaikka getPostinumero() {
         return postinumero;
     }
 
-    public void setPostinumero(Postitoimipaikat postinumero) {
+    public void setPostinumero(Postitoimipaikka postinumero) {
         this.postinumero = postinumero;
     }
 
@@ -110,12 +107,12 @@ public class Tapahtumapaikka {
         this.maksimi_osallistujat = maksimi_osallistujat;
     }
 
-    public Tapahtumat getTapahtumat() {
-        return tapahtumat;
+    public Tapahtuma getTapahtumat() {
+        return tapahtuma;
     }
 
-    public void setTapahtumat(Tapahtumat tapahtumat) {
-        this.tapahtumat = tapahtumat;
+    public void setTapahtumat(Tapahtuma tapahtuma) {
+        this.tapahtuma = tapahtuma;
     }
 
     public long getTapahtumapaikka_id() {

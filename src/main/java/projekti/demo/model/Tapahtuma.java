@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="Tapahtumat")
+@Table(name = "Tapahtumat")
 public class Tapahtuma {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class Tapahtuma {
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "Jarjestaja_id")
-    private Jarjestajat jarjestajat;
+    private Jarjestaja jarjestaja;
 
     // constructorit
     public Tapahtuma() {
@@ -59,12 +59,12 @@ public class Tapahtuma {
     }
 
     public Tapahtuma(String nimi, LocalDateTime paivamaara, String kuvaus,
-            List<Tapahtumapaikka> tapahtumapaikka, Jarjestajat jarjestajat) {
+            List<Tapahtumapaikka> tapahtumapaikka, Jarjestaja jarjestajat) {
         this.nimi = nimi;
         this.paivamaara = paivamaara;
         this.kuvaus = kuvaus;
         this.tapahtumapaikka = tapahtumapaikka;
-        this.jarjestajat = jarjestajat;
+        this.jarjestaja = jarjestajat;
     }
 
     // Getterit ja setterit
@@ -100,12 +100,12 @@ public class Tapahtuma {
         this.tapahtumapaikka = tapahtumapaikka;
     }
 
-    public Jarjestajat getJarjestajat() {
-        return jarjestajat;
+    public Jarjestaja getJarjestajat() {
+        return jarjestaja;
     }
 
-    public void setJarjestajat(Jarjestajat jarjestajat) {
-        this.jarjestajat = jarjestajat;
+    public void setJarjestajat(Jarjestaja jarjestajat) {
+        this.jarjestaja = jarjestajat;
     }
 
     public Long getTapahtuma_id() {
