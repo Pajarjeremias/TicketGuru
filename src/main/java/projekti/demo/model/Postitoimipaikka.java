@@ -24,6 +24,8 @@ public class Postitoimipaikka {
     @Column(name = "maa")
     private String maa;
 
+    
+
     public Postitoimipaikka() {
         super();
     }

@@ -40,7 +40,7 @@ public class Tapahtuma {
     private String kuvaus;
 
     @JsonIgnoreProperties("tapahtumat")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtumat")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtumapaikka_id")
     private List<Tapahtumapaikka> tapahtumapaikka;
 
     @ManyToOne

@@ -5,6 +5,6 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface LippuRepository extends CrudRepository<Lippu, Long> {
-    List<Lippu> findByTila(Long tila_id);
+    // List<Lippu> findByTila(Long tila_id);
         
 }

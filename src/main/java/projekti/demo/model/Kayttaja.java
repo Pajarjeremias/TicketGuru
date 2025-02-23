@@ -39,11 +39,11 @@ public class Kayttaja {
   @Size(max = 100, message = "Maksimipituus 100 merkkiä")
   private String katuosoite;
 
-  /*
+
   @ManyToOne
   @JoinColumn(name = "postinumero_id")
-  private Postinumero postinumero;
-  */
+  private Postitoimipaikka postinumero;
+
 
   @NotEmpty(message = "Käyttäjätyyppi on pakollinen")
   @ManyToOne

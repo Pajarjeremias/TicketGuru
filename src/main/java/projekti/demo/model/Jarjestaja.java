@@ -1,11 +1,14 @@
 package projekti.demo.model;
 
+import org.hibernate.annotations.ManyToAny;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -29,7 +32,7 @@ public class Jarjestaja {
     @OneToOne
     @JoinColumn(name="kayttaja_id")
     @NotEmpty(message = "Käyttäjä on pakollinen")
-    @Column(name = "yhteyshenkilo_id")
+
     private Kayttaja yhteyshenkilo_id;
 
     @NotEmpty(message = "Organisaation katuosoite on pakollinen.")
@@ -37,10 +40,9 @@ public class Jarjestaja {
     @Column(name = "katuosoite")
     private String katuosoite;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name="postinumero")
     @NotEmpty(message = "Postinumero on pakollinen.")
-    @Column(name = "postinumero")
     private Postitoimipaikka postinumero;
 
     public Jarjestaja(){
