@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Tapahtuman_lipputyypit")
-public class Tapahtuman_lipputyypit {
+public class Tapahtuman_lipputyyppi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class Tapahtuman_lipputyypit {
     @NotNull
     private Float hinta;
 
-    public Tapahtuman_lipputyypit(Tapahtuma tapahtuma, Lipputyyppi lipputyyppi, List<Lippu> liput,
+    public Tapahtuman_lipputyyppi(Tapahtuma tapahtuma, Lipputyyppi lipputyyppi, List<Lippu> liput,
             @NotNull Float hinta) {
         this.tapahtuma = tapahtuma;
         this.lipputyyppi = lipputyyppi;
@@ -86,10 +86,8 @@ public class Tapahtuman_lipputyypit {
 
     @Override
     public String toString() {
-        return "Tapahtuman_lipputyypit [tapahtuma_lipputyyppi_id=" + tapahtuma_lipputyyppi_id + ", tapahtuma="
+        return "Tapahtuman_lipputyyppi [tapahtuma_lipputyyppi_id=" + tapahtuma_lipputyyppi_id + ", tapahtuma="
                 + tapahtuma + ", lipputyyppi=" + lipputyyppi + ", liput=" + liput + ", hinta=" + hinta + "]";
-    } 
-
-    
+    }
 
 }

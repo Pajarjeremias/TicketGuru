@@ -30,7 +30,7 @@ public class Tila {
     // Tarkastettu tilassa?
     // Lisätty 26.2.2025, lisätty samalla getterit ja setterit
 
-    @OneToMany(mappedBy = "lippu_id")
+    @OneToMany(mappedBy = "tila")
     private List<Lippu> liput;
 
     // Constructorit

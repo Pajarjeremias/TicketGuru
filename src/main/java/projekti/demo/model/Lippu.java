@@ -25,7 +25,7 @@ public class Lippu {
     @ManyToOne
     @JoinColumn(name="tapahtuma_lipputyyppi_id")
     @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen")
-    private Tapahtuman_lipputyypit tapahtuman_lipputyypit;
+    private Tapahtuman_lipputyyppi tapahtuman_lipputyypit;
 
     @Column(name = "hinta")
     @NotEmpty
@@ -53,7 +53,7 @@ public class Lippu {
     }
 
     public Lippu(
-            @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen") Tapahtuman_lipputyypit tapahtuman_lipputyypit,
+            @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen") Tapahtuman_lipputyyppi tapahtuman_lipputyypit,
             @NotEmpty Float hinta, @NotEmpty(message = "Tila on pakollinen") Tila tila, Kayttaja tarkastaja,
             LocalDateTime tarkistus_pvm, @NotEmpty(message = "Myynti on pakollinen") Myynti myynti) {
         this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;
@@ -72,11 +72,11 @@ public class Lippu {
         this.lippu_id = lippu_id;
     }
 
-    public Tapahtuman_lipputyypit getTapahtuman_lipputyypit() {
+    public Tapahtuman_lipputyyppi getTapahtuman_lipputyypit() {
         return tapahtuman_lipputyypit;
     }
 
-    public void setTapahtuman_lipputyypit(Tapahtuman_lipputyypit tapahtuman_lipputyypit) {
+    public void setTapahtuman_lipputyypit(Tapahtuman_lipputyyppi tapahtuman_lipputyypit) {
         this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;
     }
 
