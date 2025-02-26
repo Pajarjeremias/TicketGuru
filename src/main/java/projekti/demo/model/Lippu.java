@@ -28,7 +28,7 @@ public class Lippu {
     @ManyToOne
     @JoinColumn(name="tapahtuma_lipputyyppi_id")
     @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen")
-    private Tapahtuman_lipputyyppi tapahtuma_lipputyyppi;
+    private Tapahtuman_lipputyypit tapahtuman_lipputyypit;
     */
 
     @Column(name = "hinta")
