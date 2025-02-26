@@ -115,8 +115,8 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> Lipputyyppi_id | int PK | Lipputyypin yksilöivä avain/id
-> Lipputyyppi | varchar(30) | Lipptyypin nimi, esim. aikuinen, eläkeläinen, opsikelija, lapsi
+> Lipputyyppi_id | int PK, not null | Lipputyypin yksilöivä avain/id
+> Lipputyyppi | varchar(30), not null | Lipptyypin nimi, esim. aikuinen, eläkeläinen, opsikelija, lapsi
 > 
 > ### _Tilat_
 > _Tilat-taulu sisältää lippujen eri tila-vaihtoehdot._
@@ -131,8 +131,8 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> Lippu_id | int PK | Lipun yksilöivä avain/id
-> Tapahtuma_lipputyyppi_id | int FK | Tapahtuma + lipputyyppi, viittaus [Tapahtuman_lipputyypit](#Tapahtuman_lipputyypit)-tauluun
+> Lippu_id | int PK, not null | Lipun yksilöivä avain/id
+> Tapahtuma_lipputyyppi_id | int FK, not null | Tapahtuma + lipputyyppi, viittaus [Tapahtuman_lipputyypit](#Tapahtuman_lipputyypit)-tauluun
 > Hinta | decimal(2) | Lipun lopullinen myyntihinta
 > Tila_id | int FK | Lipun tila, viittaus [Tilat](#Tilat)-tauluun
 > Tarkastanut_id | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
