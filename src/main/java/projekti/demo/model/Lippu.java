@@ -21,15 +21,11 @@ public class Lippu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lippu_id")
     private Long lippu_id;
-
-    // TODO: Tarkista, kun tapahtuma_liiputyyppi -entity olemassa
-    // TODO: Muista tarkistaa myös getterit ja setterit + toString
     
     @ManyToOne
     @JoinColumn(name="tapahtuma_lipputyyppi_id")
     @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen")
     private Tapahtuman_lipputyypit tapahtuman_lipputyypit;
-    
 
     @Column(name = "hinta")
     @NotEmpty
@@ -124,51 +120,12 @@ public class Lippu {
         this.myynti = myynti;
     }
 
-    
-    // TODO: Luo uudestaan, kun tapahtuma_liiputyyppi -entity olemassa
-    /*
-    public Lippu(Float hinta, LocalDateTime tarkistus_pvm, Tapahtuma tapahtuma, Tila tila, Lipputyyppi lipputyyppi,
-        Kayttaja tarkastaja) {
-        this.hinta = hinta;
-        this.tarkistus_pvm = tarkistus_pvm;
-        this.tapahtuma = tapahtuma;
-        this.tila = tila;
-        this.lipputyyppi = lipputyyppi;
-        this.tarkastaja = tarkastaja;
+    @Override
+    public String toString() {
+        return "Lippu [lippu_id=" + lippu_id + ", tapahtuman_lipputyypit=" + tapahtuman_lipputyypit + ", hinta=" + hinta
+                + ", tila=" + tila + ", tarkastaja=" + tarkastaja + ", tarkistus_pvm=" + tarkistus_pvm + ", myynti="
+                + myynti + "]";
     }
-    
-
-    public Float getHinta() {
-        return hinta;
-    }
-
-    public void setHinta(Float hinta) {
-        this.hinta = hinta;
-    }
-
-    public LocalDateTime getTarkistus_pvm() {
-        return tarkistus_pvm;
-    }
-
-    public void setTarkistus_pvm(LocalDateTime tarkistus_pvm) {
-        this.tarkistus_pvm = tarkistus_pvm;
-    }
-
-    public Tila getTila() {
-        return tila;
-    }
-
-    public void setTila(Tila tila) {
-        this.tila = tila;
-    }
-
-    public Kayttaja getTarkastaja() {
-        return tarkastaja;
-    }
-
-    public void setTarkastaja(Kayttaja tarkastaja) {
-        this.tarkastaja = tarkastaja;
-    }*/
     
 }
 
