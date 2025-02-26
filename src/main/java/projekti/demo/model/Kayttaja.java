@@ -50,6 +50,7 @@ public class Kayttaja {
   @JoinColumn(name = "kayttajatyyppi_id")
   private Kayttajatyyppi kayttajatyyppi;
 
+  // Constructorit
   public Kayttaja() { }
 
   public Kayttaja(String kayttajatunnus, String salasana_hash, Kayttajatyyppi kayttajatyyppi) {
@@ -59,8 +60,7 @@ public class Kayttaja {
     this.kayttajatyyppi = kayttajatyyppi;
   }
 
-  /*
-  public Kayttaja(String kayttajatunnus, String salasana_hash, String etunimi, String sukunimi, String puh_nro, String email, String katuosoite, Postinumero postinumero, Kayttajatyyppi kayttajatyyppi) {
+  public Kayttaja(String kayttajatunnus, String salasana_hash, String etunimi, String sukunimi, String puh_nro, String email, String katuosoite, Postitoimipaikka postinumero, Kayttajatyyppi kayttajatyyppi) {
     this.kayttajatunnus = kayttajatunnus;
     this.salasana_hash = salasana_hash;
     this.etunimi = etunimi;
@@ -71,8 +71,8 @@ public class Kayttaja {
     this.postinumero = postinumero;
     this.kayttajatyyppi = kayttajatyyppi;
   }
-  */
 
+  // getterit ja setterit
   public String getKayttajatunnus() {
     return kayttajatunnus;
   }
@@ -129,15 +129,13 @@ public class Kayttaja {
     this.katuosoite = katuosoite;
   }
 
-  /*
-  public Postinumero getPostinumero() {
+  public Postitoimipaikka getPostinumero() {
     return postinumero;
   }
 
-  public void setPostinumero(Postinumero postinumero) {
+  public void setPostinumero(Postitoimipaikka postinumero) {
     this.postinumero = postinumero;
   }
-  */
 
   public Kayttajatyyppi getKayttajatyyppi() {
     return kayttajatyyppi;
@@ -155,8 +153,13 @@ public class Kayttaja {
     this.kayttaja_id = kayttaja_id;
   }
 
+  // to string
+  @Override
+  public String toString() {
+    return "Kayttaja [kayttaja_id=" + kayttaja_id + ", kayttajatunnus=" + kayttajatunnus + ", salasana_hash="
+        + salasana_hash + ", etunimi=" + etunimi + ", sukunimi=" + sukunimi + ", puh_nro=" + puh_nro + ", email="
+        + email + ", katuosoite=" + katuosoite + ", postinumero=" + postinumero + ", kayttajatyyppi=" + kayttajatyyppi
+        + "]";
+  }
 
-
-
-  
 }

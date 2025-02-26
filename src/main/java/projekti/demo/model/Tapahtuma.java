@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
@@ -48,6 +49,10 @@ public class Tapahtuma {
     @JoinColumn(name = "Jarjestaja_id")
     private Jarjestaja jarjestaja;
 
+    @NotEmpty(message = "Lippumäärä on pakollinen")
+    @Min(1)
+    private int lippumaara;
+
     // constructorit
     public Tapahtuma() {
     }
@@ -74,6 +79,22 @@ public class Tapahtuma {
 
     public void setNimi(String nimi) {
         this.nimi = nimi;
+    }
+
+    public Jarjestaja getJarjestaja() {
+        return jarjestaja;
+    }
+
+    public void setJarjestaja(Jarjestaja jarjestaja) {
+        this.jarjestaja = jarjestaja;
+    }
+
+    public int getLippumaara() {
+        return lippumaara;
+    }
+
+    public void setLippumaara(int lippumaara) {
+        this.lippumaara = lippumaara;
     }
 
     public LocalDateTime getPaivamaara() {

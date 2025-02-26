@@ -13,7 +13,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 
 
-
 @Entity
 @Table(name="Liput")
 public class Lippu {
@@ -23,37 +22,43 @@ public class Lippu {
     @Column(name = "lippu_id")
     private Long lippu_id;
 
-    @NotEmpty(message = "Hinta on pakollinen")
-    @Column(name = "hinta")
-    private Long hinta;
-
-    @Column(name = "tarkistus_pvm")
-    private LocalDateTime tarkistus_pvm;
-
+    // TODO: Tarkista, kun tapahtuma_liiputyyppi -entity olemassa
+    // TODO: Muista tarkistaa myös getterit ja setterit + toString
+    /*
     @ManyToOne
-    @JoinColumn(name="tapahtuma_id")
-    @NotEmpty(message = "Tapahtuma on pakollinen")
-    private Tapahtuma tapahtuma;
+    @JoinColumn(name="tapahtuma_lipputyyppi_id")
+    @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen")
+    private Tapahtuman_lipputyyppi tapahtuma_lipputyyppi;
+    */
+
+    @Column(name = "hinta")
+    @NotEmpty
+    private Float hinta;
 
     @ManyToOne
     @JoinColumn(name="tila_id")
     @NotEmpty(message = "Tila on pakollinen")
     private Tila tila;
-    
-    @ManyToOne
-    @JoinColumn(name="lipputyyppi_id")
-    @NotEmpty(message = "Lipputyyppi on pakollinen")
-    private Lipputyyppi lipputyyppi;
 
     @ManyToOne
     @JoinColumn(name="kayttaja_id")
     private Kayttaja tarkastaja;
 
+    @Column(name = "tarkistus_pvm")
+    private LocalDateTime tarkistus_pvm;
+
+    @ManyToOne
+    @JoinColumn(name = "myynti_id", nullable = false)
+    @NotEmpty(message = "Myynti on pakollinen")
+    private Myynti myynti;
+
     public Lippu() {
         super();
     }
 
-    public Lippu(Long hinta, LocalDateTime tarkistus_pvm, Tapahtuma tapahtuma, Tila tila, Lipputyyppi lipputyyppi,
+    // TODO: Luo uudestaan, kun tapahtuma_liiputyyppi -entity olemassa
+    /*
+    public Lippu(Float hinta, LocalDateTime tarkistus_pvm, Tapahtuma tapahtuma, Tila tila, Lipputyyppi lipputyyppi,
         Kayttaja tarkastaja) {
         this.hinta = hinta;
         this.tarkistus_pvm = tarkistus_pvm;
@@ -62,12 +67,13 @@ public class Lippu {
         this.lipputyyppi = lipputyyppi;
         this.tarkastaja = tarkastaja;
     }
+    */
 
-    public Long getHinta() {
+    public Float getHinta() {
         return hinta;
     }
 
-    public void setHinta(Long hinta) {
+    public void setHinta(Float hinta) {
         this.hinta = hinta;
     }
 
@@ -79,28 +85,12 @@ public class Lippu {
         this.tarkistus_pvm = tarkistus_pvm;
     }
 
-    public Tapahtuma getTapahtuma() {
-        return tapahtuma;
-    }
-
-    public void setTapahtuma(Tapahtuma tapahtuma) {
-        this.tapahtuma = tapahtuma;
-    }
-
     public Tila getTila() {
         return tila;
     }
 
     public void setTila(Tila tila) {
         this.tila = tila;
-    }
-
-    public Lipputyyppi getLipputyyppi() {
-        return lipputyyppi;
-    }
-
-    public void setLipputyyppi(Lipputyyppi lipputyyppi) {
-        this.lipputyyppi = lipputyyppi;
     }
 
     public Kayttaja getTarkastaja() {
@@ -110,13 +100,6 @@ public class Lippu {
     public void setTarkastaja(Kayttaja tarkastaja) {
         this.tarkastaja = tarkastaja;
     }
-
-    @Override
-    public String toString() {
-        return "Lippu [lippu_id=" + lippu_id + ", hinta=" + hinta + ", tarkistus_pvm=" + tarkistus_pvm + ", tapahtuma="
-                + tapahtuma + ", tila=" + tila + ", lipputyyppi=" + lipputyyppi + ", tarkastaja=" + tarkastaja + "]";
-    }
-
     
 }
 
