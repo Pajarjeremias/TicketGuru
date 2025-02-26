@@ -24,12 +24,12 @@ public class Lippu {
 
     // TODO: Tarkista, kun tapahtuma_liiputyyppi -entity olemassa
     // TODO: Muista tarkistaa myös getterit ja setterit + toString
-    /*
+    
     @ManyToOne
     @JoinColumn(name="tapahtuma_lipputyyppi_id")
     @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen")
     private Tapahtuman_lipputyypit tapahtuman_lipputyypit;
-    */
+    
 
     @Column(name = "hinta")
     @NotEmpty
@@ -56,6 +56,75 @@ public class Lippu {
         super();
     }
 
+    public Lippu(
+            @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen") Tapahtuman_lipputyypit tapahtuman_lipputyypit,
+            @NotEmpty Float hinta, @NotEmpty(message = "Tila on pakollinen") Tila tila, Kayttaja tarkastaja,
+            LocalDateTime tarkistus_pvm, @NotEmpty(message = "Myynti on pakollinen") Myynti myynti) {
+        this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;
+        this.hinta = hinta;
+        this.tila = tila;
+        this.tarkastaja = tarkastaja;
+        this.tarkistus_pvm = tarkistus_pvm;
+        this.myynti = myynti;
+    }
+
+    public Long getLippu_id() {
+        return lippu_id;
+    }
+
+    public void setLippu_id(Long lippu_id) {
+        this.lippu_id = lippu_id;
+    }
+
+    public Tapahtuman_lipputyypit getTapahtuman_lipputyypit() {
+        return tapahtuman_lipputyypit;
+    }
+
+    public void setTapahtuman_lipputyypit(Tapahtuman_lipputyypit tapahtuman_lipputyypit) {
+        this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;
+    }
+
+    public Float getHinta() {
+        return hinta;
+    }
+
+    public void setHinta(Float hinta) {
+        this.hinta = hinta;
+    }
+
+    public Tila getTila() {
+        return tila;
+    }
+
+    public void setTila(Tila tila) {
+        this.tila = tila;
+    }
+
+    public Kayttaja getTarkastaja() {
+        return tarkastaja;
+    }
+
+    public void setTarkastaja(Kayttaja tarkastaja) {
+        this.tarkastaja = tarkastaja;
+    }
+
+    public LocalDateTime getTarkistus_pvm() {
+        return tarkistus_pvm;
+    }
+
+    public void setTarkistus_pvm(LocalDateTime tarkistus_pvm) {
+        this.tarkistus_pvm = tarkistus_pvm;
+    }
+
+    public Myynti getMyynti() {
+        return myynti;
+    }
+
+    public void setMyynti(Myynti myynti) {
+        this.myynti = myynti;
+    }
+
+    
     // TODO: Luo uudestaan, kun tapahtuma_liiputyyppi -entity olemassa
     /*
     public Lippu(Float hinta, LocalDateTime tarkistus_pvm, Tapahtuma tapahtuma, Tila tila, Lipputyyppi lipputyyppi,
@@ -67,7 +136,7 @@ public class Lippu {
         this.lipputyyppi = lipputyyppi;
         this.tarkastaja = tarkastaja;
     }
-    */
+    
 
     public Float getHinta() {
         return hinta;
@@ -99,7 +168,7 @@ public class Lippu {
 
     public void setTarkastaja(Kayttaja tarkastaja) {
         this.tarkastaja = tarkastaja;
-    }
+    }*/
     
 }
 
