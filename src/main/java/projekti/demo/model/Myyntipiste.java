@@ -10,7 +10,7 @@ public class Myyntipiste {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "myyntipiste_id")
-    private Integer myyntipisteId;
+    private Integer myyntipiste_id;
 
     @Column(name = "nimi", nullable = false, length = 100)
     private String nimi;
@@ -25,13 +25,29 @@ public class Myyntipiste {
     @OneToMany(mappedBy = "myyntipiste")
     private List<Myynti> myynnit;
 
+    // Constructorit
+    public Myyntipiste() { }
+
+    public Myyntipiste(String nimi, String katuosoite, Postitoimipaikka postitoimipaikka) {
+        this.nimi = nimi;
+        this.katuosoite = katuosoite;
+        this.postitoimipaikka = postitoimipaikka;
+    }
+
+    public Myyntipiste(String nimi, String katuosoite, Postitoimipaikka postitoimipaikka, List<Myynti> myynnit) {
+        this.nimi = nimi;
+        this.katuosoite = katuosoite;
+        this.postitoimipaikka = postitoimipaikka;
+        this.myynnit = myynnit;
+    }
+
     // Getterit ja setterit
     public Integer getMyyntipisteId() {
-        return myyntipisteId;
+        return myyntipiste_id;
     }
 
     public void setMyyntipisteId(Integer myyntipisteId) {
-        this.myyntipisteId = myyntipisteId;
+        this.myyntipiste_id = myyntipisteId;
     }
 
     public String getNimi() {
@@ -64,5 +80,12 @@ public class Myyntipiste {
 
     public void setMyynnit(List<Myynti> myynnit) {
         this.myynnit = myynnit;
+    }
+
+    // To string
+    @Override
+    public String toString() {
+        return "Myyntipiste [myyntipiste_id=" + myyntipiste_id + ", nimi=" + nimi + ", katuosoite=" + katuosoite
+                + ", postitoimipaikka=" + postitoimipaikka + ", myynnit=" + myynnit + "]";
     }
 }

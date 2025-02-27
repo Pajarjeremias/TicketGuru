@@ -88,7 +88,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 ## Tietokanta
 
-![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokaavio.png)
+![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/21-tietokannan-fiksaus/tietokaavio.png)
 
 > ### _Jarjestajat_
 > _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
@@ -115,8 +115,8 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> Lipputyyppi_id | int PK | Lipputyypin yksilöivä avain/id
-> Lipputyyppi | varchar(30) | Lipptyypin nimi, esim. aikuinen, eläkeläinen, opsikelija, lapsi
+> Lipputyyppi_id | int PK, not null | Lipputyypin yksilöivä avain/id
+> Lipputyyppi | varchar(30), not null | Lipptyypin nimi, esim. aikuinen, eläkeläinen, opsikelija, lapsi
 > 
 > ### _Tilat_
 > _Tilat-taulu sisältää lippujen eri tila-vaihtoehdot._
@@ -131,13 +131,23 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> Lippu_id | int PK | Lipun yksilöivä avain/id
-> Tapahtuma_id | int FK | Tapahtuma, johon lippu liittyy, viittaus [Tapahtumat](#Tapahtumat)-tauluun
-> Tyyppi_id | int FK | Lipun tyyppi, viittaus [Lipputyypit](#Lipputyypit)-tauluun
-> Hinta | int | Lipun perushinta
+> Lippu_id | int PK, not null | Lipun yksilöivä avain/id
+> Tapahtuma_lipputyyppi_id | int FK, not null | Tapahtuma + lipputyyppi, viittaus [Tapahtuman_lipputyypit](#Tapahtuman_lipputyypit)-tauluun
+> Hinta | decimal(2) | Lipun lopullinen myyntihinta
 > Tila_id | int FK | Lipun tila, viittaus [Tilat](#Tilat)-tauluun
 > Tarkastanut_id | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
 > Tarkistus_pvm | date | Päivämäärä, jolloin lippu on tarkasettu ovella, eli käytetty
+> Myynti_id | int, FK, not null | Myyntitapahtuma, johon lippu liittyy, viittaus [Myynnit](#Myynnit)-tauluun
+>
+> ### _Tapahtuman_lipputyypit_
+> _Tapahtuman_lipputyypit-taulu sisältää tietoa siitä millaisia lippuja mihinkin tapahtumaan on myynnissä ja paljonko ne maksavat._
+>
+> Kenttä | Tyyppi | Kuvaus 
+> ------ | ------ | ------
+> Tapahtuma_lipputyyppi_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key 
+> Tapahtuma_id | int, FK, NOT NULL | Viittaus [Tapahtumat](#Tapahtumat) -tauluun
+> Lipputyyppi_id | int, FK, NOT NULL | Viittaus [Lipputyypit](#Lipputyypit) -tauluun
+> Hinta | decimal(2), NOT NULL | Lipun myyntihinta
 >
 > ### _Tapahtumat_
 > _Tapahtumat-taulu sisältää tapahtumat, jotka järjestetään tietyssä paikassa tietyllä päivämäärällä. Tapahtumalla on myös kuvaus ja viittaus järjestäjään. Tapahtumilla on yksilöivät tunnisteet._
@@ -150,6 +160,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kuvaus | varchar(2500) | Tapahtuman kuvaus
 > Tapahtumapaikka | int FK | Viittaus [Tapahtumapaikat](#Tapahtumapaikat)-taulun, Tapahtumapaikka_id avaimeen
 > Jarjestaja_id | int FK | Tapahtuman järjestäjä. Viittaus [Jarjestajat](#jarjestajat)-tauluun
+> Lippumaara | int, not null | Tapahtumaan myytävien lippujen määrä
 >
 > ### _Tapahtumapaikat_
 > _Tapahtumapaikat-taulu sisältää paikat, joissa tapahtumat järjestetään. Nimen lisäksi se sisältää osoitteen, viittauksen postinumerotauluun ja ihmisten maksimimäärän._
@@ -186,18 +197,17 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kayttajatyyppi_id | int, autonumber, PK, not null | Yksilöivä tunniste ja primary key
 > Kayttajatyyppi | varchar(20), not null |  Kayttajatyypin nimi esim. asiakas, lipuntarkastaja, lipunmyyjä tai ylläpitäjä.
 > Kuvaus | varchar(500) | Vapaaehtoinen kuvaus käyttäjätyypille
-
+>
 > ### _Myynnit_
-> _Myynnit-taulu sisältää tietoa lippujen myymisestä asiakkaalle._
+> _Myynnit-taulu sisältää tietoa lippujen myymisestä asiakkaalle (myyntitapahtumat)._
 >
 > Kenttä | Tyyppi | Kuvaus 
 > ------ | ------ | ------
-> Myynti_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key
-> Lippu_id | int, FK, NOT NULL | Viittaus [Liput](#Lippu_id) -tauluun 
-> Asiakas_id | int, FK, NOT NULL | Viittaus [Kayttajat](#Kayttaja_id) -tauluun
+> Myynti_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key 
+> Asiakas_id | int, FK | Viittaus [Kayttajat](#Kayttaja_id) -tauluun
 > Myyntipaiva | date, NOT NULL | Päivämäärä sekä kellonaika jolloin myynti tapahtui
 > Myyntipiste_id | int, FK, NOT NULL | Viittaus [Myyntipisteet](#Myyntipiste_id) -tauluun
-> Hinta | decimal(10,2), NOT NULL | Lipun hinta
+> Maksutapa | varchar(100), NOT NULL | Maksutapa
 >
 > ### _Myyntipisteet_
 > _Myyntipisteet-taulu sisältää tietoa myyntipisteistä_

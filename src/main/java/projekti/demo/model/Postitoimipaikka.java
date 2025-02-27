@@ -10,10 +10,11 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name="Postitoimipaikat")
 public class Postitoimipaikka {
+
     @Id
     @NotEmpty(message = "Postinumero-kenttä ei saa olla tyhjä.")
     @Column(name = "postinumero")
-    private Long postinumero;
+    private String postinumero;
 
     @NotEmpty(message = "Postitoimipaikka-kenttä ei saa olla tyhjä.")
     @Size(max = 30, message = "Maksimipituus on 30 merkkiä.")
@@ -30,7 +31,7 @@ public class Postitoimipaikka {
         super();
     }
 
-    public Postitoimipaikka(@NotEmpty(message = "Postinumero-kenttä ei saa olla tyhjä.") Long postinumero,
+    public Postitoimipaikka(@NotEmpty(message = "Postinumero-kenttä ei saa olla tyhjä.") @NotEmpty(message = "Postinumero-kenttä ei saa olla tyhjä.") String postinumero,
             @NotEmpty(message = "Postitoimipaikka-kenttä ei saa olla tyhjä.") @Size(max = 30, message = "Maksimipituus on 30 merkkiä.") String postitoimipaikka,
             @Size(max = 30, message = "Maksimipituus on 30 merkkiä.") String maa) {
         this.postinumero = postinumero;
@@ -38,11 +39,11 @@ public class Postitoimipaikka {
         this.maa = maa;
     }
 
-    public Long getPostinumero() {
+    public @NotEmpty(message = "Postinumero-kenttä ei saa olla tyhjä.") String getPostinumero() {
         return postinumero;
     }
 
-    public void setPostinumero(Long postinumero) {
+    public void setPostinumero(@NotEmpty(message = "Postinumero-kenttä ei saa olla tyhjä.") String postinumero) {
         this.postinumero = postinumero;
     }
 
@@ -62,6 +63,10 @@ public class Postitoimipaikka {
         this.maa = maa;
     }
 
-    
+    @Override
+    public String toString() {
+        return "Postitoimipaikka [postinumero=" + postinumero + ", postitoimipaikka=" + postitoimipaikka + ", maa="
+                + maa + "]";
+    }
     
 }
