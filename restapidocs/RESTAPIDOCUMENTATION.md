@@ -1,5 +1,5 @@
 
-# RESTAPIDocs Examples
+# RESTAPIDocs TicketGuru
 
 BASE URL 'http://localhost:8080/'.
 
