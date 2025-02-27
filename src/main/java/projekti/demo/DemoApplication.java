@@ -7,6 +7,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import projekti.demo.model.Lipputyyppi;
+import projekti.demo.model.LipputyyppiRepository;
+import projekti.demo.model.TapahtumaRepository;
+import projekti.demo.model.Tapahtuman_lipputyyppiRepository;
+
 @SpringBootApplication
 public class DemoApplication {
 
@@ -17,6 +22,17 @@ public class DemoApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demoRunner()
+	public CommandLineRunner demoRunner(
+		TapahtumaRepository tapahtumaRepository,
+		Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository,
+		LipputyyppiRepository lipputyyppiRepository
+	) {
+		return(args) -> {
+
+			Lipputyyppi aikuinen = new Lipputyyppi("Aikuinen")
+
+
+		};
+	}
 
 }

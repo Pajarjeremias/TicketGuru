@@ -23,10 +23,12 @@ public class Tapahtuman_lipputyyppi {
 
     @ManyToOne
     @JoinColumn(name = "tapahtuma_id", nullable = false)
+    @NotNull
     private Tapahtuma tapahtuma;
 
     @ManyToOne
     @JoinColumn(name = "lipputyyppi_id", nullable = false)
+    @NotNull
     private Lipputyyppi lipputyyppi;
 
     @OneToMany(mappedBy = "tapahtuman_lipputyypit")
