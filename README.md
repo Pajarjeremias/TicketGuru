@@ -187,6 +187,29 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kayttajatyyppi | varchar(20), not null |  Kayttajatyypin nimi esim. asiakas, lipuntarkastaja, lipunmyyjä tai ylläpitäjä.
 > Kuvaus | varchar(500) | Vapaaehtoinen kuvaus käyttäjätyypille
 
+> ### _Myynnit_
+> _Myynnit-taulu sisältää tietoa lippujen myymisestä asiakkaalle._
+>
+> Kenttä | Tyyppi | Kuvaus 
+> ------ | ------ | ------
+> Myynti_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key
+> Lippu_id | int, FK, NOT NULL | Viittaus [Liput](#Lippu_id) -tauluun 
+> Asiakas_id | int, FK, NOT NULL | Viittaus [Kayttajat](#Kayttaja_id) -tauluun
+> Myyntipaiva | date, NOT NULL | Päivämäärä sekä kellonaika jolloin myynti tapahtui
+> Myyntipiste_id | int, FK, NOT NULL | Viittaus [Myyntipisteet](#Myyntipiste_id) -tauluun
+> Hinta | decimal(10,2), NOT NULL | Lipun hinta
+>
+> ### _Myyntipisteet_
+> _Myyntipisteet-taulu sisältää tietoa myyntipisteistä_
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Myyntipiste_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key 
+> Nimi | varchar(100), NOT NULL | Myyntipisteen nimi
+> Katuosoite | varchar(100), NOT NULL | Myyntipisteen katuosoite
+> Postinumero | int, FK, NOT NULL | Viittaus [Postitoimipaikat](#Postinumero) - tauluun
+
+
 ## Tekninen kuvaus
 
 Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
