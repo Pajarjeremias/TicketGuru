@@ -28,9 +28,9 @@ public class DemoApplication {
 
 	@Bean
 	public CommandLineRunner demoRunner(
+		LipputyyppiRepository lipputyyppiRepository,
 		TapahtumaRepository tapahtumaRepository,
-		Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository,
-		LipputyyppiRepository lipputyyppiRepository
+		Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository
 	) {
 		return(args) -> {
 
@@ -54,12 +54,12 @@ public class DemoApplication {
 
 			logger.info("Lisätään tapahtumille lipputyyppejä...");
 
-			Tapahtuman_lipputyyppi tapahtuma1_aikuinen = new Tapahtuman_lipputyyppi(tapahtuma1, aikuinen, (float) 30);
-			Tapahtuman_lipputyyppi tapahtuma1_lapsi = new Tapahtuman_lipputyyppi(tapahtuma1, lapsi, (float) 15);
+			Tapahtuman_lipputyyppi tapahtuma1_aikuinen = new Tapahtuman_lipputyyppi(tapahtuma1, aikuinen, (float) 30.00);
+			Tapahtuman_lipputyyppi tapahtuma1_lapsi = new Tapahtuman_lipputyyppi(tapahtuma1, lapsi, (float) 15.00);
 
 			Tapahtuman_lipputyyppi tapahtuma2_aikuinen = new Tapahtuman_lipputyyppi(tapahtuma2, aikuinen, (float) 19.90);
 			Tapahtuman_lipputyyppi tapahtuma2_lapsi = new Tapahtuman_lipputyyppi(tapahtuma2, lapsi, (float) 5.90);
-			Tapahtuman_lipputyyppi tapahtuma2_elakelainen = new Tapahtuman_lipputyyppi(tapahtuma2, elakelainen, (float) 0);
+			Tapahtuman_lipputyyppi tapahtuma2_elakelainen = new Tapahtuman_lipputyyppi(tapahtuma2, elakelainen, (float) 0.00);
 
 			tapahtuman_lipputyyppiRepository.save(tapahtuma1_aikuinen);
 			tapahtuman_lipputyyppiRepository.save(tapahtuma1_lapsi);
