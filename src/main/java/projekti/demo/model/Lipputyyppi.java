@@ -37,6 +37,11 @@ public class Lipputyyppi {
         super();
     }
 
+    public Lipputyyppi(
+            @NotEmpty(message = "Lipputyypin nimi on pakollinen") @Size(max = 30, message = "Maksimipituus 30 merkkiä") String lipputyyppi) {
+        this.lipputyyppi = lipputyyppi;
+    }
+
     public Lipputyyppi(List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit,
             @NotEmpty(message = "Lipputyypin nimi on pakollinen") @Size(max = 30, message = "Maksimipituus 30 merkkiä") String lipputyyppi) {
         this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;

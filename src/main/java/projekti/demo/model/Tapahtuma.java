@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -34,7 +35,7 @@ public class Tapahtuma {
     private String nimi;
 
     @Column(name = "PvmJaKellonaika")
-    @NotEmpty(message = "Tapahtumalla täytyy olla päiväys ja kellonaika")
+    @Future(message = "Tapahtumalla täytyy olla päiväys ja kellonaika")
     private LocalDateTime paivamaara;
 
     @Column(name = "Kuvaus")
@@ -53,8 +54,7 @@ public class Tapahtuma {
     @JoinColumn(name = "jarjestaja_id")
     private Jarjestaja jarjestaja;
 
-    @NotEmpty(message = "Lippumäärä on pakollinen")
-    @Min(1)
+    // @NotEmpty(message = "Lippumäärä on pakollinen")
     private int lippumaara;
 
     public Tapahtuma() { }
@@ -63,13 +63,14 @@ public class Tapahtuma {
             @NotEmpty(message = "Tapahtumalla täytyy olla nimi") @Size(min = 2, max = 200, message = "Täytyy olla 2-200 merkkiä") String nimi,
             @NotEmpty(message = "Tapahtumalla täytyy olla päiväys ja kellonaika") LocalDateTime paivamaara,
             @Size(min = 2, max = 2500, message = "Pituuden täytyy olla 2-2500 merkkiä") String kuvaus,
-            @NotEmpty(message = "Lippumäärä on pakollinen") @Min(1) int lippumaara) {
+             int lippumaara) {
         this.nimi = nimi;
         this.paivamaara = paivamaara;
         this.kuvaus = kuvaus;
         this.lippumaara = lippumaara;
     }
 
+    /*
     public Tapahtuma(
             @NotEmpty(message = "Tapahtumalla täytyy olla nimi") @Size(min = 2, max = 200, message = "Täytyy olla 2-200 merkkiä") String nimi,
             @NotEmpty(message = "Tapahtumalla täytyy olla päiväys ja kellonaika") LocalDateTime paivamaara,
@@ -84,6 +85,7 @@ public class Tapahtuma {
         this.jarjestaja = jarjestaja;
         this.lippumaara = lippumaara;
     }
+        */
 
     public Long getTapahtuma_id() {
         return tapahtuma_id;
@@ -152,8 +154,16 @@ public class Tapahtuma {
     @Override
     public String toString() {
         return "Tapahtuma [tapahtuma_id=" + tapahtuma_id + ", nimi=" + nimi + ", paivamaara=" + paivamaara + ", kuvaus="
+                + kuvaus + ", lippumaara=" + lippumaara + "]";
+    }
+
+    /*
+    @Override
+    public String toString() {
+        return "Tapahtuma [tapahtuma_id=" + tapahtuma_id + ", nimi=" + nimi + ", paivamaara=" + paivamaara + ", kuvaus="
                 + kuvaus + ", tapahtumapaikka=" + tapahtumapaikka + ", tapahtuman_lipputyypit=" + tapahtuman_lipputyypit
                 + ", jarjestaja=" + jarjestaja + ", lippumaara=" + lippumaara + "]";
     }
+                */
 
 }

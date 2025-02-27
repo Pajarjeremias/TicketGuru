@@ -38,6 +38,13 @@ public class Tapahtuman_lipputyyppi {
     @NotNull
     private Float hinta;
 
+    public Tapahtuman_lipputyyppi(@NotNull Tapahtuma tapahtuma, @NotNull Lipputyyppi lipputyyppi,
+            @NotNull Float hinta) {
+        this.tapahtuma = tapahtuma;
+        this.lipputyyppi = lipputyyppi;
+        this.hinta = hinta;
+    }
+
     public Tapahtuman_lipputyyppi(Tapahtuma tapahtuma, Lipputyyppi lipputyyppi, List<Lippu> liput,
             @NotNull Float hinta) {
         this.tapahtuma = tapahtuma;
