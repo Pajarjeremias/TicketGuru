@@ -99,7 +99,7 @@ public class Tapahtuman_lipputyyppi {
     @Override
     public String toString() {
         return "Tapahtuman_lipputyyppi [tapahtuma_lipputyyppi_id=" + tapahtuma_lipputyyppi_id + ", tapahtuma="
-                + tapahtuma + ", lipputyyppi=" + lipputyyppi + ", liput=" + liput + ", hinta=" + hinta + "]";
+                + tapahtuma.getNimi() + ", lipputyyppi=" + lipputyyppi + ", liput=" + liput + ", hinta=" + hinta + "]";
     }
 
 }
