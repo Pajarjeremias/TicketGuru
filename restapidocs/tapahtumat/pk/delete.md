@@ -1,6 +1,6 @@
-# Delete User's Account
+# Poista tapahtuma
 
-Delete the Account of the Authenticated User if they are Owner.
+Poista tapahtuma tietokannasta
 
 **URL** : `/api/accounts/:pk/`
 
@@ -8,10 +8,6 @@ Delete the Account of the Authenticated User if they are Owner.
 database.
 
 **Method** : `DELETE`
-
-**Auth required** : YES
-
-**Permissions required** : User is Account Owner
 
 **Data** : `{}`
 
@@ -42,4 +38,4 @@ database.
 
 ## Notes
 
-* Will remove memberships for this Account for all Users that had access.
+* Tulee poistamaan tapahtuman myös kaikilta lipun ostaneilta ja järjestäjiltä
