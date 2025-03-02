@@ -27,6 +27,7 @@ public class TapahtumaController {
     public List<Tapahtuma> getAllTapahtumat() {
         return tapahtumaRepository.findAll();
     }
+    
     @GetMapping("/tapahtumat/{id}")
     public Optional<Tapahtuma> getTapahtumaById(@PathVariable Long id) {
         return tapahtumaRepository.findById(id);

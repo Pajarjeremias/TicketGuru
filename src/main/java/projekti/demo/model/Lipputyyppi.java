@@ -2,6 +2,8 @@ package projekti.demo.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +27,7 @@ public class Lipputyyppi {
     private Long lipputyyppi_id;
 
     @OneToMany(mappedBy = "lipputyyppi", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit;
     
 
