@@ -1,63 +1,94 @@
-# Show Accessible Accounts
+# Hae kaikki tapahtumat
 
-Show all Accounts the active User can access and with what permission level.
-Includes their own Account if they have one.
+Hakee kaikki luodut tapahtumat ja niihin liittyvät tiedot.
 
-**URL** : `/api/accounts/`
+**URL** : `/api/tapahtumat`
 
 **Method** : `GET`
 
-**Auth required** : YES
+**Auth required** : Ei
 
-**Permissions required** : None
+**Permissions required** : Ei
 
-**Data constraints** : `{}`
+**Data constraints** : -
 
 ## Success Responses
 
-**Condition** : User can not see any Accounts.
-
 **Code** : `200 OK`
 
-**Content** : `{[]}`
+**Content**
 
-### OR
+Kaksi esimerkkitapahtumaa. Nähdään tapahtuman id, nimi, päivämäärä, kuvaus, tapahtumapaikka sekä tapahtumaan liittyvien lipputyyppien tiedot.
 
-**Condition** : User can see one or more Accounts.
-
-**Code** : `200 OK`
-
-**Content** : In this example, the User can see three Accounts as AccountAdmin
-`AA`, Viewer `VV`, and Owner `OO` - in that order:
 
 ```json
 [
+[
     {
-        "account": {
-            "id": 123,
-            "name": "Lots of Admins Project",
-            "enterprise": false,
-            "url": "http://testserver/api/accounts/123/"
-        },
-        "permission": "AA"
+        "tapahtuma_id": 1,
+        "nimi": "Konsertti 1",
+        "paivamaara": "2025-03-18T00:00:00",
+        "kuvaus": "Paras konsertti ikinä.",
+        "tapahtumapaikka": [],
+        "tapahtuman_lipputyypit": [
+            {
+                "tapahtuma_lipputyyppi_id": 1,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 1,
+                    "lipputyyppi": "Aikuinen"
+                },
+                "liput": [],
+                "hinta": 30.0
+            },
+            {
+                "tapahtuma_lipputyyppi_id": 2,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 2,
+                    "lipputyyppi": "Lapsi"
+                },
+                "liput": [],
+                "hinta": 15.0
+            }
+        ],
+        "lippumaara": 50
     },
     {
-        "account": {
-            "id": 234,
-            "name": "Feel free to View this",
-            "enterprise": false,
-            "url": "http://testserver/api/accounts/234/"
-        },
-        "permission": "VV"
-    },
-    {
-        "account": {
-            "id": 345,
-            "name": "Mr Owner Project",
-            "enterprise": false,
-            "url": "http://testserver/api/accounts/345/"
-        },
-        "permission": "OO"
+        "tapahtuma_id": 2,
+        "nimi": "Urheilutapahtuma 3",
+        "paivamaara": "2025-04-01T00:00:00",
+        "kuvaus": "Paras urheilutapahtuma ikinä.",
+        "tapahtumapaikka": [],
+        "tapahtuman_lipputyypit": [
+            {
+                "tapahtuma_lipputyyppi_id": 3,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 1,
+                    "lipputyyppi": "Aikuinen"
+                },
+                "liput": [],
+                "hinta": 19.9
+            },
+            {
+                "tapahtuma_lipputyyppi_id": 4,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 2,
+                    "lipputyyppi": "Lapsi"
+                },
+                "liput": [],
+                "hinta": 5.9
+            },
+            {
+                "tapahtuma_lipputyyppi_id": 5,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 3,
+                    "lipputyyppi": "Eläkeläinen"
+                },
+                "liput": [],
+                "hinta": 0.0
+            }
+        ],
+        "lippumaara": 250
     }
+]
 ]
 ```
