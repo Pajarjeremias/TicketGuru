@@ -42,12 +42,16 @@ public class Tapahtuma {
     @Size(min = 2, max = 2500, message = "Pituuden täytyy olla 2-2500 merkkiä")
     private String kuvaus;
 
+
+    //pitäisikö tämän olla many to one?
     @JsonIgnoreProperties("tapahtumat")
     @OneToMany(mappedBy = "tapahtumapaikka_id", cascade = CascadeType.ALL)
     private List<Tapahtumapaikka> tapahtumapaikka;
 
     @OneToMany(mappedBy = "tapahtuma", cascade = CascadeType.ALL)
+    // pitäisikö olla linkitettu tapahtuman lipputyyppiin? @OneToMany(mappedBy = "tapahtuma_lipputyyppi_id", cascade = CascadeType.ALL)
     private List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit;
+    
 
     @ManyToOne
     @JsonIgnore

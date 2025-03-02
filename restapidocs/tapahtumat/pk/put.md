@@ -24,7 +24,7 @@ Muokkaa tapahtumaa.
 }
 ```
 
-**Data example** Partial data is allowed???
+**Data example** HUOM! Kaikki tiedot pitää toimittaa, ei pelkästään muuttunutta tietoa. Eli lomakkeella tulee olla vanhat tiedot, joita muutetaan, muuten tyhjä "muutos" yliajaa vanhan tiedon.
 
 ```json
 {
@@ -75,6 +75,8 @@ Muokkaa tapahtumaa.
 
 ## Notes
 
+HUOM! Kaikki tiedot pitää toimittaa, ei pelkästään muuttunutta tietoa. Eli lomakkeella tulee olla vanhat tiedot, joita muutetaan, muuten tyhjä "muutos" yliajaa vanhan tiedon.
+
 ### Data ignored
 
-Endpoint jättää huomiotta parametrit, joita ei ole olemassa tai ovat vain luettavissa. ??
+Endpoint jättää huomiotta parametrit, joita ei ole olemassa tai ovat vain luettavissa??  
