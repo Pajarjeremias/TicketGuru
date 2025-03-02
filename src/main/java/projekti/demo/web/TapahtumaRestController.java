@@ -1,6 +1,7 @@
 package projekti.demo.web;
 
 import java.util.List;
+import java.util.Optional;
 
 //import java.util.Optional;
 
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/api/tapahtumat")
 public class TapahtumaRestController {
 
     @Autowired
@@ -32,6 +32,12 @@ public class TapahtumaRestController {
     public List<Tapahtuma> getAllTapahtumat() {
         return tapahtumaRepository.findAll();
     }
+
+    @GetMapping("/api/tapahtumat/{id}")
+    public Optional<Tapahtuma> getTapahtumaById(@PathVariable Long id) {
+        return tapahtumaRepository.findById(id);
+    }
+   
 
     // poista tapahtuma
     @DeleteMapping("/api/tapahtumat/{id}")
