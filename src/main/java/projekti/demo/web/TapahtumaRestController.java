@@ -1,5 +1,7 @@
 package projekti.demo.web;
 
+import java.util.List;
+
 //import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import org.springframework.http.HttpStatus;
 
 import projekti.demo.model.Tapahtuma;
 import projekti.demo.model.TapahtumaRepository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/tapahtumat")
@@ -21,6 +26,12 @@ public class TapahtumaRestController {
 
     @Autowired
     private TapahtumaRepository tapahtumaRepository;
+
+    // Hae kaikki tapahtumat
+    @GetMapping(value = {"/api/tapahtumat", "/api/tapahtumat/"})
+    public List<Tapahtuma> getAllTapahtumat() {
+        return tapahtumaRepository.findAll();
+    }
 
     // poista tapahtuma
     @DeleteMapping("/api/tapahtumat/{id}")
@@ -35,7 +46,6 @@ public class TapahtumaRestController {
     }
 
     //muokkaa tapahtumaa
-
     @PutMapping("/api/tapahtumat/{id}")
     Tapahtuma paivitaTapahtuma(@RequestBody Tapahtuma muokattuTapahtuma, @PathVariable Long id){
         muokattuTapahtuma.setTapahtuma_id(id);
