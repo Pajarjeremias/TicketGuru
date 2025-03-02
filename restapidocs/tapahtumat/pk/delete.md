@@ -9,11 +9,15 @@ database.
 
 **Method** : `DELETE`
 
+**Auth required** : `Kyllä (myöhemmässä vaiheessa, kun käyttöoikeudet on määritelty)`
+
+**Permissions required**: `Käyttäjä on ylläpitäjä`
+
 **Data** : `{}`
 
-## Success Response
+## Onnistunut tapahtuma
 
-**Condition** : If the Account exists.
+**Condition** : Jos tapahtuma onnistuttiin poistaman.
 
 **Code** : `204 NO CONTENT`
 
@@ -21,15 +25,15 @@ database.
 
 ## Error Responses
 
-**Condition** : If there was no Account available to delete.
+**Condition** : Mikäli ei löytynyt tapahtumaa, jonka voi poistaa.
 
 **Code** : `404 NOT FOUND`
 
 **Content** : `{}`
 
-### Or
+### Or  -- koodataan myöhemmin, kun käyttöoikeudet on määritelty
 
-**Condition** : Authorized User is not Owner of Account at URL.
+**Condition** : Mikäli käyttäjällä ei ole oikeuksia poistaa tapahtumaa.
 
 **Code** : `403 FORBIDDEN`
 
