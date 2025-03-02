@@ -18,17 +18,22 @@ Muokkaa tapahtumaa.
     "nimi": "[String, 2-200 merkkiä]",
     "paivamaara": "[LocalDateTime]",
     "kuvaus": "[String, 2-200 merkkiä]",
-    "tapahtumapaikka": "[Long vittaa tapahtumapaikka_id]",
+    "tapahtumapaikka": "[List vittaa tapahtumapaikka_id]",
     "tapahtuman_lipputyypit": "[List, viittaa Long tapahtuma_lipputyyppi_id]",
     "jarjestaja": "[Jarjestaja olio, viittaa Long Jarjestaja_id]",
+    "lippumäärä": "[Integer]"
 }
 ```
 
-**Data example** HUOM! Kaikki tiedot pitää toimittaa, ei pelkästään muuttunutta tietoa. Eli lomakkeella tulee olla vanhat tiedot, joita muutetaan, muuten tyhjä "muutos" yliajaa vanhan tiedon.
+**Data example** 
 
 ```json
 {
     "nimi": "UusiNimi",
+    "paivamaara": "2025-04-18T00:00:00",
+    "kuvaus": "Paras konsertti ikinä.",
+    "tapahtumapaikka": [],
+    "lippumäärä": 50
 }
 ```
 
@@ -48,11 +53,28 @@ Muokkaa tapahtumaa.
 {
     "tapahtuma_id": 1,
     "nimi": "UusiNimi",
-    "paivamaara": "[LocalDateTime]",
-    "kuvaus": "Tähän tapahtuman kuvaus",
-    "tapahtumapaikka": 1,
-    "tapahtuman_lipputyypit": [1, 2],
-    "jarjestaja": 1,
+    "paivamaara": "2025-04-18T00:00:00",
+    "kuvaus": "Paras konsertti ikinä.",
+    "tapahtumapaikka": [],
+    "tapahtuman_lipputyypit": [
+        {
+            "tapahtuma_lipputyyppi_id": 1,
+            "lipputyyppi": {
+                "lipputyyppi_id": 1,
+                "lipputyyppi": "Aikuinen"
+            },
+            "hinta": 30.0
+        },
+        {
+            "tapahtuma_lipputyyppi_id": 2,
+            "lipputyyppi": {
+                "lipputyyppi_id": 2,
+                "lipputyyppi": "Lapsi"
+            },
+            "hinta": 15.0
+        }
+    ],
+    "lippumaara": 50
     "url": "http://localhost8080/api/tapahtumat/1/"
 }
 ```
@@ -75,8 +97,5 @@ Muokkaa tapahtumaa.
 
 ## Notes
 
-HUOM! Kaikki tiedot pitää toimittaa, ei pelkästään muuttunutta tietoa. Eli lomakkeella tulee olla vanhat tiedot, joita muutetaan, muuten tyhjä "muutos" yliajaa vanhan tiedon.
+Vain annetut tiedot päivitetään. Huom. Jos annetaan tyhjä tieto, esim kuvaus, se ajaa vanhan tiedon yli. 
 
-### Data ignored
-
-Endpoint jättää huomiotta parametrit, joita ei ole olemassa tai ovat vain luettavissa??  
