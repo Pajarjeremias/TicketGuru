@@ -38,6 +38,9 @@ public class Tapahtuman_lipputyyppi {
     @NotNull
     private Float hinta;
 
+    public Tapahtuman_lipputyyppi() {
+    }
+
     public Tapahtuman_lipputyyppi(@NotNull Tapahtuma tapahtuma, @NotNull Lipputyyppi lipputyyppi,
             @NotNull Float hinta) {
         this.tapahtuma = tapahtuma;
@@ -96,7 +99,7 @@ public class Tapahtuman_lipputyyppi {
     @Override
     public String toString() {
         return "Tapahtuman_lipputyyppi [tapahtuma_lipputyyppi_id=" + tapahtuma_lipputyyppi_id + ", tapahtuma="
-                + tapahtuma + ", lipputyyppi=" + lipputyyppi + ", liput=" + liput + ", hinta=" + hinta + "]";
+                + tapahtuma.getNimi() + ", lipputyyppi=" + lipputyyppi + ", liput=" + liput + ", hinta=" + hinta + "]";
     }
 
 }
