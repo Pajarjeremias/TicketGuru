@@ -1,61 +1,73 @@
-# Update Account
+# Muokkaa tapahtumaa
 
-Update the Account of the Authenticated User if and only if they are Owner.
+Muokkaa tapahtumaa. 
 
-**URL** : `/api/accounts/:pk/`
+**URL** : `/api/tapahtumat/:pk/`
 
 **Method** : `PUT`
 
-**Auth required** : YES
+**Auth required** : Kyllä (myöhemmässä vaiheessa, kun käyttöoikeudet on määritelty)
 
-**Permissions required** : User is Account Owner
+**Permissions required** : Käyttäjä on ylläpitäjä
 
 **Data constraints**
 
 ```json
 {
-    "name": "[unicode 64 chars max]",
+    "tapahtuma_id": "[Long identity]",
+    "nimi": "[String, 2-200 merkkiä]",
+    "paivamaara": "[LocalDateTime]",
+    "kuvaus": "[String, 2-200 merkkiä]",
+    "tapahtumapaikka": "[Long vittaa tapahtumapaikka_id]",
+    "tapahtuman_lipputyypit": "[List, viittaa Long tapahtuma_lipputyyppi_id]",
+    "jarjestaja": "[Jarjestaja olio, viittaa Long Jarjestaja_id]",
 }
 ```
 
-**Data example** Partial data is allowed, but there is only one field.
+**Data example** HUOM! Kaikki tiedot pitää toimittaa, ei pelkästään muuttunutta tietoa. Eli lomakkeella tulee olla vanhat tiedot, joita muutetaan, muuten tyhjä "muutos" yliajaa vanhan tiedon.
 
 ```json
 {
-    "name": "Build something project dot com",
+    "nimi": "UusiNimi",
 }
 ```
 
 ## Success Responses
 
-**Condition** : Update can be performed either fully or partially by the Owner
-of the Account.
+**Condition** : Muutos voidaan suorittaa
 
 **Code** : `200 OK`
 
-**Content example** : For the example above, when the 'name' is updated and
-posted to `/api/accounts/123/`...
+**Code** : `201 Created`
+
+**Code** : `204 No Content`
+
+**Content example** : Esimerkki, kun nimi on päivitetty ja "postattu" osoitteeseen `/api/tapahtumat/:pk/`...
 
 ```json
 {
-    "id": 123,
-    "name": "New project name",
-    "enterprise": false,
-    "url": "http://testserver/api/accounts/123/"
+    "tapahtuma_id": 1,
+    "nimi": "UusiNimi",
+    "paivamaara": "[LocalDateTime]",
+    "kuvaus": "Tähän tapahtuman kuvaus",
+    "tapahtumapaikka": 1,
+    "tapahtuman_lipputyypit": [1, 2],
+    "jarjestaja": 1,
+    "url": "http://localhost8080/api/tapahtumat/1/"
 }
 ```
 
 ## Error Response
 
-**Condition** : Account does not exist at URL
+**Condition** : Jos annettu data ei ole kelvollista. Esimerkiksi teksti on liian pitkä. 
 
-**Code** : `404 NOT FOUND`
+**Code** : `400 Bad Request`
 
 **Content** : `{}`
 
 ### Or
 
-**Condition** : Authorized User is not Owner of Account at URL.
+**Condition** : Käyttäjä ei ole typiltään järjestäjä (toteutetaan myöhemmin).
 
 **Code** : `403 FORBIDDEN`
 
@@ -63,32 +75,8 @@ posted to `/api/accounts/123/`...
 
 ## Notes
 
+HUOM! Kaikki tiedot pitää toimittaa, ei pelkästään muuttunutta tietoa. Eli lomakkeella tulee olla vanhat tiedot, joita muutetaan, muuten tyhjä "muutos" yliajaa vanhan tiedon.
+
 ### Data ignored
 
-Endpoint will ignore irrelevant and read-only data such as parameters that
-don't exist, or `id` and `enterprise` fields which are not editable.
-
-E.g. if Account already exits:
-
-**Data example**
-
-```json
-{
-    "wibble": "flobble",
-    "id": 987,
-    "enterprise": true
-}
-```
-
-**Code** : `200 OK`
-
-**Content example**
-
-```json
-{
-    "id": 123,
-    "name": "New project name",
-    "enterprise": false,
-    "url": "http://testserver/api/accounts/123/"
-}
-```
+Endpoint jättää huomiotta parametrit, joita ei ole olemassa tai ovat vain luettavissa??  
