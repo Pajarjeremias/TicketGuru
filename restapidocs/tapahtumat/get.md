@@ -23,7 +23,6 @@ Kaksi esimerkkitapahtumaa. Nähdään tapahtuman id, nimi, päivämäärä, kuva
 
 ```json
 [
-[
     {
         "tapahtuma_id": 1,
         "nimi": "Konsertti 1",
@@ -37,7 +36,6 @@ Kaksi esimerkkitapahtumaa. Nähdään tapahtuman id, nimi, päivämäärä, kuva
                     "lipputyyppi_id": 1,
                     "lipputyyppi": "Aikuinen"
                 },
-                "liput": [],
                 "hinta": 30.0
             },
             {
@@ -46,7 +44,6 @@ Kaksi esimerkkitapahtumaa. Nähdään tapahtuman id, nimi, päivämäärä, kuva
                     "lipputyyppi_id": 2,
                     "lipputyyppi": "Lapsi"
                 },
-                "liput": [],
                 "hinta": 15.0
             }
         ],
@@ -65,7 +62,6 @@ Kaksi esimerkkitapahtumaa. Nähdään tapahtuman id, nimi, päivämäärä, kuva
                     "lipputyyppi_id": 1,
                     "lipputyyppi": "Aikuinen"
                 },
-                "liput": [],
                 "hinta": 19.9
             },
             {
@@ -74,7 +70,6 @@ Kaksi esimerkkitapahtumaa. Nähdään tapahtuman id, nimi, päivämäärä, kuva
                     "lipputyyppi_id": 2,
                     "lipputyyppi": "Lapsi"
                 },
-                "liput": [],
                 "hinta": 5.9
             },
             {
@@ -83,12 +78,10 @@ Kaksi esimerkkitapahtumaa. Nähdään tapahtuman id, nimi, päivämäärä, kuva
                     "lipputyyppi_id": 3,
                     "lipputyyppi": "Eläkeläinen"
                 },
-                "liput": [],
                 "hinta": 0.0
             }
         ],
         "lippumaara": 250
     }
-]
 ]
 ```

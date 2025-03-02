@@ -35,6 +35,7 @@ public class Tapahtuman_lipputyyppi {
     private Lipputyyppi lipputyyppi;
 
     @OneToMany(mappedBy = "tapahtuman_lipputyypit")
+    @JsonIgnore
     private List<Lippu> liput;
 
     @Column(name = "hinta")
