@@ -2,6 +2,8 @@ package projekti.demo.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,7 @@ public class Tapahtuman_lipputyyppi {
     @ManyToOne
     @JoinColumn(name = "tapahtuma_id", nullable = false)
     @NotNull
+    @JsonIgnore
     private Tapahtuma tapahtuma;
 
     @ManyToOne

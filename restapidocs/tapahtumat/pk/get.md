@@ -1,69 +1,101 @@
-# Show Single Account
+# Hae kaikki tapahtumat
 
-Show a single Account if current User has access permissions to it.
+Hakee kaikki luodut tapahtumat ja niihin liittyvät tiedot.
 
-**URL** : `/api/accounts/:pk/`
-
-**URL Parameters** : `pk=[integer]` where `pk` is the ID of the Account on the
-server.
+**URL** : `/api/tapahtumat`
 
 **Method** : `GET`
 
-**Auth required** : YES
+**Auth required** : Ei
 
-**Permissions required** :
+**Permissions required** : Ei
 
-User is at least one of the following in relation to the Account requested:
+**Data constraints** : -
 
-* Owner `OO`
-* Admin `AA`
-* Viewer `VV`
-
-**Data**: `{}`
-
-## Success Response
-
-**Condition** : If Account exists and Authorized User has required permissions.
+## Success Responses
 
 **Code** : `200 OK`
 
-**Content example**
+**Content**
+
+Kaksi esimerkkitapahtumaa. Nähdään tapahtuman id, nimi, päivämäärä, kuvaus, tapahtumapaikka sekä tapahtumaan liittyvien lipputyyppien tiedot.
+
 
 ```json
-{
-    "id": 345,
-    "name": "Super Account",
-    "enterprise": false,
-    "url": "http://testserver/api/accounts/345/"
-}
+[
+[
+    {
+        "tapahtuma_id": 1,
+        "nimi": "Konsertti 1",
+        "paivamaara": "2025-03-18T00:00:00",
+        "kuvaus": "Paras konsertti ikinä.",
+        "tapahtumapaikka": [],
+        "tapahtuman_lipputyypit": [
+            {
+                "tapahtuma_lipputyyppi_id": 1,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 1,
+                    "lipputyyppi": "Aikuinen"
+                },
+                "liput": [],
+                "hinta": 30.0
+            },
+            {
+                "tapahtuma_lipputyyppi_id": 2,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 2,
+                    "lipputyyppi": "Lapsi"
+                },
+                "liput": [],
+                "hinta": 15.0
+            }
+        ],
+        "lippumaara": 50
+    },
+    {
+        "tapahtuma_id": 2,
+        "nimi": "Urheilutapahtuma 3",
+        "paivamaara": "2025-04-01T00:00:00",
+        "kuvaus": "Paras urheilutapahtuma ikinä.",
+        "tapahtumapaikka": [],
+        "tapahtuman_lipputyypit": [
+            {
+                "tapahtuma_lipputyyppi_id": 3,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 1,
+                    "lipputyyppi": "Aikuinen"
+                },
+                "liput": [],
+                "hinta": 19.9
+            },
+            {
+                "tapahtuma_lipputyyppi_id": 4,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 2,
+                    "lipputyyppi": "Lapsi"
+                },
+                "liput": [],
+                "hinta": 5.9
+            },
+            {
+                "tapahtuma_lipputyyppi_id": 5,
+                "lipputyyppi": {
+                    "lipputyyppi_id": 3,
+                    "lipputyyppi": "Eläkeläinen"
+                },
+                "liput": [],
+                "hinta": 0.0
+            }
+        ],
+        "lippumaara": 250
+    }
+]
+]
 ```
 
-## Error Responses
+# Hae yksittäinen tapahtuma
 
-**Condition** : If Account does not exist with `id` of provided `pk` parameter.
+Hakee tiedot yksittäisestä tapahtumasta.
 
-**Code** : `404 NOT FOUND`
+TODO
 
-**Content** : `{}`
-
-### Or
-
-**Condition** : If Account exists but Authorized User does not have required
-permissions.
-
-**Code** : `403 FORBIDDEN`
-
-**Content** :
-
-```json
-{"detail": "You do not have permission to perform this action."}
-```
-
-## Notes
-
-There are security issues:
-
-* This view allows existing users to test for existence of accounts that exist
-    but that they do not have access to.
-* Account IDs are sequential so an authorized user can count all the Accounts
-    on the system.
