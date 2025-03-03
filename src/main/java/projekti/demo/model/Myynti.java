@@ -1,8 +1,11 @@
 package projekti.demo.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "myynnit")
@@ -11,14 +14,13 @@ public class Myynti {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "myynti_id")
-    private Integer myyntiId;
+    private Integer myynti_id;
+
+    @OneToMany(mappedBy = "lippu_id")
+    private List<Lippu> liput;
 
     @ManyToOne
-    @JoinColumn(name = "lippu_id", nullable = false)
-    private Lippu lippu;
-
-    @ManyToOne
-    @JoinColumn(name = "asiakas_id", nullable = false)
+    @JoinColumn(name = "kayttaja_id", nullable = false)
     private Kayttaja asiakas;
 
     @Column(name = "myyntipaiva", nullable = false)
@@ -28,24 +30,37 @@ public class Myynti {
     @JoinColumn(name = "myyntipiste_id", nullable = false)
     private Myyntipiste myyntipiste;
 
-    @Column(name = "hinta", nullable = false, precision = 10, scale = 2)
-    private BigDecimal hinta;
+    @Size(max = 100)
+    @NotEmpty
+    private String maksutapa;
+
+    // Constructorit
+    public Myynti() { }
+
+    public Myynti(List<Lippu> liput, Kayttaja asiakas, LocalDate myyntipaiva, Myyntipiste myyntipiste,
+            @Size(max = 100) @NotEmpty String maksutapa) {
+        this.liput = liput;
+        this.asiakas = asiakas;
+        this.myyntipaiva = myyntipaiva;
+        this.myyntipiste = myyntipiste;
+        this.maksutapa = maksutapa;
+    }
 
     // Getterit ja setterit
-    public Integer getMyyntiId() {
-        return myyntiId;
+    public Integer getMyynti_id() {
+        return myynti_id;
     }
 
-    public void setMyyntiId(Integer myyntiId) {
-        this.myyntiId = myyntiId;
+    public void setMyynti_id(Integer myynti_id) {
+        this.myynti_id = myynti_id;
     }
 
-    public Lippu getLippu() {
-        return lippu;
+    public List<Lippu> getLiput() {
+        return liput;
     }
 
-    public void setLippu(Lippu lippu) {
-        this.lippu = lippu;
+    public void setLiput(List<Lippu> liput) {
+        this.liput = liput;
     }
 
     public Kayttaja getAsiakas() {
@@ -72,11 +87,19 @@ public class Myynti {
         this.myyntipiste = myyntipiste;
     }
 
-    public BigDecimal getHinta() {
-        return hinta;
+    public String getMaksutapa() {
+        return maksutapa;
     }
 
-    public void setHinta(BigDecimal hinta) {
-        this.hinta = hinta;
+    public void setMaksutapa(String maksutapa) {
+        this.maksutapa = maksutapa;
     }
+
+    // To string
+    @Override
+    public String toString() {
+        return "Myynti [myynti_id=" + myynti_id + ", liput=" + liput + ", asiakas=" + asiakas + ", myyntipaiva="
+                + myyntipaiva + ", myyntipiste=" + myyntipiste + ", maksutapa=" + maksutapa + "]";
+    }
+
 }
