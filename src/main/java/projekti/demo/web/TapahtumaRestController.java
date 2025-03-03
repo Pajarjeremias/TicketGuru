@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
 
@@ -61,6 +62,27 @@ public class TapahtumaRestController {
     Tapahtuma paivitaTapahtuma(@RequestBody Tapahtuma muokattuTapahtuma, @PathVariable Long id){
         muokattuTapahtuma.setTapahtuma_id(id);
         return tapahtumaRepository.save(muokattuTapahtuma);
+    }
+    // Luo tapahtuma
+    @PostMapping("/api/tapahtumat")
+    public ResponseEntity<?> createTapahtuma(@Valid @RequestBody Tapahtuma tapahtuma) {
+        try {
+        
+            Tapahtuma savedTapahtuma = tapahtumaRepository.save(tapahtuma);
+    
+            
+            URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedTapahtuma.getTapahtuma_id())
+                .toUri();
+    
+        
+            return ResponseEntity.created(location).body(savedTapahtuma);
+        } catch (Exception e) {
+            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Tapahtuman luonti epäonnistui.");
+        }
     }
 
 }
