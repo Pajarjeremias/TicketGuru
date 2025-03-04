@@ -25,6 +25,16 @@ import jakarta.validation.constraints.Size;
 @Table(name = "Tapahtumat")
 public class Tapahtuma {
 
+    private String url; // Luotu SetUrl RestControlleria varten
+
+public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tapahtuma_id;
