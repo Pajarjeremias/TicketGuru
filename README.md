@@ -88,7 +88,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 ## Tietokanta
 
-![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/21-tietokannan-fiksaus/tietokaavio.png)
+![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokaavio.png)
 
 > ### _Jarjestajat_
 > _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
