@@ -1,7 +1,8 @@
 package projekti.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+//
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Myynti {
     private List<Lippu> liput;
 
     @ManyToOne
-    @JoinColumn(name = "kayttaja_id", nullable = false)
+    @JoinColumn(name = "kayttaja_id")
     private Kayttaja asiakas;
 
     @Column(name = "myyntipaiva", nullable = false)
@@ -31,7 +32,7 @@ public class Myynti {
 
     @ManyToOne
     @JoinColumn(name = "maksutapa_id", nullable = false)
-    @NotEmpty
+    @NotNull
     private Maksutapa maksutapa;
 
     // Constructorit
@@ -40,6 +41,12 @@ public class Myynti {
     public Myynti(List<Lippu> liput, Kayttaja asiakas, LocalDate myyntipaiva, Myyntipiste myyntipiste, Maksutapa maksutapa) {
         this.liput = liput;
         this.asiakas = asiakas;
+        this.myyntipaiva = myyntipaiva;
+        this.myyntipiste = myyntipiste;
+        this.maksutapa = maksutapa;
+    }
+
+    public Myynti(LocalDate myyntipaiva, Myyntipiste myyntipiste, Maksutapa maksutapa) {
         this.myyntipaiva = myyntipaiva;
         this.myyntipiste = myyntipiste;
         this.maksutapa = maksutapa;
