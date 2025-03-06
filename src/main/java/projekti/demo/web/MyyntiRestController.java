@@ -1,6 +1,7 @@
 package projekti.demo.web;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 
+import projekti.demo.model.Lippu;
 import projekti.demo.model.Myynti;
 import projekti.demo.model.MyyntiRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +37,22 @@ public class MyyntiRestController {
     public List<Myynti> getAllMyynnit(){
         return myyntiRepository.findAll();
     }
-    
+
+    //Hae yksi myynti
+    @GetMapping("/api/myynnit/{id}")
+    public Optional<Myynti> getMyyntiById(@PathVariable Long id){
+        return myyntiRepository.findById(id);
+    }
+
+    //Yksittäisen myynnin lippujen hakeminen
+    /* testataan, kun on lippujen controller? 
+    @GetMapping("/api/myynnit/{id}/liput")
+    public List<Lippu> getMyynninLiputById(@PathVariable Long id){
+        return myyntiRepository.findById(id)
+                    .map(Myynti::getLiput)
+                    .orElse(Collections.emptyList());
+    }
+
+    */    
     
 }
