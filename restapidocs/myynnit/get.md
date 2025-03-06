@@ -10,7 +10,18 @@ Hakee kaikki luodut tapahtumat ja niihin liittyvät tiedot.
 
 **Permissions required** : Ei
 
-**Data constraints** : -
+**Data constraints**
+
+```json
+{
+        "myynti_id": "[Long identity]",
+        "liput": "[List vittaa lippu_id]",
+        "asiakas": null,
+        "myyntipaiva": "[LocalDateTime]",
+        "myyntipiste": "[Myyntipiste olio, viittaa Long Myyntipiste_id]",
+        "maksutapa": "[Maksutapa olio, viittaa Long Maksutapa_id]"
+    }
+```
 
 ## Success Responses
 
@@ -18,71 +29,29 @@ Hakee kaikki luodut tapahtumat ja niihin liittyvät tiedot.
 
 **Content**
 
-Myynnin tiedot.
-
-Alla oleva pitää muokata
+Myynnin tiedot. Alla esimerkki.
 
 ```json
-[
+
     {
-        "tapahtuma_id": 1,
-        "nimi": "Konsertti 1",
-        "paivamaara": "2025-03-18T00:00:00",
-        "kuvaus": "Paras konsertti ikinä.",
-        "tapahtumapaikka": [],
-        "tapahtuman_lipputyypit": [
-            {
-                "tapahtuma_lipputyyppi_id": 1,
-                "lipputyyppi": {
-                    "lipputyyppi_id": 1,
-                    "lipputyyppi": "Aikuinen"
-                },
-                "hinta": 30.0
+        "myynti_id": 1,
+        "liput": [],
+        "asiakas": null,
+        "myyntipaiva": "2025-06-15",
+        "myyntipiste": {
+            "nimi": "Ensimmäinen piste",
+            "katuosoite": "Messuaukio 1",
+            "postitoimipaikka": {
+                "postinumero": "00520",
+                "postitoimipaikka": "Helsinki",
+                "maa": "Suomi"
             },
-            {
-                "tapahtuma_lipputyyppi_id": 2,
-                "lipputyyppi": {
-                    "lipputyyppi_id": 2,
-                    "lipputyyppi": "Lapsi"
-                },
-                "hinta": 15.0
-            }
-        ],
-        "lippumaara": 50
-    },
-    {
-        "tapahtuma_id": 2,
-        "nimi": "Urheilutapahtuma 3",
-        "paivamaara": "2025-04-01T00:00:00",
-        "kuvaus": "Paras urheilutapahtuma ikinä.",
-        "tapahtumapaikka": [],
-        "tapahtuman_lipputyypit": [
-            {
-                "tapahtuma_lipputyyppi_id": 3,
-                "lipputyyppi": {
-                    "lipputyyppi_id": 1,
-                    "lipputyyppi": "Aikuinen"
-                },
-                "hinta": 19.9
-            },
-            {
-                "tapahtuma_lipputyyppi_id": 4,
-                "lipputyyppi": {
-                    "lipputyyppi_id": 2,
-                    "lipputyyppi": "Lapsi"
-                },
-                "hinta": 5.9
-            },
-            {
-                "tapahtuma_lipputyyppi_id": 5,
-                "lipputyyppi": {
-                    "lipputyyppi_id": 3,
-                    "lipputyyppi": "Eläkeläinen"
-                },
-                "hinta": 0.0
-            }
-        ],
-        "lippumaara": 250
+            "myyntipisteId": 1
+        },
+        "maksutapa": {
+            "maksutapa_id": 1,
+            "maksutapa": "Käteinen"
+        }
     }
-]
+
 ```
