@@ -88,7 +88,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 ## Tietokanta
 
-![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/21-tietokannan-fiksaus/tietokaavio.png)
+![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokaavio.png)
 
 > ### _Jarjestajat_
 > _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
@@ -207,6 +207,14 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Asiakas_id | int, FK | Viittaus [Kayttajat](#Kayttaja_id) -tauluun
 > Myyntipaiva | date, NOT NULL | Päivämäärä sekä kellonaika jolloin myynti tapahtui
 > Myyntipiste_id | int, FK, NOT NULL | Viittaus [Myyntipisteet](#Myyntipiste_id) -tauluun
+> Maksutapa_id | int, FK, NOT NULL | Maksutapa, viittaus [Maksutavat](#Maksutavat) -tauluun
+>
+> ### _Maksutavat_
+> _Maksutavat_-taulu sisältää tietoa maksutavoista
+>
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> Maksutapa_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key 
 > Maksutapa | varchar(100), NOT NULL | Maksutapa
 >
 > ### _Myyntipisteet_

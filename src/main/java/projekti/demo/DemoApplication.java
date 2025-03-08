@@ -12,6 +12,14 @@ import org.springframework.context.annotation.Bean;
 
 import projekti.demo.model.Lipputyyppi;
 import projekti.demo.model.LipputyyppiRepository;
+import projekti.demo.model.Maksutapa;
+import projekti.demo.model.MaksutapaRepository;
+import projekti.demo.model.Myynti;
+import projekti.demo.model.MyyntiRepository;
+import projekti.demo.model.Myyntipiste;
+import projekti.demo.model.MyyntipisteRepository;
+import projekti.demo.model.Postitoimipaikka;
+import projekti.demo.model.PostitoimipaikkaRepository;
 import projekti.demo.model.Tapahtuma;
 import projekti.demo.model.TapahtumaRepository;
 import projekti.demo.model.Tapahtuman_lipputyyppi;
@@ -30,7 +38,12 @@ public class DemoApplication {
 	public CommandLineRunner demoRunner(
 		LipputyyppiRepository lipputyyppiRepository,
 		TapahtumaRepository tapahtumaRepository,
-		Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository
+		Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository,
+		MaksutapaRepository maksutapaRepository,
+		MyyntipisteRepository myyntipisteRepository,
+		PostitoimipaikkaRepository postitoimipaikkaRepository,
+		MyyntiRepository myyntiRepository
+
 	) {
 		return(args) -> {
 
@@ -44,6 +57,7 @@ public class DemoApplication {
 			lipputyyppiRepository.save(lapsi);
 			lipputyyppiRepository.save(elakelainen);
 
+
 			logger.info("Lisätään tapahtumia...");
 
 			Tapahtuma tapahtuma1 = new Tapahtuma("Konsertti 1", LocalDate.of(2025, Month.MARCH, 18).atStartOfDay(), "Paras konsertti ikinä.", 50);
@@ -51,6 +65,7 @@ public class DemoApplication {
 
 			tapahtumaRepository.save(tapahtuma1);
 			tapahtumaRepository.save(tapahtuma2);
+
 
 			logger.info("Lisätään tapahtumille lipputyyppejä...");
 
@@ -66,6 +81,29 @@ public class DemoApplication {
 			tapahtuman_lipputyyppiRepository.save(tapahtuma2_aikuinen);
 			tapahtuman_lipputyyppiRepository.save(tapahtuma2_lapsi);
 			tapahtuman_lipputyyppiRepository.save(tapahtuma2_elakelainen);
+
+
+			logger.info("Lisätään maksutapoja...");
+
+			Maksutapa maksutapa1 = new Maksutapa("Käteinen");
+			maksutapaRepository.save(maksutapa1);
+			maksutapaRepository.save(new Maksutapa("Kortti"));
+			maksutapaRepository.save(new Maksutapa("Muu"));
+
+			
+			logger.info("Lisätään postitoimipaikkoja...");
+			Postitoimipaikka postitmpk1 = new Postitoimipaikka("00520", "Helsinki", "Suomi");
+			postitoimipaikkaRepository.save(postitmpk1);
+
+
+			logger.info("Lisätään myyntipisteitä...");
+			Myyntipiste myyntipiste1 = new Myyntipiste("Ensimmäinen piste","Messuaukio 1", postitmpk1);
+			myyntipisteRepository.save(myyntipiste1);
+
+			logger.info("Lisätään myyntejä...");
+			myyntiRepository.save(new Myynti(LocalDate.of(2025, 6, 15), myyntipiste1, maksutapa1));
+
+
 
 		};
 	}
