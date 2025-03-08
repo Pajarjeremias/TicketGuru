@@ -24,6 +24,8 @@ import projekti.demo.model.Tapahtuma;
 import projekti.demo.model.TapahtumaRepository;
 import projekti.demo.model.Tapahtuman_lipputyyppi;
 import projekti.demo.model.Tapahtuman_lipputyyppiRepository;
+import projekti.demo.model.Tila;
+import projekti.demo.model.TilaRepository;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -42,7 +44,8 @@ public class DemoApplication {
 		MaksutapaRepository maksutapaRepository,
 		MyyntipisteRepository myyntipisteRepository,
 		PostitoimipaikkaRepository postitoimipaikkaRepository,
-		MyyntiRepository myyntiRepository
+		MyyntiRepository myyntiRepository,
+		TilaRepository tilaRepository
 
 	) {
 		return(args) -> {
@@ -103,7 +106,17 @@ public class DemoApplication {
 			logger.info("Lisätään myyntejä...");
 			myyntiRepository.save(new Myynti(LocalDate.of(2025, 6, 15), myyntipiste1, maksutapa1));
 
+			logger.info("Lisätään tiloja...");
+			Tila myyty = new Tila("Myyty");
+			Tila myymatta = new Tila("Myymättä");
+			Tila tarkastettu = new Tila("Tarkastettu");
+			Tila peruttu = new Tila("Peruttu");
 
+			tilaRepository.save(myyty);
+			tilaRepository.save(myymatta);
+			tilaRepository.save(tarkastettu);
+			tilaRepository.save(peruttu);
+			
 
 		};
 	}
