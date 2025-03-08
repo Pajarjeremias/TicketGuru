@@ -21,4 +21,5 @@ Endpointit Tapahtumat taulun katsomiseen ja muokkaamiseen
 * [Näytä yksi myynti](myynnit/pk/get.md) : `GET /api/myynnit/:pk/`
 * [Näytä yhden myynnin liput](myynnit/pk/get.md) : `GET /api/myynnit/:pk/liput`
 
-
+### Lippuihin liittyvät
+* [Luo lippu](liput/create.md) : `POST /api/liput/`
