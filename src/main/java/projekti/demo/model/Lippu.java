@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 
 @Entity
@@ -19,48 +20,41 @@ public class Lippu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lippu_id")
     private Long lippu_id;
-    
-    @ManyToOne
-    @JoinColumn(name="tapahtuma_lipputyyppi_id")
-    @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen")
-    private Tapahtuman_lipputyyppi tapahtuman_lipputyypit;
 
-    @Column(name = "hinta")
-    @NotEmpty
+    @NotNull(message = "Tapahtuman lipputyyppi on pakollinen")
+    @ManyToOne
+    @JoinColumn(name = "tapahtuma_lipputyyppi_id")
+    private Tapahtuman_lipputyyppi tapahtuman_lipputyyppi;
+
+    @NotNull(message = "Pakollinen")
     private Float hinta;
 
+    @NotNull(message = "Tila on pakollinen")
     @ManyToOne
-    @JoinColumn(name="tila_id")
-    @NotEmpty(message = "Tila on pakollinen")
+    @JoinColumn(name = "tila_id")
     private Tila tila;
 
     @ManyToOne
-    @JoinColumn(name="kayttaja_id")
-    private Kayttaja tarkastaja;
+    @JoinColumn(name = "kayttaja_id")
+    private Kayttaja tarkastanut;
 
-    @Column(name = "tarkistus_pvm")
-    private LocalDateTime tarkistus_pvm;
+    private LocalDateTime tarkastus_pvm;
 
+    @NotNull(message = "Myynti on pakollinen")
     @ManyToOne
-    @JoinColumn(name = "myynti_id", nullable = false)
-    @NotEmpty(message = "Myynti on pakollinen")
+    @JoinColumn(name = "myynti_id")
     private Myynti myynti;
 
-    public Lippu() {
-        super();
-    }
+    public Lippu() { }
 
     public Lippu(
-            @NotEmpty(message = "Tapahtuma_lipputyyppi on pakollinen") Tapahtuman_lipputyyppi tapahtuman_lipputyypit,
-            @NotEmpty Float hinta, @NotEmpty(message = "Tila on pakollinen") Tila tila, Kayttaja tarkastaja,
-            LocalDateTime tarkistus_pvm, @NotEmpty(message = "Myynti on pakollinen") Myynti myynti) {
-        this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;
+            @NotNull(message = "Tapahtuman lipputyyppi on pakollinen") Tapahtuman_lipputyyppi tapahtuman_lipputyyppi,
+            @NotNull(message = "Pakollinen") Float hinta, @NotNull(message = "Tila on pakollinen") Tila tila,
+            @NotNull(message = "Myynti on pakollinen") Myynti myynti) {
+        this.tapahtuman_lipputyyppi = tapahtuman_lipputyyppi;
         this.hinta = hinta;
         this.tila = tila;
-        this.tarkastaja = tarkastaja;
-        this.tarkistus_pvm = tarkistus_pvm;
         this.myynti = myynti;
     }
 
@@ -72,12 +66,12 @@ public class Lippu {
         this.lippu_id = lippu_id;
     }
 
-    public Tapahtuman_lipputyyppi getTapahtuman_lipputyypit() {
-        return tapahtuman_lipputyypit;
+    public Tapahtuman_lipputyyppi getTapahtuman_lipputyyppi() {
+        return tapahtuman_lipputyyppi;
     }
 
-    public void setTapahtuman_lipputyypit(Tapahtuman_lipputyyppi tapahtuman_lipputyypit) {
-        this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;
+    public void setTapahtuman_lipputyyppi(Tapahtuman_lipputyyppi tapahtuman_lipputyyppi) {
+        this.tapahtuman_lipputyyppi = tapahtuman_lipputyyppi;
     }
 
     public Float getHinta() {
@@ -96,20 +90,20 @@ public class Lippu {
         this.tila = tila;
     }
 
-    public Kayttaja getTarkastaja() {
-        return tarkastaja;
+    public Kayttaja getTarkastanut() {
+        return tarkastanut;
     }
 
-    public void setTarkastaja(Kayttaja tarkastaja) {
-        this.tarkastaja = tarkastaja;
+    public void setTarkastanut(Kayttaja tarkastanut) {
+        this.tarkastanut = tarkastanut;
     }
 
-    public LocalDateTime getTarkistus_pvm() {
-        return tarkistus_pvm;
+    public LocalDateTime getTarkastus_pvm() {
+        return tarkastus_pvm;
     }
 
-    public void setTarkistus_pvm(LocalDateTime tarkistus_pvm) {
-        this.tarkistus_pvm = tarkistus_pvm;
+    public void setTarkastus_pvm(LocalDateTime tarkastus_pvm) {
+        this.tarkastus_pvm = tarkastus_pvm;
     }
 
     public Myynti getMyynti() {
@@ -120,12 +114,9 @@ public class Lippu {
         this.myynti = myynti;
     }
 
-    @Override
-    public String toString() {
-        return "Lippu [lippu_id=" + lippu_id + ", tapahtuman_lipputyypit=" + tapahtuman_lipputyypit + ", hinta=" + hinta
-                + ", tila=" + tila + ", tarkastaja=" + tarkastaja + ", tarkistus_pvm=" + tarkistus_pvm + ", myynti="
-                + myynti + "]";
-    }
     
+
+
+
 }
 
