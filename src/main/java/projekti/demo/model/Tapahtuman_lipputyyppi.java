@@ -34,7 +34,7 @@ public class Tapahtuman_lipputyyppi {
     @NotNull
     private Lipputyyppi lipputyyppi;
 
-    @OneToMany(mappedBy = "tapahtuman_lipputyypit")
+    @OneToMany(mappedBy = "tapahtuman_lipputyyppi")
     @JsonIgnore
     private List<Lippu> liput;
 

@@ -10,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import projekti.demo.model.Lippu;
+import projekti.demo.model.LippuRepository;
 import projekti.demo.model.Lipputyyppi;
 import projekti.demo.model.LipputyyppiRepository;
 import projekti.demo.model.Maksutapa;
@@ -24,6 +26,8 @@ import projekti.demo.model.Tapahtuma;
 import projekti.demo.model.TapahtumaRepository;
 import projekti.demo.model.Tapahtuman_lipputyyppi;
 import projekti.demo.model.Tapahtuman_lipputyyppiRepository;
+import projekti.demo.model.Tila;
+import projekti.demo.model.TilaRepository;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -42,7 +46,9 @@ public class DemoApplication {
 		MaksutapaRepository maksutapaRepository,
 		MyyntipisteRepository myyntipisteRepository,
 		PostitoimipaikkaRepository postitoimipaikkaRepository,
-		MyyntiRepository myyntiRepository
+		MyyntiRepository myyntiRepository,
+		TilaRepository tilaRepository,
+		LippuRepository lippuRepository
 
 	) {
 		return(args) -> {
@@ -102,8 +108,22 @@ public class DemoApplication {
 
 			logger.info("Lisätään myyntejä...");
 			myyntiRepository.save(new Myynti(LocalDate.of(2025, 6, 15), myyntipiste1, maksutapa1));
+			Myynti myynti2 = new Myynti(LocalDate.of(2025, 6, 15), myyntipiste1, maksutapa1);
+			myyntiRepository.save(myynti2);
 
+			logger.info("Lisätään tiloja...");
+			Tila myyty = new Tila("Myyty");
+			Tila myymatta = new Tila("Myymättä");
+			Tila tarkastettu = new Tila("Tarkastettu");
+			Tila peruttu = new Tila("Peruttu");
 
+			tilaRepository.save(myyty);
+			tilaRepository.save(myymatta);
+			tilaRepository.save(tarkastettu);
+			tilaRepository.save(peruttu);
+			
+			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
+			lippuRepository.save(lippu1);
 
 		};
 	}

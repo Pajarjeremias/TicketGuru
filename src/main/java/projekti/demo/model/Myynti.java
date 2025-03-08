@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "myynnit")
 public class Myynti {
@@ -17,6 +19,7 @@ public class Myynti {
     private Integer myynti_id;
 
     @OneToMany(mappedBy = "lippu_id")
+    @JsonIgnore
     private List<Lippu> liput;
 
     @ManyToOne

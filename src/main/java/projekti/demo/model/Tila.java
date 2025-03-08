@@ -2,6 +2,8 @@ package projekti.demo.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,7 @@ public class Tila {
     // Lisätty 26.2.2025, lisätty samalla getterit ja setterit
 
     @OneToMany(mappedBy = "tila")
+    @JsonIgnore
     private List<Lippu> liput;
 
     // Constructorit
