@@ -1,5 +1,6 @@
 package projekti.demo.web;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import projekti.demo.model.Myynti;
 import projekti.demo.model.MyyntiRepository;
+import projekti.demo.model.Lippu;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -31,7 +33,7 @@ public class MyyntiRestController {
     }
 
     //Yksittäisen myynnin lippujen hakeminen
-    /* testataan, kun on lippujen controller? 
+
     @GetMapping("/api/myynnit/{id}/liput")
     public List<Lippu> getMyynninLiputById(@PathVariable Long id){
         return myyntiRepository.findById(id)
@@ -39,6 +41,6 @@ public class MyyntiRestController {
                     .orElse(Collections.emptyList());
     }
 
-    */    
+     
     
 }
