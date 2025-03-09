@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,10 +36,12 @@ public class MyyntiRestController {
     //Yksittäisen myynnin lippujen hakeminen
 
     @GetMapping("/api/myynnit/{id}/liput")
-    public List<Lippu> getMyynninLiputById(@PathVariable Long id){
+    public Optional<Object> getMyynninLiputById(@PathVariable Long id){
         return myyntiRepository.findById(id)
-                    .map(Myynti::getLiput)
-                    .orElse(Collections.emptyList());
+                    .map(myynti -> {
+                        System.out.println("lippujen määrä" + myynti.getLiput().size());
+                        return ResponseEntity.ok(myynti.getLiput());
+                    });
     }
 
      

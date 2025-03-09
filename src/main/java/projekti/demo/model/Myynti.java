@@ -18,7 +18,7 @@ public class Myynti {
     @Column(name = "myynti_id")
     private Integer myynti_id;
 
-    @OneToMany(mappedBy = "lippu_id")
+    @OneToMany(mappedBy = "myynti")
     @JsonIgnore
     private List<Lippu> liput;
 
