@@ -12,6 +12,7 @@ import projekti.demo.model.Tapahtuman_lipputyyppiRepository;
 import projekti.demo.model.TilaRepository;
 import projekti.demo.model.PutLippuModel;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -113,5 +114,14 @@ public class LippuRestController {
 
   } 
  */
+
+
+ //Hae kaikki liput
+
+ @GetMapping(value = {"/api/liput", "/api/liput/"})
+ public Iterable<Lippu> getAllLiput(){
+  return lippuRepository.findAll();
+ }
+
   
 }
