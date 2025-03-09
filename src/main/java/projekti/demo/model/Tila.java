@@ -22,16 +22,16 @@ public class Tila {
     @Column(name = "tila_id")
     private Long tila_id;
 
-    @Column(name = "myyty", nullable = false)
+    @Column(name = "Myyty", nullable = false)
     private boolean myyty = false;
 
-    @Column(name = "myymatta", nullable = false)
+    @Column(name = "Myymatta", nullable = false)
     private boolean myymatta = false;
 
-    @Column(name = "tarkastettu", nullable = false)
+    @Column(name = "Tarkastettu", nullable = false)
     private boolean tarkastettu = false;
 
-    @Column(name = "peruttu", nullable = false)
+    @Column(name = "Peruttu", nullable = false)
     private boolean peruttu = false;
 
     // halutaanko tänne myös lista lipuista? Eli voi hakea mitä lippuja on esim.

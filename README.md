@@ -124,7 +124,10 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > Tila_id | int PK | Tilan yksilöivä avain/id
-> Tila | varchar(30) | Tilan nimi, esim. myymättä, myyty, tarkastettu, peruttu
+> myyty | boolean | Tila myyty
+> myymatta | boolean | Tila myymatta
+> tarkastettu | boolean | Tila tarkastettu
+> peruttu | boolean | Tila peruttu
 >
 > ### _Liput_
 > _Liput-taulu sisältää yksilölliset liput. Jokainen lippu liittyy vain yhteen tapahtumaan, tyyppiin, lipputyyppiin, tilaan ja käyttäjään._
