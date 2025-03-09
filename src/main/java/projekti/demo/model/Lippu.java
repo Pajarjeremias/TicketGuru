@@ -1,6 +1,7 @@
 package projekti.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -54,6 +55,10 @@ public class Lippu {
         this.hinta = hinta;
         this.tila = tila;
         this.myynti = myynti;
+    }
+
+    public Lippu(Tapahtuman_lipputyyppi tapahtuman_lipputyyppi2, Float hinta2, Optional<Tila> byMyyty, Myynti myynti2) {
+        //TODO Auto-generated constructor stub
     }
 
     public Long getLippu_id() {

@@ -68,7 +68,7 @@ public class LippuRestController {
       Lippu uusiLippu = new Lippu(
         tapahtuman_lipputyyppi,
         hinta,
-        tilaRepository.findByTila("Myyty"),
+        tilaRepository.findByMyyty(true),
         myynti
       );
       lippuRepository.save(uusiLippu);

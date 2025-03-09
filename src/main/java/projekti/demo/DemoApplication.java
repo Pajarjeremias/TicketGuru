@@ -112,17 +112,17 @@ public class DemoApplication {
 			myyntiRepository.save(myynti2);
 
 			logger.info("Lisätään tiloja...");
-			Tila myyty = new Tila("Myyty");
-			Tila myymatta = new Tila("Myymättä");
-			Tila tarkastettu = new Tila("Tarkastettu");
-			Tila peruttu = new Tila("Peruttu");
+			Tila tila1 = new Tila("myyty");
+			Tila tila2 = new Tila("myymatta");
+			Tila tila3 = new Tila("tarkastettu");
+			Tila tila4 = new Tila("peruttu");
 
-			tilaRepository.save(myyty);
-			tilaRepository.save(myymatta);
-			tilaRepository.save(tarkastettu);
-			tilaRepository.save(peruttu);
+			tilaRepository.save(tila1);
+			tilaRepository.save(tila2);
+			tilaRepository.save(tila3);
+			tilaRepository.save(tila4);
 			
-			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
+			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, tila1, myynti2);
 			lippuRepository.save(lippu1);
 
 		};
