@@ -10,11 +10,20 @@ import projekti.demo.model.PostLippuModel;
 import projekti.demo.model.Tapahtuman_lipputyyppi;
 import projekti.demo.model.Tapahtuman_lipputyyppiRepository;
 import projekti.demo.model.TilaRepository;
+import projekti.demo.model.PutLippuModel;
+
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 
 @RestController
@@ -84,5 +93,25 @@ public class LippuRestController {
     }
 
   }
+// Päivitä lippu
+  @PutMapping("/api/liput/{id}")
+  Lippu paivitaLippu(@PathVariable Long id, @RequestBody Lippu muokattuLippu) {
+      //tallennetaan muokatut tiedot lipulle - tarvitaan kaikki lipun tiedot
+      muokattuLippu.setLippu_id(id);
+      return lippuRepository.save(muokattuLippu);
+  }
+
+  @GetMapping("/api/getlippu/{id}")
+  public Optional<Lippu> getLippuById(@PathVariable Long id){
+        return lippuRepository.findById(id);
+  }
+  
+  /* 
+  //päivitä lippua enemmillä tiedoilla
+  @PutMapping("/api/liputtiedoilla/{id}")
+  PutLippuModel paivitaLipuntietoja(@PathVariable Long id ){
+
+  } 
+ */
   
 }
