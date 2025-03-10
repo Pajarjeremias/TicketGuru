@@ -16,7 +16,7 @@ public class Myynti {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "myynti_id")
-    private Integer myynti_id;
+    private Long myynti_id;
 
     @OneToMany(mappedBy = "lippu_id")
     @JsonIgnore
@@ -56,11 +56,11 @@ public class Myynti {
     }
 
     // Getterit ja setterit
-    public Integer getMyynti_id() {
+    public Long getMyynti_id() {
         return myynti_id;
     }
 
-    public void setMyynti_id(Integer myynti_id) {
+    public void setMyynti_id(Long myynti_id) {
         this.myynti_id = myynti_id;
     }
 
