@@ -37,6 +37,15 @@ public class MyyntiRestController {
         return myyntiRepository.findById(id);
     }
 
+    //Yksittäisen myynnin lippujen hakeminen
+    @GetMapping("/api/myynnit/{id}/liput")
+    public List<Lippu> getMyynninLiputById(@PathVariable Long id){
+        return myyntiRepository.findById(id)
+                    .map(Myynti::getLiput)
+                    .orElse(Collections.emptyList());
+    }
+
+
     //Luo myynti
     @PostMapping("/api/myynnit")
     public ResponseEntity<Myynti> createMyynti(@RequestBody Myynti myynti) {
@@ -47,8 +56,9 @@ public class MyyntiRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-    //Yksittäisen myynnin lippujen hakeminen
-
+    
+/*  
+   // nämä oli varmaan jotain vanhoja
     @GetMapping("/api/myynnit/{id}/liput")
     public Optional<Object> getMyynninLiputById(@PathVariable Long id){
         return myyntiRepository.findById(id)
@@ -58,8 +68,15 @@ public class MyyntiRestController {
                     });
     }
 
+        /* testataan, kun on lippujen controller? 
+    @GetMapping("/api/myynnit/{id}/liput")
+    public List<Lippu> getMyynninLiputById(@PathVariable Long id){
+        return myyntiRepository.findById(id)
+                    .map(Myynti::getLiput)
+                    .orElse(Collections.emptyList());
+    }
      
-    
+    */
     }
 
 }
