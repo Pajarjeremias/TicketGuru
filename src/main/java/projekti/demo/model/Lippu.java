@@ -56,6 +56,9 @@ public class Lippu {
         this.myynti = myynti;
     }
 
+    
+
+
     public Long getLippu_id() {
         return lippu_id;
     }
