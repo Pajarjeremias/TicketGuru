@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "myynnit")
 public class Myynti {
@@ -14,9 +16,10 @@ public class Myynti {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "myynti_id")
-    private Integer myynti_id;
+    private Long myynti_id;
 
-    @OneToMany(mappedBy = "lippu_id")
+    @OneToMany(mappedBy = "myynti")
+    @JsonIgnore
     private List<Lippu> liput;
 
     @ManyToOne
@@ -53,11 +56,11 @@ public class Myynti {
     }
 
     // Getterit ja setterit
-    public Integer getMyynti_id() {
+    public Long getMyynti_id() {
         return myynti_id;
     }
 
-    public void setMyynti_id(Integer myynti_id) {
+    public void setMyynti_id(Long myynti_id) {
         this.myynti_id = myynti_id;
     }
 

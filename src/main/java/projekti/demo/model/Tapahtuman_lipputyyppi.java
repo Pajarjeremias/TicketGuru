@@ -34,7 +34,7 @@ public class Tapahtuman_lipputyyppi {
     @NotNull
     private Lipputyyppi lipputyyppi;
 
-    @OneToMany(mappedBy = "tapahtuman_lipputyypit")
+    @OneToMany(mappedBy = "tapahtuman_lipputyyppi")
     @JsonIgnore
     private List<Lippu> liput;
 
@@ -99,11 +99,11 @@ public class Tapahtuman_lipputyyppi {
     public void setHinta(Float hinta) {
         this.hinta = hinta;
     }
-
     @Override
     public String toString() {
-        return "Tapahtuman_lipputyyppi [tapahtuma_lipputyyppi_id=" + tapahtuma_lipputyyppi_id + ", tapahtuma="
-                + tapahtuma.getNimi() + ", lipputyyppi=" + lipputyyppi + ", liput=" + liput + ", hinta=" + hinta + "]";
+        return "Tapahtuman_lipputyyppi [tapahtuma_lipputyyppi_id=" + tapahtuma_lipputyyppi_id 
+                + ", tapahtuma=" + (tapahtuma != null ? tapahtuma.getNimi() : "null")
+                + ", lipputyyppi=" + (lipputyyppi != null ? lipputyyppi.getLipputyyppi_id() : "null") 
+                + ", hinta=" + hinta + "]";
     }
-
 }
