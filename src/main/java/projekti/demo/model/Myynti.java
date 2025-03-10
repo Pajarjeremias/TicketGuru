@@ -1,11 +1,13 @@
 package projekti.demo.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+//
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "myynnit")
@@ -14,13 +16,14 @@ public class Myynti {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "myynti_id")
-    private Integer myynti_id;
+    private Long myynti_id;
 
-    @OneToMany(mappedBy = "lippu_id")
+    @OneToMany(mappedBy = "myynti")
+    @JsonIgnore
     private List<Lippu> liput;
 
     @ManyToOne
-    @JoinColumn(name = "kayttaja_id", nullable = false)
+    @JoinColumn(name = "kayttaja_id")
     private Kayttaja asiakas;
 
     @Column(name = "myyntipaiva", nullable = false)
@@ -30,15 +33,15 @@ public class Myynti {
     @JoinColumn(name = "myyntipiste_id", nullable = false)
     private Myyntipiste myyntipiste;
 
-    @Size(max = 100)
-    @NotEmpty
-    private String maksutapa;
+    @ManyToOne
+    @JoinColumn(name = "maksutapa_id", nullable = false)
+    @NotNull
+    private Maksutapa maksutapa;
 
     // Constructorit
     public Myynti() { }
 
-    public Myynti(List<Lippu> liput, Kayttaja asiakas, LocalDate myyntipaiva, Myyntipiste myyntipiste,
-            @Size(max = 100) @NotEmpty String maksutapa) {
+    public Myynti(List<Lippu> liput, Kayttaja asiakas, LocalDate myyntipaiva, Myyntipiste myyntipiste, Maksutapa maksutapa) {
         this.liput = liput;
         this.asiakas = asiakas;
         this.myyntipaiva = myyntipaiva;
@@ -46,12 +49,18 @@ public class Myynti {
         this.maksutapa = maksutapa;
     }
 
+    public Myynti(LocalDate myyntipaiva, Myyntipiste myyntipiste, Maksutapa maksutapa) {
+        this.myyntipaiva = myyntipaiva;
+        this.myyntipiste = myyntipiste;
+        this.maksutapa = maksutapa;
+    }
+
     // Getterit ja setterit
-    public Integer getMyynti_id() {
+    public Long getMyynti_id() {
         return myynti_id;
     }
 
-    public void setMyynti_id(Integer myynti_id) {
+    public void setMyynti_id(Long myynti_id) {
         this.myynti_id = myynti_id;
     }
 
@@ -87,11 +96,11 @@ public class Myynti {
         this.myyntipiste = myyntipiste;
     }
 
-    public String getMaksutapa() {
+    public Maksutapa getMaksutapa() {
         return maksutapa;
     }
 
-    public void setMaksutapa(String maksutapa) {
+    public void setMaksutapa(Maksutapa maksutapa) {
         this.maksutapa = maksutapa;
     }
 

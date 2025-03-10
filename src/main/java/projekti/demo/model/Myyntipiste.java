@@ -3,6 +3,8 @@ package projekti.demo.model;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "myyntipisteet")
 public class Myyntipiste {
@@ -22,6 +24,7 @@ public class Myyntipiste {
     @JoinColumn(name = "postinumero", nullable = false)
     private Postitoimipaikka postitoimipaikka;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "myyntipiste")
     private List<Myynti> myynnit;
 
