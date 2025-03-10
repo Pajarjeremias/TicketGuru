@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import projekti.demo.model.Myynti;
@@ -33,6 +37,16 @@ public class MyyntiRestController {
         return myyntiRepository.findById(id);
     }
 
+    //Luo myynti
+    @PostMapping("/api/myynnit")
+    public ResponseEntity<Myynti> createMyynti(@RequestBody Myynti myynti) {
+        try {
+            Myynti uusiMyynti = myyntiRepository.save(myynti);
+            return new ResponseEntity<>(uusiMyynti, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     //Yksittäisen myynnin lippujen hakeminen
 
     @GetMapping("/api/myynnit/{id}/liput")
@@ -46,4 +60,6 @@ public class MyyntiRestController {
 
      
     
+    }
+
 }

@@ -24,7 +24,6 @@ import projekti.demo.model.Tapahtuma;
 import projekti.demo.model.TapahtumaRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @RestController
 public class TapahtumaRestController {
 
