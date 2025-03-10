@@ -1,6 +1,6 @@
 	Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
 
-# Muokkaa lippua -- pahasti kesken
+# Muokkaa lippua 
 
 Muokkaa lippua. 
 
