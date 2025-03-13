@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import projekti.demo.model.Myynti;
@@ -34,7 +38,27 @@ public class MyyntiRestController {
     }
 
     //Yksittäisen myynnin lippujen hakeminen
+    @GetMapping("/api/myynnit/{id}/liput")
+    public List<Lippu> getMyynninLiputById(@PathVariable Long id){
+        return myyntiRepository.findById(id)
+                    .map(Myynti::getLiput)
+                    .orElse(Collections.emptyList());
+    }
 
+
+    //Luo myynti
+    @PostMapping("/api/myynnit")
+    public ResponseEntity<Myynti> createMyynti(@RequestBody Myynti myynti) {
+        try {
+            Myynti uusiMyynti = myyntiRepository.save(myynti);
+            return new ResponseEntity<>(uusiMyynti, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    
+/*  
+   // nämä oli varmaan jotain vanhoja
     @GetMapping("/api/myynnit/{id}/liput")
     public Optional<Object> getMyynninLiputById(@PathVariable Long id){
         return myyntiRepository.findById(id)
@@ -44,6 +68,15 @@ public class MyyntiRestController {
                     });
     }
 
+        /* testataan, kun on lippujen controller? 
+    @GetMapping("/api/myynnit/{id}/liput")
+    public List<Lippu> getMyynninLiputById(@PathVariable Long id){
+        return myyntiRepository.findById(id)
+                    .map(Myynti::getLiput)
+                    .orElse(Collections.emptyList());
+    }
      
-    
+    */
+    }
+
 }
