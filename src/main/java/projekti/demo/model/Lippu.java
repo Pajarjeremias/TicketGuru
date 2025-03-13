@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 
@@ -25,7 +26,8 @@ public class Lippu {
     @JoinColumn(name = "tapahtuma_lipputyyppi_id")
     private Tapahtuman_lipputyyppi tapahtuman_lipputyyppi;
 
-    @NotNull(message = "Pakollinen")
+    @NotNull(message = "Hinta on pakollinen")
+    @Min(value = 0, message = "Hinta ei voi olla miinusmerkkinen")
     private Float hinta;
 
     @NotNull(message = "Tila on pakollinen")
@@ -37,6 +39,12 @@ public class Lippu {
     @JoinColumn(name = "kayttaja_id")
     private Kayttaja tarkastanut;
 
+    //2025-05-11T11:16:00 
+    /*
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty("date")
+     */
     private LocalDateTime tarkastus_pvm;
 
     @NotNull(message = "Myynti on pakollinen")
