@@ -145,6 +145,9 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
         System.out.println("Lipputyyppi ID saatu: " + lippuTiedot.getTapahtuman_lipputyypit_id());
         Tapahtuman_lipputyyppi tapahtuman_lipputyyppi = tapahtuman_lipputyyppiRepository
         .findById(lippuTiedot.getTapahtuman_lipputyypit_id()).orElse(null);
+        if(tapahtuman_lipputyyppi == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Tapahtuman lipputyyppi ei ole kelvollinen, anna käytössä oleva id."));
+        }
         uusiLippu.setTapahtuman_lipputyyppi(tapahtuman_lipputyyppi);
         System.out.println("Lipputyyppi tallennettu  "+tapahtuman_lipputyyppi);
       }
@@ -173,8 +176,12 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
       // tarkistetaan onko annettu uusi myyni_id, jos on, niin korvataan se uusiLippu:un
     if (lippuTiedot.getMyynti_id()!=null){
       Myynti myynti = myyntiRepository.findById(lippuTiedot.getMyynti_id()).orElse(null);
+      if (myynti == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Myynti ei ole kelvollinen, anna käytössä oleva myynti_id." ));
+      }
       uusiLippu.setMyynti(myynti);
     }
+    
       lippuRepository.save(uusiLippu);
 
       // Palautetaan luodun lipun tiedot
