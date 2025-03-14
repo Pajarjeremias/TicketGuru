@@ -1,6 +1,7 @@
 package projekti.demo.web;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 import projekti.demo.model.Lippu;
@@ -100,20 +101,21 @@ public class LippuRestController {
 
   }
 
-  // Päivitä lippu
+  /* Päivitä lippu 
   @PutMapping("/api/liput/{id}")
   Lippu paivitaLippu(@PathVariable Long id, @Valid @RequestBody Lippu muokattuLippu) {
     // tallennetaan muokatut tiedot lipulle - tarvitaan kaikki lipun tiedot
     muokattuLippu.setLippu_id(id);
     return lippuRepository.save(muokattuLippu);
-  }
+  
+  } */
+
+  //Hae yksittäinen lippu
 
   @GetMapping("/api/getlippu/{id}")
   public Optional<Lippu> getLippuById(@PathVariable Long id) {
     return lippuRepository.findById(id);
   }
-
-
 
 
  //Hae kaikki liput
@@ -126,13 +128,14 @@ public class LippuRestController {
   
   // päivitä lippua enemmillä tiedoilla
   @PutMapping("/api/liputtiedoilla/{id}") 
-  public ResponseEntity<Lippu> paivitaLipuntietoja(@PathVariable Long id, @Valid @RequestBody PutLippuModel lippuTiedot) {
+  public ResponseEntity<?> paivitaLipuntietoja(@PathVariable Long id, @RequestBody PutLippuModel lippuTiedot) {
     try {
 
       // lataa lipun id:llä olevat tiedot ja tallenna ne uusiLippu:n
       Lippu uusiLippu = lippuRepository.findById(id).orElse(null);
       if (uusiLippu==null){
-        throw new Exception("Invalid value for lippu ID. Lippu does not exist");
+        //throw new Exception("Invalid value for lippu ID. Lippu does not exist");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("virhe", "Lippu_Id " + id + " ei ole olemassa."));
       } 
 
   // korvaa uusLippuun vain RequestBodyssä annetut tiedot
@@ -149,15 +152,23 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
       // tarkistetaan onko annettu uusi hinta, jos on, niin korvataan se uusiLippu:un
       if (lippuTiedot.getHinta()!=null){
         System.out.println("Uusi hinta saatu: " + lippuTiedot.getHinta());
-         uusiLippu.setHinta(lippuTiedot.getHinta());
+        if(lippuTiedot.getHinta()<0) {
+          //throw new Exception("Hinta ei kelpaa, ei voi olla alle 0€.");
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Hinta ei ole kelvollinen. Hinta ei voi olla alle 0€. "));
+        } else {
+          uusiLippu.setHinta(lippuTiedot.getHinta());
+        }
+         
       }
 
       // tarkistetaan onko annettu uusi tila, jos on, niin korvataan se uusiLippu:un
       if (lippuTiedot.getTila_id()!=null){
         Tila tila = tilaRepository.findById(lippuTiedot.getTila_id()).orElse(null);
+        if (tila == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Tila ei ole kelvollinen, anna käytössä oleva tila_id."));
+        }
         uusiLippu.setTila(tila);
-
-      }
+      } 
 
       // tarkistetaan onko annettu uusi myyni_id, jos on, niin korvataan se uusiLippu:un
     if (lippuTiedot.getMyynti_id()!=null){
@@ -180,7 +191,7 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<Map<String, String>> handleInvalidJson(HttpMessageNotReadableException ex) {
 
-    return ResponseEntity.badRequest().body(Map.of("virhe", "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku."));
+    return ResponseEntity.badRequest().body(Map.of("virhe", "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku." + ex.getMessage()));
     
   }
     
