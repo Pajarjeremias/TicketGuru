@@ -2,6 +2,8 @@ package projekti.demo.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,12 +41,8 @@ public class Lippu {
     @JoinColumn(name = "kayttaja_id")
     private Kayttaja tarkastanut;
 
-    //2025-05-11T11:16:00 
-    /*
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonProperty("date")
-     */
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime tarkastus_pvm;
 
     @NotNull(message = "Myynti on pakollinen")
@@ -56,16 +54,13 @@ public class Lippu {
 
     public Lippu(
             @NotNull(message = "Tapahtuman lipputyyppi on pakollinen") Tapahtuman_lipputyyppi tapahtuman_lipputyyppi,
-            @NotNull(message = "Pakollinen") Float hinta, @NotNull(message = "Tila on pakollinen") Tila tila,
+            @NotNull(message = "Hinta on pakollinen")  @Min(value = 0, message = "Hinta ei voi olla miinusmerkkinen") Float hinta, @NotNull(message = "Tila on pakollinen") Tila tila,
             @NotNull(message = "Myynti on pakollinen") Myynti myynti) {
         this.tapahtuman_lipputyyppi = tapahtuman_lipputyyppi;
         this.hinta = hinta;
         this.tila = tila;
         this.myynti = myynti;
     }
-
-    
-
 
     public Long getLippu_id() {
         return lippu_id;
