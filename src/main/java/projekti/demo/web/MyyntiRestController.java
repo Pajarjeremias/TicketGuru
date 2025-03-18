@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import projekti.demo.model.Myynti;
 import projekti.demo.model.MyyntiRepository;
@@ -33,8 +35,14 @@ public class MyyntiRestController {
 
     //Hae yksi myynti
     @GetMapping("/api/myynnit/{id}")
-    public Optional<Myynti> getMyyntiById(@PathVariable Long id){
-        return myyntiRepository.findById(id);
+    public ResponseEntity<Myynti> getMyyntiById(@PathVariable Long id){
+        try {
+            Myynti myynti = myyntiRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Myyntiä ei löydy id:llä " + id));
+            return ResponseEntity.ok(myynti);
+        } catch (DataAccessException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe myyntiä haettaessa", e);
+        }
     }
 
     //Yksittäisen myynnin lippujen hakeminen
