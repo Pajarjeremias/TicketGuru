@@ -1,5 +1,7 @@
 package projekti.demo.web;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,9 +19,7 @@ import projekti.demo.model.PutLippuModel;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -111,10 +111,10 @@ public class LippuRestController {
   } */
 
   //Hae yksittäinen lippu
-
   @GetMapping("/api/getlippu/{id}")
-  public Optional<Lippu> getLippuById(@PathVariable Long id) {
-    return lippuRepository.findById(id);
+  public Lippu getLippuById(@PathVariable Long id) {
+    return lippuRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy id:llä " + id));
   }
 
 
@@ -122,7 +122,11 @@ public class LippuRestController {
 
  @GetMapping(value = {"/api/liput", "/api/liput/"})
  public Iterable<Lippu> getAllLiput(){
+  try{
   return lippuRepository.findAll();
+} catch (DataAccessException e) {
+    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe: ei voitu hakea lippuja", e);
+}
  }
 
   
