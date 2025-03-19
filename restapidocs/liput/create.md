@@ -31,6 +31,9 @@ Luo lippu tapahtuma järjestelmään
   - jos hintaa ei ole annettu, oletuksena haetaan lipulle sen tapahtuman_lipputyypin hinta, johon se liittyy
   <u>vapaaehtoinen</u>
 
+  Tarkastanut ja tarkastus_pvm ei anneta lippua luodessa, ne lisätään tarkastusvaiheessa.
+  Lipun tilaa ei voi määrittää luontivaiheessa, se on automaattisesti myyty.
+
 **Data example 1**
 Myynnin id on 1 ja tapahtuman_lipputyypin id on niin ikään 1. Hinnaksi on annettu 29.00.
 
@@ -109,6 +112,19 @@ Myynnin id on taas 1 ja tapahtuman_lipputyypin id on niin ikään 1. Hintaa ei o
 **Code** : `400 BAD REQUEST`
 
 **Content** : `error message`
+
+Jos myynti_id tai tapahtuman_lipputyypit_id on laitettu id, jota ei ole olemassa: Invalid value for 'myynti' and 'tapahtuman_lipputyyppi', please check. Id must be a valid id-number.
+
+Jos myynti_id tai tapahtuman_lipputyypit_id puuttuu kokonaan tai on null-arvoinen: The given id must not be null.
+
+Jos myynti_idtä ei ole olemassa: Invalid value for 'myynti', please check.Id must be a valid id-number.
+
+Jos tapahtuman_lipputyypit_idtä ei ole olemassa: Invalid value for 'tapahtuman_lipputyyppi', please check.Id must be a valid id-number.
+
+Jos annettu hinta on alle 0€: Invalid value for 'hinta'. Can't be under 0€, please check.
+
+Jos syöte on väärässä muodossa, esim. Long tilalla String: "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku."
+
 
 **Content example** : 
 

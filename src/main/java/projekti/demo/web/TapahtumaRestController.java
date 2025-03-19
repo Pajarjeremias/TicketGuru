@@ -7,6 +7,7 @@ import java.util.Optional;
 //import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
@@ -32,13 +34,27 @@ public class TapahtumaRestController {
 
     // Hae kaikki tapahtumat
     @GetMapping(value = {"/api/tapahtumat", "/api/tapahtumat/"})
-    public List<Tapahtuma> getAllTapahtumat() {
-        return tapahtumaRepository.findAll();
+    public ResponseEntity<List<Tapahtuma>> getAllTapahtumat() {
+        try {
+            List<Tapahtuma> tapahtumat =tapahtumaRepository.findAll();
+            if (tapahtumat.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(tapahtumat);
+        } catch (DataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe tapahtumia haettaessa", e);
+        }
     }
 
     @GetMapping("/api/tapahtumat/{id}")
-    public Optional<Tapahtuma> getTapahtumaById(@PathVariable Long id) {
-        return tapahtumaRepository.findById(id);
+    public ResponseEntity<Tapahtuma> getTapahtumaById(@PathVariable Long id) {
+        try {
+            Tapahtuma tapahtuma = tapahtumaRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tapahtumaa ei löydy id:llä" + id));
+            return ResponseEntity.ok(tapahtuma);
+        } catch (DataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe tapahtumaa haettaessa", e);
+        }
     }
    
 

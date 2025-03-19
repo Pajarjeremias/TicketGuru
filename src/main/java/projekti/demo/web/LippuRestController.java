@@ -1,7 +1,11 @@
 package projekti.demo.web;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
 import projekti.demo.model.Lippu;
 import projekti.demo.model.LippuRepository;
 import projekti.demo.model.Myynti;
@@ -14,14 +18,15 @@ import projekti.demo.model.TilaRepository;
 import projekti.demo.model.PutLippuModel;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -58,17 +63,19 @@ public class LippuRestController {
       // Tarkistetaan, että pyynnössä tulleet myynti + lipputyyppi ovat olemassa. Jos
       // ei, heitetään Exception.
       if (myynti == null && tapahtuman_lipputyyppi == null) {
-        throw new Exception("Invalid value for 'myynti' and 'tapahtuman_lipputyyppi', please check.");
+        throw new Exception("Invalid value for 'myynti' and 'tapahtuman_lipputyyppi', please check. Id must be a valid id-number.");
       } else if (myynti == null) {
-        throw new Exception("Invalid value for 'myynti', please check.");
+        throw new Exception("Invalid value for 'myynti', please check.Id must be a valid id-number.");
       } else if (tapahtuman_lipputyyppi == null) {
-        throw new Exception("Invalid value for 'tapahtuman_lipputyyppi', please check.");
+        throw new Exception("Invalid value for 'tapahtuman_lipputyyppi', please check.Id must be a valid id-number.");
       }
 
       // Jos hintaa ei ole annettu pyynnössä, haetaan lipun hinnaksi lipputyypin hinta
       Float hinta;
       if (lippuTiedot.getHinta() == null) {
         hinta = tapahtuman_lipputyyppi.getHinta();
+      } else if (lippuTiedot.getHinta()<0) {
+        throw new Exception("Invalid value for 'hinta'. Can't be under 0€, please check.");
       } else {
         hinta = lippuTiedot.getHinta();
       }
@@ -94,39 +101,45 @@ public class LippuRestController {
 
   }
 
-  // Päivitä lippu
+  /* Päivitä lippu 
   @PutMapping("/api/liput/{id}")
-  Lippu paivitaLippu(@PathVariable Long id, @RequestBody Lippu muokattuLippu) {
+  Lippu paivitaLippu(@PathVariable Long id, @Valid @RequestBody Lippu muokattuLippu) {
     // tallennetaan muokatut tiedot lipulle - tarvitaan kaikki lipun tiedot
     muokattuLippu.setLippu_id(id);
     return lippuRepository.save(muokattuLippu);
-  }
+  
+  } */
 
+  //Hae yksittäinen lippu
   @GetMapping("/api/getlippu/{id}")
-  public Optional<Lippu> getLippuById(@PathVariable Long id) {
-    return lippuRepository.findById(id);
+  public Lippu getLippuById(@PathVariable Long id) {
+    return lippuRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy id:llä " + id));
   }
-
-
 
 
  //Hae kaikki liput
 
  @GetMapping(value = {"/api/liput", "/api/liput/"})
  public Iterable<Lippu> getAllLiput(){
+  try{
   return lippuRepository.findAll();
+} catch (DataAccessException e) {
+    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe: ei voitu hakea lippuja", e);
+}
  }
 
   
   // päivitä lippua enemmillä tiedoilla
   @PutMapping("/api/liputtiedoilla/{id}") 
-  public ResponseEntity<Lippu> paivitaLipuntietoja(@PathVariable Long id, @RequestBody PutLippuModel lippuTiedot) {
+  public ResponseEntity<?> paivitaLipuntietoja(@PathVariable Long id, @RequestBody PutLippuModel lippuTiedot) {
     try {
 
       // lataa lipun id:llä olevat tiedot ja tallenna ne uusiLippu:n
       Lippu uusiLippu = lippuRepository.findById(id).orElse(null);
       if (uusiLippu==null){
-        throw new Exception("Invalid value for lippu ID. Lippu does not exist");
+        //throw new Exception("Invalid value for lippu ID. Lippu does not exist");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("virhe", "Lippu_Id " + id + " ei ole olemassa."));
       } 
 
   // korvaa uusLippuun vain RequestBodyssä annetut tiedot
@@ -136,6 +149,9 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
         System.out.println("Lipputyyppi ID saatu: " + lippuTiedot.getTapahtuman_lipputyypit_id());
         Tapahtuman_lipputyyppi tapahtuman_lipputyyppi = tapahtuman_lipputyyppiRepository
         .findById(lippuTiedot.getTapahtuman_lipputyypit_id()).orElse(null);
+        if(tapahtuman_lipputyyppi == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Tapahtuman lipputyyppi ei ole kelvollinen, anna käytössä oleva id."));
+        }
         uusiLippu.setTapahtuman_lipputyyppi(tapahtuman_lipputyyppi);
         System.out.println("Lipputyyppi tallennettu  "+tapahtuman_lipputyyppi);
       }
@@ -143,21 +159,33 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
       // tarkistetaan onko annettu uusi hinta, jos on, niin korvataan se uusiLippu:un
       if (lippuTiedot.getHinta()!=null){
         System.out.println("Uusi hinta saatu: " + lippuTiedot.getHinta());
-         uusiLippu.setHinta(lippuTiedot.getHinta());
+        if(lippuTiedot.getHinta()<0) {
+          //throw new Exception("Hinta ei kelpaa, ei voi olla alle 0€.");
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Hinta ei ole kelvollinen. Hinta ei voi olla alle 0€. "));
+        } else {
+          uusiLippu.setHinta(lippuTiedot.getHinta());
+        }
+         
       }
 
       // tarkistetaan onko annettu uusi tila, jos on, niin korvataan se uusiLippu:un
       if (lippuTiedot.getTila_id()!=null){
         Tila tila = tilaRepository.findById(lippuTiedot.getTila_id()).orElse(null);
+        if (tila == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Tila ei ole kelvollinen, anna käytössä oleva tila_id."));
+        }
         uusiLippu.setTila(tila);
-
-      }
+      } 
 
       // tarkistetaan onko annettu uusi myyni_id, jos on, niin korvataan se uusiLippu:un
     if (lippuTiedot.getMyynti_id()!=null){
       Myynti myynti = myyntiRepository.findById(lippuTiedot.getMyynti_id()).orElse(null);
+      if (myynti == null) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Myynti ei ole kelvollinen, anna käytössä oleva myynti_id." ));
+      }
       uusiLippu.setMyynti(myynti);
     }
+    
       lippuRepository.save(uusiLippu);
 
       // Palautetaan luodun lipun tiedot
@@ -168,6 +196,17 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
       return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
   }
+
+
+  
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<Map<String, String>> handleInvalidJson(HttpMessageNotReadableException ex) {
+
+    return ResponseEntity.badRequest().body(Map.of("virhe", "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku." + ex.getMessage()));
+    
+  }
+    
+
 }
 
 
