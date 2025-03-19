@@ -66,8 +66,8 @@ public class DemoApplication {
 
 			logger.info("Lisätään tapahtumia...");
 
-			Tapahtuma tapahtuma1 = new Tapahtuma("Konsertti 1", LocalDate.of(2025, Month.MARCH, 18).atStartOfDay(), "Paras konsertti ikinä.", 50);
-			Tapahtuma tapahtuma2 = new Tapahtuma("Urheilutapahtuma 3", LocalDate.of(2025, Month.APRIL, 1).atStartOfDay(), "Paras urheilutapahtuma ikinä.", 250);
+			Tapahtuma tapahtuma1 = new Tapahtuma("Konsertti 1", LocalDate.of(2025, Month.JULY, 18).atStartOfDay(), "Paras konsertti ikinä.", 50);
+			Tapahtuma tapahtuma2 = new Tapahtuma("Urheilutapahtuma 3", LocalDate.of(2025, Month.JUNE, 1).atStartOfDay(), "Paras urheilutapahtuma ikinä.", 250);
 
 			tapahtumaRepository.save(tapahtuma1);
 			tapahtumaRepository.save(tapahtuma2);

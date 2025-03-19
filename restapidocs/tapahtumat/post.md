@@ -1,72 +1,130 @@
-# Create User's Account
+# Luo tapahtuma
 
-Create an Account for the authenticated User if an Account for that User does
-not already exist. Each User can only have one Account.
+Luo uusi tapahtuma järjestelmään
 
-**URL** : `/api/accounts/`
+**URL** : `/api/tapahtumat/`
 
 **Method** : `POST`
 
-**Auth required** : YES
+**Auth required** : Kyllä 
 
-**Permissions required** : None
+**Permissions required** : Käyttäjä on ylläpitäjä
 
 **Data constraints**
 
-Provide name of Account to be created.
+Kaikki kentät, jotka voi antaa kutsussa sekä niiden vaatimukset datan muodon osalta.
 
 ```json
 {
-    "name": "[unicode 64 chars max]"
+    "nimi": "[String, 2-200 merkkiä]",
+    "paivamaara": "[LocalDateTime]",
+    "kuvaus": "[String, 2-200 merkkiä]",
+    "tapahtumapaikka": "[List viittaa tapahtumapaikka_id]",
+    "jarjestaja": "[Jarjestaja-olio viittaa jarjestaja_id]",
+    "tapahtuman_lipputyypit": "[Long, viittaa tapaht_lipputyyp_id]",
+    "lippumaara": "[Integer, Greater than 0]"
 }
 ```
 
-**Data example** All fields must be sent.
+**Minimum required data**
+
+Minimidata, joka vaaditaan uuden tapahtuman luontiin (nimi, päivämäärä ja lippumäärä).
 
 ```json
 {
-    "name": "Build something project dot com"
+    "nimi": "[String, 2-200 merkkiä]",
+    "paivamaara": "[LocalDateTime]",
+    "lippumaara": "[Integer, Greater than 0]"
+}
+```
+
+**Data example**
+
+Esimerkki validista request body:sta.
+
+```json
+{
+    "nimi": "Cheek-keikka",
+    "paivamaara": "2025-05-11T11:16:00",
+    "kuvaus": "Cheekin upea konsertti",
+    "lippumaara": 1200
 }
 ```
 
 ## Success Response
 
-**Condition** : If everything is OK and an Account didn't exist for this User.
+**Condition** : Tapahtuma luodaan onnistuneesti
 
 **Code** : `201 CREATED`
 
-**Content example**
+**Response example** 
 
 ```json
 {
-    "id": 123,
-    "name": "Build something project dot com",
-    "url": "http://testserver/api/accounts/123/"
+    "tapahtuma_id": 1,
+    "nimi": "Cheek-keikka",
+    "paivamaara": "2025-05-11T11:16:00",
+    "kuvaus": "Cheekin upea konsertti",
+    "tapahtumapaikka": null,
+    "tapahtuman_lipputyypit": null,
+    "lippumaara": 1200,
+    "url": null
 }
 ```
 
 ## Error Responses
 
-**Condition** : If Account already exists for User.
-
-**Code** : `303 SEE OTHER`
-
-**Headers** : `Location: http://testserver/api/accounts/123/`
-
-**Content** : `{}`
-
-### Or
-
-**Condition** : If fields are missed.
+**Condition** Pakollista tietoa puuttuu.
 
 **Code** : `400 BAD REQUEST`
 
 **Content example**
 
+Päivämäärää puuttuu pyynnöstä.
+
 ```json
 {
-    "name": [
-        "This field is required."
+    "nimi": "Bib Marleyn Reggaefest",
+    "lippumaara": 600
+}
+```
+
+**Response example** 
+
+```json
+{
+    "errors": [
+        "Päivämäärä ja kellonaika täytyy olla annettu ja sen on oltava tulevaisuudessa."
     ]
 }
 ```
+
+---
+
+**Condition** Tietoa annetaan virheellisessä muodossa.
+
+**Code** : `400 BAD REQUEST`
+
+**Content example** 
+
+Päivämäärä ei ole oikeassa muodossa.
+
+```json
+{
+    "nimi": "Bib Marleyn Reggaefest",
+    "paivamaara": "5.6.2026",
+    "lippumaara": 600
+}
+```
+
+**Response example** 
+
+```json
+{
+    "errors": [
+        "JSON parse error: Cannot deserialize value of type `java.time.LocalDateTime` from String \"5.6.2026\": Failed to deserialize java.time.LocalDateTime: (java.time.format.DateTimeParseException) Text '5.6.2026' could not be parsed at index 0"
+    ]
+}
+```
+
+---
