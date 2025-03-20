@@ -27,10 +27,12 @@ public class Myynti {
     private Kayttaja asiakas;
 
     @Column(name = "myyntipaiva", nullable = false)
+    @NotNull
     private LocalDate myyntipaiva;
 
     @ManyToOne
     @JoinColumn(name = "myyntipiste_id", nullable = false)
+    @NotNull
     private Myyntipiste myyntipiste;
 
     @ManyToOne
