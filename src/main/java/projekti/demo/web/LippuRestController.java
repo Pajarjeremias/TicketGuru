@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
+import projekti.demo.model.Kayttaja;
+import projekti.demo.model.KayttajaRepository;
 import projekti.demo.model.Lippu;
 import projekti.demo.model.LippuRepository;
 import projekti.demo.model.Myynti;
@@ -17,6 +19,7 @@ import projekti.demo.model.Tila;
 import projekti.demo.model.TilaRepository;
 import projekti.demo.model.PutLippuModel;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -37,16 +40,19 @@ public class LippuRestController {
   MyyntiRepository myyntiRepository;
   Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository;
   TilaRepository tilaRepository;
+  KayttajaRepository kayttajaRepository;
 
   public LippuRestController(
       LippuRepository lippuRepository,
       MyyntiRepository myyntiRepository,
       Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository,
-      TilaRepository tilaRepository) {
+      TilaRepository tilaRepository,
+      KayttajaRepository kayttajaRepository) {
     this.lippuRepository = lippuRepository;
     this.myyntiRepository = myyntiRepository;
     this.tapahtuman_lipputyyppiRepository = tapahtuman_lipputyyppiRepository;
     this.tilaRepository = tilaRepository;
+    this.kayttajaRepository = kayttajaRepository;
   }
 
   // Luo uusi lippu
@@ -101,17 +107,8 @@ public class LippuRestController {
 
   }
 
-  /* Päivitä lippu 
-  @PutMapping("/api/liput/{id}")
-  Lippu paivitaLippu(@PathVariable Long id, @Valid @RequestBody Lippu muokattuLippu) {
-    // tallennetaan muokatut tiedot lipulle - tarvitaan kaikki lipun tiedot
-    muokattuLippu.setLippu_id(id);
-    return lippuRepository.save(muokattuLippu);
-  
-  } */
-
   //Hae yksittäinen lippu
-  @GetMapping("/api/getlippu/{id}")
+  @GetMapping("/api/liput/{id}")
   public Lippu getLippuById(@PathVariable Long id) {
     return lippuRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy id:llä " + id));
@@ -119,7 +116,6 @@ public class LippuRestController {
 
 
  //Hae kaikki liput
-
  @GetMapping(value = {"/api/liput", "/api/liput/"})
  public Iterable<Lippu> getAllLiput(){
   try{
@@ -131,7 +127,7 @@ public class LippuRestController {
 
   
   // päivitä lippua enemmillä tiedoilla
-  @PutMapping("/api/liputtiedoilla/{id}") 
+  @PutMapping("/api/liput/{id}") 
   public ResponseEntity<?> paivitaLipuntietoja(@PathVariable Long id, @RequestBody PutLippuModel lippuTiedot) {
     try {
 
@@ -185,15 +181,34 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
       }
       uusiLippu.setMyynti(myynti);
     }
+
+    if (lippuTiedot.getKayttaja_id()!=null){
+      System.out.println("Checking kayttaja_id: " + lippuTiedot.getKayttaja_id());
+      Kayttaja kayttaja = kayttajaRepository.findById(lippuTiedot.getKayttaja_id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+      "Kayttaja ei ole kelvollinen, anna käytössä oleva kayttaja_id."));
+      /*if (kayttaja == null) {
+        System.out.println("Kayttaja not found! Returning BAD_REQUEST.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("virhe", "Tarkastanut ei ole kelvollinen, anna käytössä oleva kayttaja_id." ));
+      }*/
+      uusiLippu.setTarkastanut(kayttaja);
+    }
+
+    if (lippuTiedot.getTarkastus_pvm()!=null){
+      uusiLippu.setTarkastus_pvm(lippuTiedot.getTarkastus_pvm());
+    }
     
       lippuRepository.save(uusiLippu);
 
       // Palautetaan luodun lipun tiedot
       return new ResponseEntity<>(uusiLippu, HttpStatus.CREATED);
 
-    } catch (Exception e) {
+    } /*catch (Exception e) {
       // Palautetaan virheviesti
       return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }*/
+    catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(Map.of("virhe", "Odottamaton virhe: " + e.getMessage()));
     }
   }
 
@@ -202,7 +217,7 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
   @ExceptionHandler(HttpMessageNotReadableException.class)
   public ResponseEntity<Map<String, String>> handleInvalidJson(HttpMessageNotReadableException ex) {
 
-    return ResponseEntity.badRequest().body(Map.of("virhe", "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku." + ex.getMessage()));
+    return ResponseEntity.badRequest().body(Map.of("virhe", "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku. Päivämäärän ja ajan tulee olla muodossa yyyy-MM-dd'T'HH:mm:ss.   " + ex.getMessage()));
     
   }
     
