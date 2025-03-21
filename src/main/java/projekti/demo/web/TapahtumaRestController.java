@@ -69,12 +69,21 @@ public class TapahtumaRestController {
 
     // Hae yksittäinen tapahtuma
     @GetMapping("/api/tapahtumat/{id}")
-    public ResponseEntity<Tapahtuma> getTapahtumaById(@PathVariable Long id) {
+    public ResponseEntity<?> getTapahtumaById(@PathVariable Long id) {
         try {
-            Tapahtuma tapahtuma = tapahtumaRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tapahtumaa ei löydy id:llä" + id));
+            // tarkistetaan onko annetulla id:llä tapahtaumaa
+        if (!tapahtumaRepository.existsById(id)){
+            // jos ei ole palautetaan 404 not found ja teksti
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("Not Found", " invalid ID value for Tapahtuma. Id must be valid. ID "
+                                        + id + " not found"));
+        } else {
+            // tapahtuma on olemassa, haetaan ja palautetaan se
+            Optional<Tapahtuma> tapahtuma = tapahtumaRepository.findById(id);
             return ResponseEntity.ok(tapahtuma);
+        }
         } catch (DataAccessException e) {
+            //tähän ei ikinä pitäisi joutua, mut jätettiin tää nyt tänne
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe tapahtumaa haettaessa", e);
         }
     }

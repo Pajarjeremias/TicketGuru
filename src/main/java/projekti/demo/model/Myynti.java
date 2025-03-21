@@ -27,7 +27,6 @@ public class Myynti {
     private Kayttaja asiakas;
 
     @Column(name = "myyntipaiva", nullable = false)
-    @NotNull
     private LocalDate myyntipaiva;
 
     @ManyToOne
