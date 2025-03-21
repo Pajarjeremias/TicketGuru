@@ -1,68 +1,144 @@
-# Luo tapahtuma
+# Luo myynti
 
-Luo uusi tapahtuma järjestelmään
+Luo uuden myynnin tietokantaan
 
-**URL** : `/api/tapahtumat/`
+**URL** : `/api/myynnit`
 
 **Method** : `POST`
 
-**Auth required** : Kyllä 
+**Auth required** : Kyllä
 
-**Permissions required** : Käyttäjä on ylläpitäjä
+**Permissions required** : Kyllä
 
-**Data constraints**
-
-```json
-{
-    "nimi": "[String, 2-200 merkkiä]",
-    "paivamaara": "[LocalDateTime]",
-    "kuvaus": "[String, 2-200 merkkiä]",
-    "tapahtumapaikka": "[List viittaa tapahtumapaikka_id]",
-    "jarjestaja": "[Jarjestaja-olio viittaa jarjestaja_id]",
-    "tapahtuman_lipputyypit": "[Long, viittaa tapaht_lipputyyp_id]",
-    "lippumaara": "[Integer]"
-}
-```
-**Data example**
+**Data Constraints**
 
 ```json
+
 {
-    "nimi": "Cheek-keikka",
-    "paivamaara": "2025-05-11T11:16:00",
-    "kuvaus": "Cheekin upea konsertti",
-    "lippumaara": 1200
-}
+        "liput": "[List vittaa lippu_id]",
+        "asiakas": null,
+        "myyntipiste": "[Myyntipiste olio, viittaa Long Myyntipiste_id]",
+        "maksutapa": "[Maksutapa olio, viittaa Long Maksutapa_id]"
+    }
 ```
 
-## Success Response
+## Data example 
 
-**Condition** : Tapahtuma luodaan onnistuneesti
+```json
+
+{
+    "liput": [],
+    "asiakas": null,
+    "myyntipiste": {
+        "myyntipisteId": 1
+    },
+    "maksutapa": {
+        "maksutapa_id": 1
+    }
+}
+
+```
+
+## Success response
+
+Uusi myynti luodaan onnistuneesti. 
+Myyntipäiväksi tulee tämän hetkinen päivä.
+HUOM! asiakas täytyy olla vielä tässä vaiheessa null
 
 **Code** : `201 CREATED`
 
-**Content example** 
+**Content**
 
 ```json
 {
-    "tapahtuma_id": 1,
-    "nimi": "Bob Marley Reggaefest",
-    "paivamaara": "2025-08-23T2419:00",
-    "kuvaus": "Bob Marleyn upea kesäinen lavakeikka",
-    "tapahtumapaikka": [],
-    "tapahtuman_lipputyypit": [],
-    "lippumaara": 60,
-    "url": "http://localhost:8080/api/tapahtumat/1/"
+    "myynti_id": 3,
+    "asiakas": null,
+    "myyntipaiva": "2025-03-21",
+    "myyntipiste": {
+        "nimi": "Ensimmäinen piste",
+        "katuosoite": "Messuaukio 1",
+        "postitoimipaikka": {
+            "postinumero": "00520",
+            "postitoimipaikka": "Helsinki",
+            "maa": "Suomi"
+        },
+        "myyntipisteId": 1
+    },
+    "maksutapa": {
+        "maksutapa_id": 1,
+        "maksutapa": "Käteinen"
+    }
 }
 ```
 
-## Error Response
+## Error respones
 
-**Condition** Jos annettu data ei ole kelvollista. Esimerkiksi syötetyt tiedot eivät vastaa tietotyyppejä.
+**Condition** : Jos annettu data ei ole kelvollista.
 
-**Code** : `400`
+**Code** : `400 BAD REQUEST`
 
-**Content** : `{}`
-
-
+**Content** : Antaa virheilmoituksessa sisällön ja viittauksen mihin ongelma liittyy`{}`
 
 
+**Condition** : Jos annettua myyntipisteId:tä ei ole olemassa.
+
+**Code** : `404 Not Found`
+
+**Content** : Palauttaa myös virheellisen Id:n numeron osana tekstiä
+```json
+{
+    "Not Found": " invalid value for myyntipiste. Please check id. Id must be a valid id number. Myyntipiste ID 2 not found"
+}
+```
+
+
+**Condition** : Jos annettu maksutapaId:tä ei ole olemassa.
+
+**Code** : `404 Not Found`
+
+**Content** : 
+
+```json
+{
+    "Not Found": " invalid value for maksutapa. Please check id. Id must be a valid id number. Maksutapa ID 6 not found"
+}
+```
+
+
+**Condition** : Jos molemmat myyntipiste ja maksutapa Id ovat virheellisiä.
+
+**Code** : `404 Not Found`
+
+**Content** : 
+
+```json
+{
+    "Not Found": " invalid value for myyntipiste and maksutapa. Id must be valid. Myyntipiste ID 5 Maksutapa ID 6 not found"
+}
+```
+
+Esimerkki:
+Post, missä asiakasta 101 ei ole olemassa:
+```json
+{
+    "liput": [],
+    "asiakas": 101,
+    "myyntipiste": {
+        "myyntipisteId": 1
+    },
+    "maksutapa": {
+        "maksutapa_id": 1
+    }
+
+}
+```
+
+**Code** : `404 Not Found`
+
+**Content** : 
+
+```json
+{
+    "virhe": "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku.JSON parse error: Cannot construct instance of `projekti.demo.model.Kayttaja` (although at least one Creator exists): no int/Int-argument constructor/factory method to deserialize from Number value (0)"
+}
+```
