@@ -92,12 +92,18 @@ public class TapahtumaRestController {
     // Poista tapahtuma
     @DeleteMapping("/api/tapahtumat/{id}")
     public ResponseEntity<Void> deleteTapahtuma(@PathVariable Long id) {
+        try { 
         if (tapahtumaRepository.existsById(id)) {
             tapahtumaRepository.deleteById(id);
-               return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.noContent().build(); // Palauttaa 204 NO CONTENT eli onnistunut poisto
+        } 
+        else { // Palauttaa 404 NOT_FOUND jos tapahtumaa ei löydy 
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tapahtumaa ei löydy ID:llä " + id);
         }
+
+    } catch (DataAccessException e) { // Palauttaa 400 BAD_REQUEST tietokantavirheille, jotta ei tule 500 koodia
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Virhe tapahtumaa poistettaessa", e);
+    }
 
     }
 

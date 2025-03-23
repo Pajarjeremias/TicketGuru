@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,8 @@ import projekti.demo.model.MyyntipisteRepository;
 import projekti.demo.model.Lippu;
 import projekti.demo.model.Maksutapa;
 import projekti.demo.model.MaksutapaRepository;
+import projekti.demo.DemoApplication;
+import projekti.demo.model.JarjestajaRepository;
 import projekti.demo.model.Kayttaja;
 import projekti.demo.model.KayttajaRepository;
 
@@ -42,8 +45,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 public class MyyntiRestController {
 
-        @Autowired
-        private MyyntiRepository myyntiRepository;
+    private final JarjestajaRepository jarjestajaRepository;
+
+    private final CommandLineRunner demoRunner;
+
+    private final DemoApplication demoApplication;
+
+    @Autowired
+    private MyyntiRepository myyntiRepository;
 
         @Autowired
         MyyntipisteRepository myyntipisteRepository;
@@ -55,10 +64,23 @@ public class MyyntiRestController {
         KayttajaRepository kayttajaRepository;
 
         // Hae kaikki myynnit
-        @GetMapping(value = { "/api/myynnit", "/api/myynnit/" })
-        public List<Myynti> getAllMyynnit() {
-                return myyntiRepository.findAll();
+        
+    @GetMapping(value = {"/api/myynnit", "/api/myynnit/"})
+    public List<Myynti> getAllMyynnit(){
+        try {
+            List<Myynti> myynnit = myyntiRepository.findAll();
+            
+            if (myynnit.isEmpty()) { // Palauttaa 404 NOT_FOUND jos lista tyhjä
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Yhtään myyntiä ei löytynyt.");
+            }
+            return myynnit; // Palauttaa 200 haetaan myynnit onnistuneesti
+        
+        } catch (DataAccessException e) { // Palauttaa 400 BAD_REQUEST tietokantavirheille, jotta ei tule 500 koodia
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Virhe myyntejä haettaessa", e);
         }
+    }
+
+        
 
         // Hae yksi myynti
         @GetMapping("/api/myynnit/{id}")
