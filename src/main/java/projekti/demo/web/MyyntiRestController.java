@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
+import projekti.demo.DemoApplication;
+import projekti.demo.model.JarjestajaRepository;
 import projekti.demo.model.Myynti;
 import projekti.demo.model.MyyntiRepository;
 import projekti.demo.model.Lippu;
@@ -24,13 +26,35 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 public class MyyntiRestController {
 
+    private final JarjestajaRepository jarjestajaRepository;
+
+    private final CommandLineRunner demoRunner;
+
+    private final DemoApplication demoApplication;
+
     @Autowired
     private MyyntiRepository myyntiRepository;
+
+    MyyntiRestController(DemoApplication demoApplication, CommandLineRunner demoRunner, JarjestajaRepository jarjestajaRepository) {
+        this.demoApplication = demoApplication;
+        this.demoRunner = demoRunner;
+        this.jarjestajaRepository = jarjestajaRepository;
+    }
 
     //Hae kaikki myynnit
     @GetMapping(value = {"/api/myynnit", "/api/myynnit/"})
     public List<Myynti> getAllMyynnit(){
-        return myyntiRepository.findAll();
+        try {
+            List<Myynti> myynnit = myyntiRepository.findAll();
+            
+            if (myynnit.isEmpty()) { // Palauttaa 404 NOT_FOUND jos lista tyhjä
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Yhtään myyntiä ei löytynyt.");
+            }
+            return myynnit; // Palauttaa 200 haetaan myynnit onnistuneesti
+        
+        } catch (DataAccessException e) { // Palauttaa 400 BAD_REQUEST tietokantavirheille, jotta ei tule 500 koodia
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Virhe myyntejä haettaessa", e);
+        }
     }
 
     //Hae yksi myynti
