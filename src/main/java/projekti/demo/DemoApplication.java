@@ -53,6 +53,8 @@ public class DemoApplication {
 	) {
 		return(args) -> {
 
+			
+
 			logger.info("Lisätään lipputyyppejä...");
 
 			Lipputyyppi aikuinen = new Lipputyyppi("Aikuinen");
@@ -66,8 +68,8 @@ public class DemoApplication {
 
 			logger.info("Lisätään tapahtumia...");
 
-			Tapahtuma tapahtuma1 = new Tapahtuma("Konsertti 1", LocalDate.of(2025, Month.MARCH, 18).atStartOfDay(), "Paras konsertti ikinä.", 50);
-			Tapahtuma tapahtuma2 = new Tapahtuma("Urheilutapahtuma 3", LocalDate.of(2025, Month.APRIL, 1).atStartOfDay(), "Paras urheilutapahtuma ikinä.", 250);
+			Tapahtuma tapahtuma1 = new Tapahtuma("Konsertti 1", LocalDate.of(2025, Month.JULY, 18).atStartOfDay(), "Paras konsertti ikinä.", 50);
+			Tapahtuma tapahtuma2 = new Tapahtuma("Urheilutapahtuma 3", LocalDate.of(2025, Month.JUNE, 1).atStartOfDay(), "Paras urheilutapahtuma ikinä.", 250);
 
 			tapahtumaRepository.save(tapahtuma1);
 			tapahtumaRepository.save(tapahtuma2);
@@ -122,10 +124,11 @@ public class DemoApplication {
 			tilaRepository.save(tarkastettu);
 			tilaRepository.save(peruttu);
 			
+			
 			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
-			lippuRepository.save(lippu1);
+			lippuRepository.save(lippu1); 
 
-		};
+		}; 
 	}
 
 }

@@ -17,7 +17,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -25,14 +27,6 @@ import jakarta.validation.constraints.Size;
 public class Tapahtuma {
 
     private String url; // Luotu SetUrl RestControlleria varten
-
-public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,61 +38,59 @@ public String getUrl() {
     private String nimi;
 
     @Column(name = "PvmJaKellonaika")
-    @Future(message = "Tapahtumalla täytyy olla päiväys ja kellonaika")
+    @Future(message = "Päivämäärän ja kellonajan on oltava tulevaisuudessa.")
+    @NotNull(message = "Päivämäärä ja kellonaika täytyy olla annettu ja sen on oltava tulevaisuudessa.")
     private LocalDateTime paivamaara;
 
     @Column(name = "Kuvaus")
     @Size(min = 2, max = 2500, message = "Pituuden täytyy olla 2-2500 merkkiä")
     private String kuvaus;
 
-
-    //pitäisikö tämän olla many to one?
     @JsonIgnoreProperties("tapahtumat")
-    @OneToMany(mappedBy = "tapahtumapaikka_id", cascade = CascadeType.ALL)
-    private List<Tapahtumapaikka> tapahtumapaikka;
+    @ManyToOne
+    @JoinColumn(name = "tapahtumapaikka_id")
+    private Tapahtumapaikka tapahtumapaikka;
 
     @OneToMany(mappedBy = "tapahtuma", cascade = CascadeType.ALL)
     // pitäisikö olla linkitettu tapahtuman lipputyyppiin? @OneToMany(mappedBy = "tapahtuma_lipputyyppi_id", cascade = CascadeType.ALL)
     private List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit;
-    
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "jarjestaja_id")
     private Jarjestaja jarjestaja;
 
-    // @NotEmpty(message = "Lippumäärä on pakollinen")
+    @Min(value = 1, message = "Lippumäärän täytyy olla positiivinen kokonaisluku")
     private int lippumaara;
 
     public Tapahtuma() { }
 
     public Tapahtuma(
             @NotEmpty(message = "Tapahtumalla täytyy olla nimi") @Size(min = 2, max = 200, message = "Täytyy olla 2-200 merkkiä") String nimi,
-            @NotEmpty(message = "Tapahtumalla täytyy olla päiväys ja kellonaika") LocalDateTime paivamaara,
+            @Future(message = "Tapahtumalla täytyy olla päiväys ja kellonaika") @NotNull LocalDateTime paivamaara,
+            @Min(value = 1, message = "Lippumäärän täytyy olla positiivinen kokonaisluku") int lippumaara) {
+        this.nimi = nimi;
+        this.paivamaara = paivamaara;
+        this.lippumaara = lippumaara;
+    }
+
+    public Tapahtuma(
+            @NotEmpty(message = "Tapahtumalla täytyy olla nimi") @Size(min = 2, max = 200, message = "Täytyy olla 2-200 merkkiä") String nimi,
+            @Future(message = "Tapahtumalla täytyy olla päiväys ja kellonaika") @NotNull LocalDateTime paivamaara,
             @Size(min = 2, max = 2500, message = "Pituuden täytyy olla 2-2500 merkkiä") String kuvaus,
-             int lippumaara) {
+            @Min(value = 1, message = "Lippumäärän täytyy olla positiivinen kokonaisluku") int lippumaara) {
         this.nimi = nimi;
         this.paivamaara = paivamaara;
         this.kuvaus = kuvaus;
         this.lippumaara = lippumaara;
     }
 
-    /*
-    public Tapahtuma(
-            @NotEmpty(message = "Tapahtumalla täytyy olla nimi") @Size(min = 2, max = 200, message = "Täytyy olla 2-200 merkkiä") String nimi,
-            @NotEmpty(message = "Tapahtumalla täytyy olla päiväys ja kellonaika") LocalDateTime paivamaara,
-            @Size(min = 2, max = 2500, message = "Pituuden täytyy olla 2-2500 merkkiä") String kuvaus,
-            List<Tapahtumapaikka> tapahtumapaikka, List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit,
-            Jarjestaja jarjestaja, @NotEmpty(message = "Lippumäärä on pakollinen") @Min(1) int lippumaara) {
-        this.nimi = nimi;
-        this.paivamaara = paivamaara;
-        this.kuvaus = kuvaus;
-        this.tapahtumapaikka = tapahtumapaikka;
-        this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;
-        this.jarjestaja = jarjestaja;
-        this.lippumaara = lippumaara;
+    public String getUrl() {
+        return url;
     }
-        */
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public Long getTapahtuma_id() {
         return tapahtuma_id;
@@ -132,11 +124,11 @@ public String getUrl() {
         this.kuvaus = kuvaus;
     }
 
-    public List<Tapahtumapaikka> getTapahtumapaikka() {
+    public Tapahtumapaikka getTapahtumapaikka() {
         return tapahtumapaikka;
     }
 
-    public void setTapahtumapaikka(List<Tapahtumapaikka> tapahtumapaikka) {
+    public void setTapahtumapaikka(Tapahtumapaikka tapahtumapaikka) {
         this.tapahtumapaikka = tapahtumapaikka;
     }
 
@@ -166,17 +158,10 @@ public String getUrl() {
 
     @Override
     public String toString() {
-        return "Tapahtuma [tapahtuma_id=" + tapahtuma_id + ", nimi=" + nimi + ", paivamaara=" + paivamaara + ", kuvaus="
-                + kuvaus + ", lippumaara=" + lippumaara + "]";
+        return "Tapahtuma [url=" + url + ", tapahtuma_id=" + tapahtuma_id + ", nimi=" + nimi + ", paivamaara="
+                + paivamaara + ", kuvaus=" + kuvaus + ", tapahtumapaikka=" + tapahtumapaikka
+                + ", tapahtuman_lipputyypit=" + tapahtuman_lipputyypit + ", jarjestaja=" + jarjestaja + ", lippumaara="
+                + lippumaara + "]";
     }
-
-    /*
-    @Override
-    public String toString() {
-        return "Tapahtuma [tapahtuma_id=" + tapahtuma_id + ", nimi=" + nimi + ", paivamaara=" + paivamaara + ", kuvaus="
-                + kuvaus + ", tapahtumapaikka=" + tapahtumapaikka + ", tapahtuman_lipputyypit=" + tapahtuman_lipputyypit
-                + ", jarjestaja=" + jarjestaja + ", lippumaara=" + lippumaara + "]";
-    }
-                */
 
 }

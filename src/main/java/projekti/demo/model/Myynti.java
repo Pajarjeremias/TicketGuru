@@ -31,6 +31,7 @@ public class Myynti {
 
     @ManyToOne
     @JoinColumn(name = "myyntipiste_id", nullable = false)
+    @NotNull
     private Myyntipiste myyntipiste;
 
     @ManyToOne

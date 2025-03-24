@@ -19,10 +19,10 @@ Endpointit Tapahtumat taulun katsomiseen ja muokkaamiseen
 
 * [Näytä kaikki myynnit](myynnit/get.md) : `GET /api/myynnit/`
 * [Näytä yksi myynti](myynnit/pk/get.md) : `GET /api/myynnit/:pk/`
-* [Näytä yhden myynnin liput](myynnit/pk/get.md) : `GET /api/myynnit/:pk/liput`
+* [Näytä yhden myynnin liput](myynnit/pk/getLiput.md) : `GET /api/myynnit/:pk/liput`
 
 ### Lippuihin liittyvät
 * [Luo lippu](liput/create.md) : `POST /api/liput/`
-* [Muokkaa lippua](liput/put.md) : `POST /api/liputtiedoilla/:pk`
+* [Muokkaa lippua](liput/put.md) : `PUT /api/liput/:pk`
 * [Näytä kaikki liput](liput/get.md) : `GET /api/liput/`
 

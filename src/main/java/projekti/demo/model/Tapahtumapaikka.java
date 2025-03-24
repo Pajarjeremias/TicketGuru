@@ -41,7 +41,7 @@ public class Tapahtumapaikka {
 
     @JsonIgnoreProperties("tapahtumapaikat")
     @ManyToOne
-    @JoinColumn(name = "tapahtumat_id")
+    @JoinColumn(name = "tapahtuma_id")
     private Tapahtuma tapahtuma;
 
     public Tapahtumapaikka() {

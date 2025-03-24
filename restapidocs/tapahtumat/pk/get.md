@@ -22,9 +22,15 @@ Hakee yksittäisen tapahtuman.
 
 **Condition** : Mikäli yksilöivällä tunnisteellä ei ole tapahtumaa.
 
-**Code** : `200 ok`
+**Code** : `404 Not Found`
 
-**Content** : `null`
+**Content** :
+
+```json
+{
+    "Not Found": " invalid ID value for Tapahtuma. Id must be valid. ID 3 not found"
+}
+```
 
 **Content**
 
