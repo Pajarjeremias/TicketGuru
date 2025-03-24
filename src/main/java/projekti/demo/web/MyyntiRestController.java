@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,11 +78,24 @@ public class MyyntiRestController {
 
         // Yksittäisen myynnin lippujen hakeminen
         @GetMapping("/api/myynnit/{id}/liput")
+        public ResponseEntity<?> getMyynninLiputById(@PathVariable Long id) {
+                Optional<Myynti> optionalMyynti = myyntiRepository.findById(id);
+
+                if (optionalMyynti.isPresent()) {
+                        List<Lippu> liput = optionalMyynti.get().getLiput();
+                        return ResponseEntity.ok(liput);
+                } else {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("virhe", "Myyntiä ei löydy id:llä " + id));
+                }
+        }
+
+        /* Yksittäisen myynnin lippujen hakeminen - palautetaan tyhjä lista
+        @GetMapping("/api/myynnit/{id}/liput")
         public List<Lippu> getMyynninLiputById(@PathVariable Long id) {
                 return myyntiRepository.findById(id)
                                 .map(Myynti::getLiput)
                                 .orElse(Collections.emptyList());
-        }
+        } */
 
         // Luo myynti
         @PostMapping("/api/myynnit")

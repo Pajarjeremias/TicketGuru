@@ -53,6 +53,8 @@ public class DemoApplication {
 	) {
 		return(args) -> {
 
+			
+
 			logger.info("Lisätään lipputyyppejä...");
 
 			Lipputyyppi aikuinen = new Lipputyyppi("Aikuinen");
@@ -126,7 +128,7 @@ public class DemoApplication {
 			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
 			lippuRepository.save(lippu1); 
 
-		};
+		}; 
 	}
 
 }
