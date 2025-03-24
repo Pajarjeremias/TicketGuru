@@ -4,7 +4,7 @@
 
 Muokkaa lippua. 
 
-**URL** : `/api/liputtiedoilla/:pk/`
+**URL** : `/api/liput/:pk/`
 
 **Method** : `PUT`
 
@@ -140,11 +140,24 @@ Voi käyttää kaikki neljää, vain yhtä tai muunlaista kombinaatiota muutetta
 
 ## Error Response
 
-**Condition** : Jos annettu data ei ole kelvollista. Esimerkiksi teksti on liian pitkä tai lippua ei löydy
+**Condition** : Jos annettu data ei ole kelvollista. Esimerkiksi pvm on väärässä muodossa
 
-**Code** : `400 Bad Request`
+**Code** : `400 Bad Request` 
 
-**Content** : `{}`
+**Content** : `{
+    "tapahtuman_lipputyyppi_id": null,
+    "hinta": 10,
+    "tila_id": null,
+    "myynti_id": null,
+    "kayttaja_id": null,
+    "tarkastus_pvm": "2025-06-15 10:10:00"
+}`
+
+Päivämäärä on väärin: "virhe": "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku. Päivämäärän ja ajan tulee olla muodossa yyyy-MM-dd'T'HH:mm:ss.   JSON parse error: Cannot deserialize value of type `java.time.LocalDateTime` from String \"2025-06-15 10:10:00\": Failed to deserialize java.time.LocalDateTime: (java.time.format.DateTimeParseException) Text '2025-06-15 10:10:00' could not be parsed at index 10"
+
+Hinta on alle 0€: virhe": "Hinta ei ole kelvollinen. Hinta ei voi olla alle 0€.
+
+Käyttäjä_id on väärin: "virhe": "Odottamaton virhe: 400 BAD_REQUEST \"Kayttaja ei ole kelvollinen, anna käytössä oleva kayttaja_id."
 
 ### Or
 
@@ -153,6 +166,12 @@ Voi käyttää kaikki neljää, vain yhtä tai muunlaista kombinaatiota muutetta
 **Code** : `403 FORBIDDEN`
 
 **Content** : `{}`
+
+**Condition** : Jos kyselyssä annettua IDtä ei ole olemassa
+
+**Code** : `404 Not found`
+
+**Content** : `{"virhe": "Lippu_Id 10 ei ole olemassa."}`
 
 ## Notes
 

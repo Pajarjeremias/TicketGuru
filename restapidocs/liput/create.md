@@ -113,22 +113,61 @@ Myynnin id on taas 1 ja tapahtuman_lipputyypin id on niin ikään 1. Hintaa ei o
 
 **Content** : `error message`
 
-Jos myynti_id tai tapahtuman_lipputyypit_id on laitettu id, jota ei ole olemassa: Invalid value for 'myynti' and 'tapahtuman_lipputyyppi', please check. Id must be a valid id-number.
-
-Jos myynti_id tai tapahtuman_lipputyypit_id puuttuu kokonaan tai on null-arvoinen: The given id must not be null.
-
-Jos myynti_idtä ei ole olemassa: Invalid value for 'myynti', please check.Id must be a valid id-number.
-
-Jos tapahtuman_lipputyypit_idtä ei ole olemassa: Invalid value for 'tapahtuman_lipputyyppi', please check.Id must be a valid id-number.
-
-Jos annettu hinta on alle 0€: Invalid value for 'hinta'. Can't be under 0€, please check.
-
-Jos syöte on väärässä muodossa, esim. Long tilalla String: "Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku."
+{
+  "myynti_id": 10,
+  "tapahtuman_lipputyypit_id": 10
+}
 
 
 **Content example** : 
 
+Jos myynti_id tai tapahtuman_lipputyypit_id on laitettu id, jota ei ole olemassa: 
+
 ```
-Invalid value for 'myynti', please check.
+Invalid value for 'myynti' and 'tapahtuman_lipputyyppi', please check. Id must be a valid id-number.
 ```
+
+**Content** : `error message`
+
+{
+  "myynti_id": null,
+  "tapahtuman_lipputyypit_id": null,
+  "hinta": -1
+}
+
+
+**Content example** : 
+
+
+Jos myynti_id tai tapahtuman_lipputyypit_id puuttuu kokonaan tai on null-arvoinen: 
+
+```
+The given id must not be null.
+```
+
+Jos myynti_idtä ei ole olemassa: 
+
+```
+Invalid value for 'myynti', please check.Id must be a valid id-number.
+```
+
+Jos tapahtuman_lipputyypit_idtä ei ole olemassa: 
+
+```
+Invalid value for 'tapahtuman_lipputyyppi', please check.Id must be a valid id-number.
+```
+
+Jos annettu hinta on alle 0€:
+
+```
+Invalid value for 'hinta'. Can't be under 0€, please check.
+```
+
+Jos syöte on väärässä muodossa, esim. Long tilalla String: 
+
+```
+Tieto väärässä muodossa, tarkasta syötteiden arvot. IDn tulee olla kokonaislukuja. Mahdollisen hinnan tulee olla joko kokonaisluku tai liukuluku.
+```
+
+
 
