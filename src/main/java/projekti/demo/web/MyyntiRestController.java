@@ -80,8 +80,6 @@ public class MyyntiRestController {
         }
     }
 
-        
-
         // Hae yksi myynti
         @GetMapping("/api/myynnit/{id}")
         public ResponseEntity<Myynti> getMyyntiById(@PathVariable Long id) {
