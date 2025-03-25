@@ -44,12 +44,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 public class MyyntiRestController {
-
+   
+        /* Nämä herjaavat käynnistettäessä.
     private final JarjestajaRepository jarjestajaRepository;
 
     private final CommandLineRunner demoRunner;
 
-    private final DemoApplication demoApplication;
+    private final DemoApplication demoApplication; */
 
     @Autowired
     private MyyntiRepository myyntiRepository;
