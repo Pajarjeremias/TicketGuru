@@ -195,7 +195,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > Kayttajatyyppi_id | int, autonumber, PK, not null | Yksilöivä tunniste ja primary key
-> Kayttajatyyppi | varchar(20), not null |  Kayttajatyypin nimi esim. asiakas, lipuntarkastaja, lipunmyyjä tai ylläpitäjä.
+> Kayttajatyyppi | varchar(20), not null |  Kayttajatyypin nimi esim. asiakas, lipuntarkastaja, lipunmyyjä, tapahtumavastaava tai ylläpitäjä.
 > Kuvaus | varchar(500) | Vapaaehtoinen kuvaus käyttäjätyypille
 >
 > ### _Myynnit_
