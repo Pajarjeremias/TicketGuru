@@ -2,23 +2,16 @@ package projekti.demo.web;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,15 +27,13 @@ import projekti.demo.model.MyyntipisteRepository;
 import projekti.demo.model.Lippu;
 import projekti.demo.model.Maksutapa;
 import projekti.demo.model.MaksutapaRepository;
-import projekti.demo.DemoApplication;
-import projekti.demo.model.JarjestajaRepository;
-import projekti.demo.model.Kayttaja;
 import projekti.demo.model.KayttajaRepository;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
+@EnableMethodSecurity(securedEnabled = true)
 public class MyyntiRestController {
    
         /* Nämä herjaavat käynnistettäessä.
