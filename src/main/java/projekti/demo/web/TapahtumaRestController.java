@@ -56,7 +56,7 @@ public class TapahtumaRestController {
 
 
     // Hae kaikki tapahtumat
-    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Lipunmyyja')")
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
     @GetMapping(value = {"/api/tapahtumat", "/api/tapahtumat/"})
     public ResponseEntity<List<Tapahtuma>> getAllTapahtumat() {
         try {
@@ -72,6 +72,7 @@ public class TapahtumaRestController {
 
 
     // Hae yksittäinen tapahtuma
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
     @GetMapping("/api/tapahtumat/{id}")
     public ResponseEntity<?> getTapahtumaById(@PathVariable Long id) {
         try {
@@ -94,6 +95,7 @@ public class TapahtumaRestController {
 
 
     // Poista tapahtuma
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava')")
     @DeleteMapping("/api/tapahtumat/{id}")
     public ResponseEntity<Void> deleteTapahtuma(@PathVariable Long id) {
         try { 
@@ -113,6 +115,7 @@ public class TapahtumaRestController {
 
 
     // Muokkaa tapahtumaa
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava')")
     @PutMapping("/api/tapahtumat/{id}")
     public ResponseEntity<?> paivitaTapahtuma(@RequestBody PutTapahtumaModel paivitettavatTiedot, @PathVariable Long id){
 
@@ -173,6 +176,7 @@ public class TapahtumaRestController {
 
 
     // Luo tapahtuma
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava')")
     @PostMapping("/api/tapahtumat")
     public ResponseEntity<?> createTapahtuma(@Valid @RequestBody Tapahtuma tapahtuma) {
         try {

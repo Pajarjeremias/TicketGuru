@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,6 +56,7 @@ public class LippuRestController {
   }
 
   // Luo uusi lippu
+  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
   @PostMapping(value = { "/api/liput", "/api/liput/" })
   public ResponseEntity<?> createLippu(@RequestBody PostLippuModel lippuTiedot) {
 
@@ -107,6 +109,7 @@ public class LippuRestController {
   }
 
   //Hae yksittäinen lippu
+  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
   @GetMapping("/api/liput/{id}")
   public Lippu getLippuById(@PathVariable Long id) {
     return lippuRepository.findById(id)
@@ -115,6 +118,7 @@ public class LippuRestController {
 
 
  //Hae kaikki liput
+ @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
  @GetMapping(value = {"/api/liput", "/api/liput/"})
  public Iterable<Lippu> getAllLiput(){
   try{
@@ -126,6 +130,7 @@ public class LippuRestController {
 
   
   // päivitä lippua enemmillä tiedoilla
+  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
   @PutMapping("/api/liput/{id}") 
   public ResponseEntity<?> paivitaLipuntietoja(@PathVariable Long id, @RequestBody PutLippuModel lippuTiedot) {
     try {
