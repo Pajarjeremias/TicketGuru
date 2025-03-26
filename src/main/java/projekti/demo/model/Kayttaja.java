@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -45,7 +46,7 @@ public class Kayttaja {
   @JoinColumn(name = "postinumero")
   private Postitoimipaikka postinumero;
 
-  @NotEmpty(message = "Käyttäjätyyppi on pakollinen")
+  @NotNull(message = "Käyttäjätyyppi on pakollinen")
   @ManyToOne
   @JoinColumn(name = "kayttajatyyppi_id")
   private Kayttajatyyppi kayttajatyyppi;

@@ -42,7 +42,7 @@ public class Lippu {
     private Kayttaja tarkastanut;
 
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime tarkastus_pvm;
 
     @NotNull(message = "Myynti on pakollinen")

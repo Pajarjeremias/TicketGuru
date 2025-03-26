@@ -138,7 +138,7 @@ Annetu päivämäärä on väärässä muodossa.
 
 **Content Example** :
 
-Annetu päivämäärä on väärässä muodossa.
+Annetulla tapahtumapaikka_id:lla ei löydy tapahtumapaikkaa.
 
 ```json
 {

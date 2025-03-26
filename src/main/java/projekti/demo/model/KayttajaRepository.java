@@ -1,7 +1,10 @@
 package projekti.demo.model;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.Optional;
 
-public interface KayttajaRepository extends CrudRepository<Kayttaja, Long> {
+//import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface KayttajaRepository extends JpaRepository<Kayttaja, Long> {
 
 }
