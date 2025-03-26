@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.validation.Valid;
 import projekti.demo.model.Kayttaja;
 import projekti.demo.model.KayttajaRepository;
 import projekti.demo.model.Lippu;
@@ -19,12 +18,11 @@ import projekti.demo.model.Tila;
 import projekti.demo.model.TilaRepository;
 import projekti.demo.model.PutLippuModel;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +32,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
+@EnableMethodSecurity(securedEnabled = true)
 public class LippuRestController {
 
   LippuRepository lippuRepository;

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +42,7 @@ import projekti.demo.model.TapahtumapaikkaRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
+@EnableMethodSecurity(securedEnabled = true)
 public class TapahtumaRestController {
 
     @Autowired
@@ -53,6 +56,7 @@ public class TapahtumaRestController {
 
 
     // Hae kaikki tapahtumat
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Lipunmyyjä')")
     @GetMapping(value = {"/api/tapahtumat", "/api/tapahtumat/"})
     public ResponseEntity<List<Tapahtuma>> getAllTapahtumat() {
         try {

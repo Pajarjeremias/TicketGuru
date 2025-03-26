@@ -137,7 +137,7 @@ public class DemoApplication {
 			logger.info("lisätään käyttäjätyypät");
 
 			Kayttajatyyppi asiakas = new Kayttajatyyppi("Asiakas", "Tuiki tavallinen palveluiden kuluttaja");
-			Kayttajatyyppi lipunmyyja = new Kayttajatyyppi("Lipunmyyjä", "Kovan luokan laillinen trokari");
+			Kayttajatyyppi lipunmyyja = new Kayttajatyyppi("Lipunmyyja", "Kovan luokan laillinen trokari");
 			Kayttajatyyppi tapahtumavastaava = new Kayttajatyyppi("Tapahtumavastaava", "Mestan tirehtööri niin että, party never ends.");
 			Kayttajatyyppi yllapitaja = new Kayttajatyyppi("Yllapitaja", "Tää on se noobi, joka potkii sut pihalle servulta suutuspäissään. aka'Tech_god' ");
 
@@ -148,10 +148,10 @@ public class DemoApplication {
 
 			logger.info("Lisätään käyttäjiä...");
 
-			Kayttaja kayttaja1 = new Kayttaja("asiakas", "asiakas", "Jeremias", "Pajari", "0449834478", "jeremias.pajari@gmail.com", "vanhatie 5", postitmpk1, asiakas);
-			Kayttaja kayttaja2 = new Kayttaja("lipunmyyjä", "lipunmyyjä", "Matti", "Meiikäläinen", "040459596", "matti.meikalaienn@gmail.com", "jokukatu1", postitmpk1, lipunmyyja);
-			Kayttaja kayttaja3 = new Kayttaja("tapahtumavastaava", "tapahtumavastaava", "tapahtuma", "vastaava", "023954365", "srfdhsgafa@gmail.com", "ruttopuisto 1", postitmpk1, tapahtumavastaava);
-			Kayttaja kayttaja4 = new Kayttaja("yllapitaja", "yllapitaja", "ylla", "pitaja", "0405349534", "asgads@gmail.com", "jumbonparkkipaikka", postitmpk1, yllapitaja);
+			Kayttaja kayttaja1 = new Kayttaja("asiakas", "$2a$10$fs/sPJqj.ZdZHSPpen19GONDN7HhVXTB/oXJFflS8kzMyfgLouwoq", "Jeremias", "Pajari", "0449834478", "jeremias.pajari@gmail.com", "vanhatie 5", postitmpk1, asiakas);
+			Kayttaja kayttaja2 = new Kayttaja("lipunmyyjä", "$2a$10$HLxDiZI9wgTbvc4ky0/eletLO9odk0vTh8Nw9lDECQdfZ/DcVm6P2", "Matti", "Meiikäläinen", "040459596", "matti.meikalaienn@gmail.com", "jokukatu1", postitmpk1, lipunmyyja);
+			Kayttaja kayttaja3 = new Kayttaja("tapahtumavastaava", "$2a$10$.CJDmiwhy06KrVn1X3qIcOba2vl8bZ09odC.j8YqHDJlwNAV569P.", "tapahtuma", "vastaava", "023954365", "srfdhsgafa@gmail.com", "ruttopuisto 1", postitmpk1, tapahtumavastaava);
+			Kayttaja kayttaja4 = new Kayttaja("yllapitaja", "$2a$10$cXQXTxyhjEznUURgTLxju.deYV7U6fbJVJ.7iCNc8goIZvmK0TVG.", "ylla", "pitaja", "0405349534", "asgads@gmail.com", "jumbonparkkipaikka", postitmpk1, yllapitaja);
 
 			kayttajaRepository.save(kayttaja1);
 			kayttajaRepository.save(kayttaja2);
