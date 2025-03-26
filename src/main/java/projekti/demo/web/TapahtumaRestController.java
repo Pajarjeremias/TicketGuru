@@ -56,7 +56,7 @@ public class TapahtumaRestController {
 
 
     // Hae kaikki tapahtumat
-    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Lipunmyyjä')")
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Lipunmyyja')")
     @GetMapping(value = {"/api/tapahtumat", "/api/tapahtumat/"})
     public ResponseEntity<List<Tapahtuma>> getAllTapahtumat() {
         try {
