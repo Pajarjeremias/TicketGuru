@@ -45,6 +45,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
+@EnableMethodSecurity(securedEnabled = true)
 public class KayttajaRestController {
 
     @Autowired
@@ -57,6 +58,7 @@ public class KayttajaRestController {
     KayttajatyyppiRepository kayttajatyyppiRepository;
 
     // luo uusi käyttäjä
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
     @PostMapping(value = { "/api/kayttajat", "/api/kayttajat/" })
     public ResponseEntity<?> createKayttaja(@RequestBody Kayttaja kayttaja) {
         try {
@@ -110,6 +112,7 @@ public class KayttajaRestController {
     }
 
     // hae yksittäinen käyttäjä
+    @PreAuthorize("hasAnyAuthority('Yllapitaja')")
     @GetMapping("/api/kayttajat/{id}")
     public Kayttaja getMethodName(@PathVariable Long id) {
         return kayttajaRepository.findById(id)
@@ -118,7 +121,7 @@ public class KayttajaRestController {
     }
 
     // hae kaikki käyttäjät
-    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
+    @PreAuthorize("hasAnyAuthority('Yllapitaja')")
     @GetMapping(value = { "/api/kayttajat", "/api/kayttajat/" })
     public ResponseEntity<List<Kayttaja>> getAllKayttajat() {
         System.out.println("Päästiin oikeaan paikkaa - HAE KAIKKI KÄYTTÄJÄT");
