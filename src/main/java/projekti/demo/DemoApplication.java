@@ -80,7 +80,6 @@ public class DemoApplication {
 			tapahtumaRepository.save(tapahtuma1);
 			tapahtumaRepository.save(tapahtuma2);
 
-
 			logger.info("Lisätään tapahtumille lipputyyppejä...");
 
 			Tapahtuman_lipputyyppi tapahtuma1_aikuinen = new Tapahtuman_lipputyyppi(tapahtuma1, aikuinen, (float) 30.00);
@@ -134,6 +133,7 @@ public class DemoApplication {
 			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
 			lippuRepository.save(lippu1); 
 
+
 			logger.info("lisätään käyttäjätyypät");
 
 			Kayttajatyyppi asiakas = new Kayttajatyyppi("Asiakas", "Tuiki tavallinen palveluiden kuluttaja");
@@ -158,7 +158,7 @@ public class DemoApplication {
 			kayttajaRepository.save(kayttaja3);
 			kayttajaRepository.save(kayttaja4);
 			
-			logger.info("käyttäjät lisätty onnistuneesti :)");
+			logger.info("käyttäjät lisätty onnistuneesti :)"); 
 
 		}; 
 	}
