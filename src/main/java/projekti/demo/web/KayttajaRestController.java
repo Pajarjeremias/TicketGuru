@@ -64,7 +64,12 @@ public class KayttajaRestController {
         try {
             System.out.println("käyttäjätunnus on " + kayttaja.getKayttajatunnus());
             System.out.println("syötetty postinumero on " + kayttaja.getPostinumero());
-            System.out.println("kayttajatyyppi on " + kayttaja.getKayttajatyyppi());
+             // mikäli käyttäjätyyppiä ei ole ilmoitettu, asetetaan käyttäjätyypiksi Asiakas
+            if (kayttaja.getKayttajatyyppi() == null) {
+                System.out.println("kayttajatyyppi on " + kayttaja.getKayttajatyyppi());
+                kayttaja.setKayttajatyyppi(kayttajatyyppiRepository.findByKayttajatyyppi("Asiakas"));
+            }
+   
             // tarkastetaan, mikäli käyttäjätunnus on jo varattu
             if (kayttajaRepository.findByKayttajatunnusIgnoreCase(kayttaja.getKayttajatunnus()) != null) {
                 throw new Exception("Username is allready taken.");
@@ -99,6 +104,7 @@ public class KayttajaRestController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String passhasString = passwordEncoder.encode(kayttaja.getSalasana_hash());
             kayttaja.setSalasana_hash(passhasString);
+
 
             kayttajaRepository.save(kayttaja);
 
