@@ -51,7 +51,6 @@ public class Tapahtuma {
     private Tapahtumapaikka tapahtumapaikka;
 
     @OneToMany(mappedBy = "tapahtuma", cascade = CascadeType.ALL)
-    // pitäisikö olla linkitettu tapahtuman lipputyyppiin? @OneToMany(mappedBy = "tapahtuma_lipputyyppi_id", cascade = CascadeType.ALL)
     private List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit;
 
     @ManyToOne

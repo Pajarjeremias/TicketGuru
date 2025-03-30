@@ -11,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,12 +37,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @EnableMethodSecurity(securedEnabled = true)
 public class MyyntiRestController {
    
-        /* Nämä herjaavat käynnistettäessä.
-    private final JarjestajaRepository jarjestajaRepository;
-
-    private final CommandLineRunner demoRunner;
-
-    private final DemoApplication demoApplication; */
 
     @Autowired
     private MyyntiRepository myyntiRepository;
@@ -56,7 +51,7 @@ public class MyyntiRestController {
         KayttajaRepository kayttajaRepository;
 
         // Hae kaikki myynnit
-        
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
     @GetMapping(value = {"/api/myynnit", "/api/myynnit/"})
     public List<Myynti> getAllMyynnit(){
         try {
@@ -73,6 +68,7 @@ public class MyyntiRestController {
     }
 
         // Hae yksi myynti
+        @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
         @GetMapping("/api/myynnit/{id}")
         public ResponseEntity<Myynti> getMyyntiById(@PathVariable Long id) {
                 try {
@@ -89,6 +85,7 @@ public class MyyntiRestController {
         }
 
         // Yksittäisen myynnin lippujen hakeminen
+        @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
         @GetMapping("/api/myynnit/{id}/liput")
         public ResponseEntity<?> getMyynninLiputById(@PathVariable Long id) {
                 Optional<Myynti> optionalMyynti = myyntiRepository.findById(id);
@@ -101,15 +98,9 @@ public class MyyntiRestController {
                 }
         }
 
-        /* Yksittäisen myynnin lippujen hakeminen - palautetaan tyhjä lista
-        @GetMapping("/api/myynnit/{id}/liput")
-        public List<Lippu> getMyynninLiputById(@PathVariable Long id) {
-                return myyntiRepository.findById(id)
-                                .map(Myynti::getLiput)
-                                .orElse(Collections.emptyList());
-        } */
 
         // Luo myynti
+        @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
         @PostMapping("/api/myynnit")
         public ResponseEntity<?> createMyynti(@Valid @RequestBody Myynti myynti) {
                 try {
@@ -210,27 +201,5 @@ public class MyyntiRestController {
 
         }
 
-        /*
-         * // nämä oli varmaan jotain vanhoja
-         * 
-         * @GetMapping("/api/myynnit/{id}/liput")
-         * public Optional<Object> getMyynninLiputById(@PathVariable Long id){
-         * return myyntiRepository.findById(id)
-         * .map(myynti -> {
-         * System.out.println("lippujen määrä" + myynti.getLiput().size());
-         * return ResponseEntity.ok(myynti.getLiput());
-         * });
-         * }
-         * 
-         * /* testataan, kun on lippujen controller?
-         * 
-         * @GetMapping("/api/myynnit/{id}/liput")
-         * public List<Lippu> getMyynninLiputById(@PathVariable Long id){
-         * return myyntiRepository.findById(id)
-         * .map(Myynti::getLiput)
-         * .orElse(Collections.emptyList());
-         * }
-         * 
-         */
 
 }
