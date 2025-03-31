@@ -10,6 +10,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import projekti.demo.model.Kayttaja;
+import projekti.demo.model.KayttajaRepository;
+import projekti.demo.model.Kayttajatyyppi;
+import projekti.demo.model.KayttajatyyppiRepository;
 import projekti.demo.model.Lippu;
 import projekti.demo.model.LippuRepository;
 import projekti.demo.model.Lipputyyppi;
@@ -48,7 +52,9 @@ public class DemoApplication {
 		PostitoimipaikkaRepository postitoimipaikkaRepository,
 		MyyntiRepository myyntiRepository,
 		TilaRepository tilaRepository,
-		LippuRepository lippuRepository
+		LippuRepository lippuRepository,
+		KayttajaRepository kayttajaRepository,
+		KayttajatyyppiRepository kayttajatyyppiRepository
 
 	) {
 		return(args) -> {
@@ -73,7 +79,6 @@ public class DemoApplication {
 
 			tapahtumaRepository.save(tapahtuma1);
 			tapahtumaRepository.save(tapahtuma2);
-
 
 			logger.info("Lisätään tapahtumille lipputyyppejä...");
 
@@ -127,6 +132,33 @@ public class DemoApplication {
 			
 			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
 			lippuRepository.save(lippu1); 
+
+
+			logger.info("lisätään käyttäjätyypät");
+
+			Kayttajatyyppi asiakas = new Kayttajatyyppi("Asiakas", "Tuiki tavallinen palveluiden kuluttaja");
+			Kayttajatyyppi lipunmyyja = new Kayttajatyyppi("Lipunmyyja", "Kovan luokan laillinen trokari");
+			Kayttajatyyppi tapahtumavastaava = new Kayttajatyyppi("Tapahtumavastaava", "Mestan tirehtööri niin että, party never ends.");
+			Kayttajatyyppi yllapitaja = new Kayttajatyyppi("Yllapitaja", "Tää on se noobi, joka potkii sut pihalle servulta suutuspäissään. aka'Tech_god' ");
+
+			kayttajatyyppiRepository.save(asiakas);
+			kayttajatyyppiRepository.save(lipunmyyja);
+			kayttajatyyppiRepository.save(tapahtumavastaava);
+			kayttajatyyppiRepository.save(yllapitaja);
+
+			logger.info("Lisätään käyttäjiä...");
+
+			Kayttaja kayttaja1 = new Kayttaja("asiakas", "$2a$10$fs/sPJqj.ZdZHSPpen19GONDN7HhVXTB/oXJFflS8kzMyfgLouwoq", "Jeremias", "Pajari", "0449834478", "jeremias.pajari@gmail.com", "vanhatie 5", postitmpk1, asiakas);
+			Kayttaja kayttaja2 = new Kayttaja("lipunmyyjä", "$2a$10$HLxDiZI9wgTbvc4ky0/eletLO9odk0vTh8Nw9lDECQdfZ/DcVm6P2", "Matti", "Meiikäläinen", "040459596", "matti.meikalaienn@gmail.com", "jokukatu1", postitmpk1, lipunmyyja);
+			Kayttaja kayttaja3 = new Kayttaja("tapahtumavastaava", "$2a$10$.CJDmiwhy06KrVn1X3qIcOba2vl8bZ09odC.j8YqHDJlwNAV569P.", "tapahtuma", "vastaava", "023954365", "srfdhsgafa@gmail.com", "ruttopuisto 1", postitmpk1, tapahtumavastaava);
+			Kayttaja kayttaja4 = new Kayttaja("yllapitaja", "$2a$10$cXQXTxyhjEznUURgTLxju.deYV7U6fbJVJ.7iCNc8goIZvmK0TVG.", "ylla", "pitaja", "0405349534", "asgads@gmail.com", "jumbonparkkipaikka", postitmpk1, yllapitaja);
+
+			kayttajaRepository.save(kayttaja1);
+			kayttajaRepository.save(kayttaja2);
+			kayttajaRepository.save(kayttaja3);
+			kayttajaRepository.save(kayttaja4);
+			
+			logger.info("käyttäjät lisätty onnistuneesti :)"); 
 
 		}; 
 	}

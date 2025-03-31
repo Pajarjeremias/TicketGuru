@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +42,7 @@ import projekti.demo.model.TapahtumapaikkaRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
+@EnableMethodSecurity(securedEnabled = true)
 public class TapahtumaRestController {
 
     @Autowired
@@ -53,6 +56,7 @@ public class TapahtumaRestController {
 
 
     // Hae kaikki tapahtumat
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
     @GetMapping(value = {"/api/tapahtumat", "/api/tapahtumat/"})
     public ResponseEntity<List<Tapahtuma>> getAllTapahtumat() {
         try {
@@ -68,6 +72,7 @@ public class TapahtumaRestController {
 
 
     // Hae yksittäinen tapahtuma
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
     @GetMapping("/api/tapahtumat/{id}")
     public ResponseEntity<?> getTapahtumaById(@PathVariable Long id) {
         try {
@@ -90,6 +95,7 @@ public class TapahtumaRestController {
 
 
     // Poista tapahtuma
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava')")
     @DeleteMapping("/api/tapahtumat/{id}")
     public ResponseEntity<Void> deleteTapahtuma(@PathVariable Long id) {
         try { 
@@ -109,6 +115,7 @@ public class TapahtumaRestController {
 
 
     // Muokkaa tapahtumaa
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava')")
     @PutMapping("/api/tapahtumat/{id}")
     public ResponseEntity<?> paivitaTapahtuma(@RequestBody PutTapahtumaModel paivitettavatTiedot, @PathVariable Long id){
 
@@ -169,6 +176,7 @@ public class TapahtumaRestController {
 
 
     // Luo tapahtuma
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava')")
     @PostMapping("/api/tapahtumat")
     public ResponseEntity<?> createTapahtuma(@Valid @RequestBody Tapahtuma tapahtuma) {
         try {

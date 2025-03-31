@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.validation.Valid;
 import projekti.demo.model.Kayttaja;
 import projekti.demo.model.KayttajaRepository;
 import projekti.demo.model.Lippu;
@@ -19,12 +18,12 @@ import projekti.demo.model.Tila;
 import projekti.demo.model.TilaRepository;
 import projekti.demo.model.PutLippuModel;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
+@EnableMethodSecurity(securedEnabled = true)
 public class LippuRestController {
 
   LippuRepository lippuRepository;
@@ -56,6 +56,7 @@ public class LippuRestController {
   }
 
   // Luo uusi lippu
+  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
   @PostMapping(value = { "/api/liput", "/api/liput/" })
   public ResponseEntity<?> createLippu(@RequestBody PostLippuModel lippuTiedot) {
 
@@ -108,6 +109,7 @@ public class LippuRestController {
   }
 
   //Hae yksittäinen lippu
+  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
   @GetMapping("/api/liput/{id}")
   public Lippu getLippuById(@PathVariable Long id) {
     return lippuRepository.findById(id)
@@ -116,6 +118,7 @@ public class LippuRestController {
 
 
  //Hae kaikki liput
+ @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
  @GetMapping(value = {"/api/liput", "/api/liput/"})
  public Iterable<Lippu> getAllLiput(){
   try{
@@ -127,6 +130,7 @@ public class LippuRestController {
 
   
   // päivitä lippua enemmillä tiedoilla
+  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
   @PutMapping("/api/liput/{id}") 
   public ResponseEntity<?> paivitaLipuntietoja(@PathVariable Long id, @RequestBody PutLippuModel lippuTiedot) {
     try {

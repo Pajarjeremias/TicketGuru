@@ -3,7 +3,6 @@ package projekti.demo.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -52,7 +51,6 @@ public class Tapahtuma {
     private Tapahtumapaikka tapahtumapaikka;
 
     @OneToMany(mappedBy = "tapahtuma", cascade = CascadeType.ALL)
-    // pitäisikö olla linkitettu tapahtuman lipputyyppiin? @OneToMany(mappedBy = "tapahtuma_lipputyyppi_id", cascade = CascadeType.ALL)
     private List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit;
 
     @ManyToOne
