@@ -36,7 +36,37 @@ import projekti.demo.model.TilaRepository;
 @SpringBootApplication
 public class DemoApplication {
 
+    private final KayttajatyyppiRepository kayttajatyyppiRepository;
+
+    private final KayttajaRepository kayttajaRepository;
+
+    private final LippuRepository lippuRepository;
+
+    private final TilaRepository tilaRepository;
+
+    private final MyyntiRepository myyntiRepository;
+
+    private final MyyntipisteRepository myyntipisteRepository;
+
+    private final PostitoimipaikkaRepository postitoimipaikkaRepository;
+
+    private final Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository;
+
+    private final TapahtumaRepository tapahtumaRepository;
+
 	private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
+
+    DemoApplication(TapahtumaRepository tapahtumaRepository, Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository, PostitoimipaikkaRepository postitoimipaikkaRepository, MyyntipisteRepository myyntipisteRepository, MyyntiRepository myyntiRepository, TilaRepository tilaRepository, LippuRepository lippuRepository, KayttajaRepository kayttajaRepository, KayttajatyyppiRepository kayttajatyyppiRepository) {
+        this.tapahtumaRepository = tapahtumaRepository;
+        this.tapahtuman_lipputyyppiRepository = tapahtuman_lipputyyppiRepository;
+        this.postitoimipaikkaRepository = postitoimipaikkaRepository;
+        this.myyntipisteRepository = myyntipisteRepository;
+        this.myyntiRepository = myyntiRepository;
+        this.tilaRepository = tilaRepository;
+        this.lippuRepository = lippuRepository;
+        this.kayttajaRepository = kayttajaRepository;
+        this.kayttajatyyppiRepository = kayttajatyyppiRepository;
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -67,9 +97,12 @@ public class DemoApplication {
 			Lipputyyppi lapsi = new Lipputyyppi("Lapsi");
 			Lipputyyppi elakelainen = new Lipputyyppi("Eläkeläinen");
 
-			lipputyyppiRepository.save(aikuinen);
-			lipputyyppiRepository.save(lapsi);
-			lipputyyppiRepository.save(elakelainen);
+			if (lippuRepository.count() == 0) {
+				lipputyyppiRepository.save(aikuinen);
+				lipputyyppiRepository.save(lapsi);
+				lipputyyppiRepository.save(elakelainen);
+			}
+
 
 
 			logger.info("Lisätään tapahtumia...");
@@ -77,8 +110,11 @@ public class DemoApplication {
 			Tapahtuma tapahtuma1 = new Tapahtuma("Konsertti 1", LocalDate.of(2025, Month.JULY, 18).atStartOfDay(), "Paras konsertti ikinä.", 50);
 			Tapahtuma tapahtuma2 = new Tapahtuma("Urheilutapahtuma 3", LocalDate.of(2025, Month.JUNE, 1).atStartOfDay(), "Paras urheilutapahtuma ikinä.", 250);
 
-			tapahtumaRepository.save(tapahtuma1);
-			tapahtumaRepository.save(tapahtuma2);
+			if (tapahtumaRepository.count() == 0) {
+				tapahtumaRepository.save(tapahtuma1);
+				tapahtumaRepository.save(tapahtuma2);
+			}
+
 
 			logger.info("Lisätään tapahtumille lipputyyppejä...");
 
@@ -89,34 +125,49 @@ public class DemoApplication {
 			Tapahtuman_lipputyyppi tapahtuma2_lapsi = new Tapahtuman_lipputyyppi(tapahtuma2, lapsi, (float) 5.90);
 			Tapahtuman_lipputyyppi tapahtuma2_elakelainen = new Tapahtuman_lipputyyppi(tapahtuma2, elakelainen, (float) 0.00);
 
-			tapahtuman_lipputyyppiRepository.save(tapahtuma1_aikuinen);
-			tapahtuman_lipputyyppiRepository.save(tapahtuma1_lapsi);
-			tapahtuman_lipputyyppiRepository.save(tapahtuma2_aikuinen);
-			tapahtuman_lipputyyppiRepository.save(tapahtuma2_lapsi);
-			tapahtuman_lipputyyppiRepository.save(tapahtuma2_elakelainen);
+			if (tapahtuman_lipputyyppiRepository.count() == 0) {
+				tapahtuman_lipputyyppiRepository.save(tapahtuma1_aikuinen);
+				tapahtuman_lipputyyppiRepository.save(tapahtuma1_lapsi);
+				tapahtuman_lipputyyppiRepository.save(tapahtuma2_aikuinen);
+				tapahtuman_lipputyyppiRepository.save(tapahtuma2_lapsi);
+				tapahtuman_lipputyyppiRepository.save(tapahtuma2_elakelainen);
+			}
+
 
 
 			logger.info("Lisätään maksutapoja...");
 
 			Maksutapa maksutapa1 = new Maksutapa("Käteinen");
-			maksutapaRepository.save(maksutapa1);
-			maksutapaRepository.save(new Maksutapa("Kortti"));
-			maksutapaRepository.save(new Maksutapa("Muu"));
+			if (maksutapaRepository.count() == 0) {
+				maksutapaRepository.save(maksutapa1);
+				maksutapaRepository.save(new Maksutapa("Kortti"));
+				maksutapaRepository.save(new Maksutapa("Muu"));
+			}
+
 
 			
 			logger.info("Lisätään postitoimipaikkoja...");
 			Postitoimipaikka postitmpk1 = new Postitoimipaikka("00520", "Helsinki", "Suomi");
-			postitoimipaikkaRepository.save(postitmpk1);
+			if (postitoimipaikkaRepository.count() == 0) {
+				postitoimipaikkaRepository.save(postitmpk1);
+			}
+
 
 
 			logger.info("Lisätään myyntipisteitä...");
 			Myyntipiste myyntipiste1 = new Myyntipiste("Ensimmäinen piste","Messuaukio 1", postitmpk1);
-			myyntipisteRepository.save(myyntipiste1);
+			if (myyntipisteRepository.count() == 0) {
+				myyntipisteRepository.save(myyntipiste1);
+			}
 
-			logger.info("Lisätään myyntejä...");
-			myyntiRepository.save(new Myynti(LocalDate.of(2025, 6, 15), myyntipiste1, maksutapa1));
 			Myynti myynti2 = new Myynti(LocalDate.of(2025, 6, 15), myyntipiste1, maksutapa1);
-			myyntiRepository.save(myynti2);
+			logger.info("Lisätään myyntejä...");
+			if (myyntiRepository.count() == 0) {
+				myyntiRepository.save(new Myynti(LocalDate.of(2025, 6, 15), myyntipiste1, maksutapa1));
+
+				myyntiRepository.save(myynti2);
+			}
+
 
 			logger.info("Lisätään tiloja...");
 			Tila myyty = new Tila("Myyty");
@@ -124,14 +175,20 @@ public class DemoApplication {
 			Tila tarkastettu = new Tila("Tarkastettu");
 			Tila peruttu = new Tila("Peruttu");
 
-			tilaRepository.save(myyty);
-			tilaRepository.save(myymatta);
-			tilaRepository.save(tarkastettu);
-			tilaRepository.save(peruttu);
+			if (tilaRepository.count() == 0) {
+				tilaRepository.save(myyty);
+				tilaRepository.save(myymatta);
+				tilaRepository.save(tarkastettu);
+				tilaRepository.save(peruttu);
+			}
+
 			
 			
 			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
-			lippuRepository.save(lippu1); 
+			if (lippuRepository.count() == 0) {
+				lippuRepository.save(lippu1); 
+			}
+
 
 
 			logger.info("lisätään käyttäjätyypät");
@@ -141,10 +198,13 @@ public class DemoApplication {
 			Kayttajatyyppi tapahtumavastaava = new Kayttajatyyppi("Tapahtumavastaava", "Mestan tirehtööri niin että, party never ends.");
 			Kayttajatyyppi yllapitaja = new Kayttajatyyppi("Yllapitaja", "Tää on se noobi, joka potkii sut pihalle servulta suutuspäissään. aka'Tech_god' ");
 
-			kayttajatyyppiRepository.save(asiakas);
-			kayttajatyyppiRepository.save(lipunmyyja);
-			kayttajatyyppiRepository.save(tapahtumavastaava);
-			kayttajatyyppiRepository.save(yllapitaja);
+			if (kayttajatyyppiRepository.count() == 0) {
+				kayttajatyyppiRepository.save(asiakas);
+				kayttajatyyppiRepository.save(lipunmyyja);
+				kayttajatyyppiRepository.save(tapahtumavastaava);
+				kayttajatyyppiRepository.save(yllapitaja);
+			}
+
 
 			logger.info("Lisätään käyttäjiä...");
 
@@ -153,10 +213,13 @@ public class DemoApplication {
 			Kayttaja kayttaja3 = new Kayttaja("tapahtumavastaava", "$2a$10$.CJDmiwhy06KrVn1X3qIcOba2vl8bZ09odC.j8YqHDJlwNAV569P.", "tapahtuma", "vastaava", "023954365", "srfdhsgafa@gmail.com", "ruttopuisto 1", postitmpk1, tapahtumavastaava);
 			Kayttaja kayttaja4 = new Kayttaja("yllapitaja", "$2a$10$cXQXTxyhjEznUURgTLxju.deYV7U6fbJVJ.7iCNc8goIZvmK0TVG.", "ylla", "pitaja", "0405349534", "asgads@gmail.com", "jumbonparkkipaikka", postitmpk1, yllapitaja);
 
-			kayttajaRepository.save(kayttaja1);
-			kayttajaRepository.save(kayttaja2);
-			kayttajaRepository.save(kayttaja3);
-			kayttajaRepository.save(kayttaja4);
+			if (kayttajaRepository.count() == 0) {
+				kayttajaRepository.save(kayttaja1);
+				kayttajaRepository.save(kayttaja2);
+				kayttajaRepository.save(kayttaja3);
+				kayttajaRepository.save(kayttaja4);
+			}
+
 			
 			logger.info("käyttäjät lisätty onnistuneesti :)"); 
 
