@@ -2,7 +2,8 @@ package projekti.demo.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,8 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 
 @Entity
@@ -20,71 +21,69 @@ public class Lippu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lippu_id")
     private Long lippu_id;
 
-    @NotEmpty(message = "Hinta on pakollinen")
-    @Column(name = "hinta")
-    private Long hinta;
-
-    @Column(name = "tarkistus_pvm")
-    private LocalDateTime tarkistus_pvm;
-
+    @NotNull(message = "Tapahtuman lipputyyppi on pakollinen")
     @ManyToOne
-    @JoinColumn(name="tapahtuma_id")
-    @NotEmpty(message = "Tapahtuma on pakollinen")
-    private Tapahtuma tapahtuma;
+    @JoinColumn(name = "tapahtuma_lipputyyppi_id")
+    private Tapahtuman_lipputyyppi tapahtuman_lipputyyppi;
 
+    @NotNull(message = "Hinta on pakollinen")
+    @Min(value = 0, message = "Hinta ei voi olla miinusmerkkinen")
+    private Float hinta;
+
+    @NotNull(message = "Tila on pakollinen")
     @ManyToOne
-    @JoinColumn(name="tila_id")
-    @NotEmpty(message = "Tila on pakollinen")
+    @JoinColumn(name = "tila_id")
     private Tila tila;
-    
-    @ManyToOne
-    @JoinColumn(name="lipputyyppi_id")
-    @NotEmpty(message = "Lipputyyppi on pakollinen")
-    private Lipputyyppi lipputyyppi;
 
     @ManyToOne
-    @JoinColumn(name="kayttaja_id")
-    private Kayttaja tarkastaja;
+    @JoinColumn(name = "kayttaja_id")
+    private Kayttaja tarkastanut;
 
-    public Lippu() {
-        super();
-    }
 
-    public Lippu(Long hinta, LocalDateTime tarkistus_pvm, Tapahtuma tapahtuma, Tila tila, Lipputyyppi lipputyyppi,
-        Kayttaja tarkastaja) {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime tarkastus_pvm;
+
+    @NotNull(message = "Myynti on pakollinen")
+    @ManyToOne
+    @JoinColumn(name = "myynti_id")
+    private Myynti myynti;
+
+    public Lippu() { }
+
+    public Lippu(
+            @NotNull(message = "Tapahtuman lipputyyppi on pakollinen") Tapahtuman_lipputyyppi tapahtuman_lipputyyppi,
+            @NotNull(message = "Hinta on pakollinen")  @Min(value = 0, message = "Hinta ei voi olla miinusmerkkinen") Float hinta, @NotNull(message = "Tila on pakollinen") Tila tila,
+            @NotNull(message = "Myynti on pakollinen") Myynti myynti) {
+        this.tapahtuman_lipputyyppi = tapahtuman_lipputyyppi;
         this.hinta = hinta;
-        this.tarkistus_pvm = tarkistus_pvm;
-        this.tapahtuma = tapahtuma;
         this.tila = tila;
-        this.lipputyyppi = lipputyyppi;
-        this.tarkastaja = tarkastaja;
+        this.myynti = myynti;
     }
 
-    public Long getHinta() {
+    public Long getLippu_id() {
+        return lippu_id;
+    }
+
+    public void setLippu_id(Long lippu_id) {
+        this.lippu_id = lippu_id;
+    }
+
+    public Tapahtuman_lipputyyppi getTapahtuman_lipputyyppi() {
+        return tapahtuman_lipputyyppi;
+    }
+
+    public void setTapahtuman_lipputyyppi(Tapahtuman_lipputyyppi tapahtuman_lipputyyppi) {
+        this.tapahtuman_lipputyyppi = tapahtuman_lipputyyppi;
+    }
+
+    public Float getHinta() {
         return hinta;
     }
 
-    public void setHinta(Long hinta) {
+    public void setHinta(Float hinta) {
         this.hinta = hinta;
-    }
-
-    public LocalDateTime getTarkistus_pvm() {
-        return tarkistus_pvm;
-    }
-
-    public void setTarkistus_pvm(LocalDateTime tarkistus_pvm) {
-        this.tarkistus_pvm = tarkistus_pvm;
-    }
-
-    public Tapahtuma getTapahtuma() {
-        return tapahtuma;
-    }
-
-    public void setTapahtuma(Tapahtuma tapahtuma) {
-        this.tapahtuma = tapahtuma;
     }
 
     public Tila getTila() {
@@ -95,28 +94,33 @@ public class Lippu {
         this.tila = tila;
     }
 
-    public Lipputyyppi getLipputyyppi() {
-        return lipputyyppi;
+    public Kayttaja getTarkastanut() {
+        return tarkastanut;
     }
 
-    public void setLipputyyppi(Lipputyyppi lipputyyppi) {
-        this.lipputyyppi = lipputyyppi;
+    public void setTarkastanut(Kayttaja tarkastanut) {
+        this.tarkastanut = tarkastanut;
     }
 
-    public Kayttaja getTarkastaja() {
-        return tarkastaja;
+    public LocalDateTime getTarkastus_pvm() {
+        return tarkastus_pvm;
     }
 
-    public void setTarkastaja(Kayttaja tarkastaja) {
-        this.tarkastaja = tarkastaja;
+    public void setTarkastus_pvm(LocalDateTime tarkastus_pvm) {
+        this.tarkastus_pvm = tarkastus_pvm;
     }
 
-    @Override
-    public String toString() {
-        return "Lippu [lippu_id=" + lippu_id + ", hinta=" + hinta + ", tarkistus_pvm=" + tarkistus_pvm + ", tapahtuma="
-                + tapahtuma + ", tila=" + tila + ", lipputyyppi=" + lipputyyppi + ", tarkastaja=" + tarkastaja + "]";
+    public Myynti getMyynti() {
+        return myynti;
+    }
+
+    public void setMyynti(Myynti myynti) {
+        this.myynti = myynti;
     }
 
     
+
+
+
 }
 

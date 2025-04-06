@@ -3,7 +3,6 @@ package projekti.demo.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -16,12 +15,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Tapahtumat")
 public class Tapahtuma {
+
+    private String url; // Luotu SetUrl RestControlleria varten
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tapahtuma_id;
@@ -32,7 +37,8 @@ public class Tapahtuma {
     private String nimi;
 
     @Column(name = "PvmJaKellonaika")
-    @NotEmpty(message = "Tapahtumalla täytyy olla päiväys ja kellonaika")
+    @Future(message = "Päivämäärän ja kellonajan on oltava tulevaisuudessa.")
+    @NotNull(message = "Päivämäärä ja kellonaika täytyy olla annettu ja sen on oltava tulevaisuudessa.")
     private LocalDateTime paivamaara;
 
     @Column(name = "Kuvaus")
@@ -40,34 +46,58 @@ public class Tapahtuma {
     private String kuvaus;
 
     @JsonIgnoreProperties("tapahtumat")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tapahtumapaikka_id")
-    private List<Tapahtumapaikka> tapahtumapaikka;
+    @ManyToOne
+    @JoinColumn(name = "tapahtumapaikka_id")
+    private Tapahtumapaikka tapahtumapaikka;
+
+    @OneToMany(mappedBy = "tapahtuma", cascade = CascadeType.ALL)
+    private List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit;
 
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "Jarjestaja_id")
+    @JoinColumn(name = "jarjestaja_id")
     private Jarjestaja jarjestaja;
 
-    // constructorit
-    public Tapahtuma() {
+    @Min(value = 1, message = "Lippumäärän täytyy olla positiivinen kokonaisluku")
+    private int lippumaara;
+
+    public Tapahtuma() { }
+
+    public Tapahtuma(
+            @NotEmpty(message = "Tapahtumalla täytyy olla nimi") @Size(min = 2, max = 200, message = "Täytyy olla 2-200 merkkiä") String nimi,
+            @Future(message = "Tapahtumalla täytyy olla päiväys ja kellonaika") @NotNull LocalDateTime paivamaara,
+            @Min(value = 1, message = "Lippumäärän täytyy olla positiivinen kokonaisluku") int lippumaara) {
+        this.nimi = nimi;
+        this.paivamaara = paivamaara;
+        this.lippumaara = lippumaara;
     }
 
-    public Tapahtuma(String nimi, LocalDateTime paivamaara, String kuvaus) {
+    public Tapahtuma(
+            @NotEmpty(message = "Tapahtumalla täytyy olla nimi") @Size(min = 2, max = 200, message = "Täytyy olla 2-200 merkkiä") String nimi,
+            @Future(message = "Tapahtumalla täytyy olla päiväys ja kellonaika") @NotNull LocalDateTime paivamaara,
+            @Size(min = 2, max = 2500, message = "Pituuden täytyy olla 2-2500 merkkiä") String kuvaus,
+            @Min(value = 1, message = "Lippumäärän täytyy olla positiivinen kokonaisluku") int lippumaara) {
         this.nimi = nimi;
         this.paivamaara = paivamaara;
         this.kuvaus = kuvaus;
+        this.lippumaara = lippumaara;
     }
 
-    public Tapahtuma(String nimi, LocalDateTime paivamaara, String kuvaus,
-            List<Tapahtumapaikka> tapahtumapaikka, Jarjestaja jarjestajat) {
-        this.nimi = nimi;
-        this.paivamaara = paivamaara;
-        this.kuvaus = kuvaus;
-        this.tapahtumapaikka = tapahtumapaikka;
-        this.jarjestaja = jarjestajat;
+    public String getUrl() {
+        return url;
     }
 
-    // Getterit ja setterit
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Long getTapahtuma_id() {
+        return tapahtuma_id;
+    }
+
+    public void setTapahtuma_id(Long tapahtuma_id) {
+        this.tapahtuma_id = tapahtuma_id;
+    }
+
     public String getNimi() {
         return nimi;
     }
@@ -92,36 +122,44 @@ public class Tapahtuma {
         this.kuvaus = kuvaus;
     }
 
-    public List<Tapahtumapaikka> getTapahtumapaikka() {
+    public Tapahtumapaikka getTapahtumapaikka() {
         return tapahtumapaikka;
     }
 
-    public void setTapahtumapaikat(List<Tapahtumapaikka> tapahtumapaikka) {
+    public void setTapahtumapaikka(Tapahtumapaikka tapahtumapaikka) {
         this.tapahtumapaikka = tapahtumapaikka;
     }
 
-    public Jarjestaja getJarjestajat() {
+    public List<Tapahtuman_lipputyyppi> getTapahtuman_lipputyypit() {
+        return tapahtuman_lipputyypit;
+    }
+
+    public void setTapahtuman_lipputyypit(List<Tapahtuman_lipputyyppi> tapahtuman_lipputyypit) {
+        this.tapahtuman_lipputyypit = tapahtuman_lipputyypit;
+    }
+
+    public Jarjestaja getJarjestaja() {
         return jarjestaja;
     }
 
-    public void setJarjestajat(Jarjestaja jarjestajat) {
-        this.jarjestaja = jarjestajat;
+    public void setJarjestaja(Jarjestaja jarjestaja) {
+        this.jarjestaja = jarjestaja;
     }
 
-    public Long getTapahtuma_id() {
-        return tapahtuma_id;
+    public int getLippumaara() {
+        return lippumaara;
+    }
+
+    public void setLippumaara(int lippumaara) {
+        this.lippumaara = lippumaara;
     }
 
     @Override
     public String toString() {
-        if (this.tapahtumapaikka != null) {
-            return "Tapahtumat [Tapahtuma_id=" + tapahtuma_id + ", Nimi=" + nimi + ", Paivamaara=" + paivamaara
-                    + ", Kuvaus=" + kuvaus + ", tapahtumapaikat=" + tapahtumapaikka + "]";
-        } else {
-            return "Tapahtumat [Tapahtuma_id=" + tapahtuma_id + ", Nimi=" + nimi + ", Paivamaara=" + paivamaara
-                    + ", Kuvaus=" + kuvaus + "]";
-        }
-
+        return "Tapahtuma [url=" + url + ", tapahtuma_id=" + tapahtuma_id + ", nimi=" + nimi + ", paivamaara="
+                + paivamaara + ", kuvaus=" + kuvaus + ", tapahtumapaikka=" + tapahtumapaikka
+                + ", tapahtuman_lipputyypit=" + tapahtuman_lipputyypit + ", jarjestaja=" + jarjestaja + ", lippumaara="
+                + lippumaara + "]";
     }
 
 }
