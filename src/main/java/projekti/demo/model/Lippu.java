@@ -1,15 +1,18 @@
 package projekti.demo.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -49,6 +52,16 @@ public class Lippu {
     @ManyToOne
     @JoinColumn(name = "myynti_id")
     private Myynti myynti;
+
+    @Column(nullable = false, unique = true)
+    private String koodi;
+
+    @PrePersist
+    public void generoiKooodi() {
+        if(this.koodi == null) {
+            this.koodi = UUID.randomUUID().toString();
+        }
+    }
 
     public Lippu() { }
 
@@ -118,8 +131,9 @@ public class Lippu {
         this.myynti = myynti;
     }
 
-    
-
+    public String getKoodi() {
+        return koodi;
+    }
 
 
 }
