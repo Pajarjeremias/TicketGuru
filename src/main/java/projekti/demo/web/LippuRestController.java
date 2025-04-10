@@ -26,6 +26,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -117,6 +118,24 @@ public class LippuRestController {
   }
 
 
+
+  //Hae kaikki liput tai lippu koodilla
+ @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
+ @GetMapping(value = {"/api/liput", "/api/liput/"})
+ public ResponseEntity<?> getKaikkiLiputTaiKoodilla(@RequestParam(required = false) String koodi){
+  try{
+    if (koodi != null) {
+      return ResponseEntity.ok(lippuRepository.findByKoodi(koodi)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy koodilla " + koodi)));      
+    } else {
+      return ResponseEntity.ok(lippuRepository.findAll());
+    }
+  
+} catch (DataAccessException e) {
+    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe: ei voitu hakea lippuja", e);
+}
+}
+  /* 
  //Hae kaikki liput
  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
  @GetMapping(value = {"/api/liput", "/api/liput/"})
@@ -126,7 +145,7 @@ public class LippuRestController {
 } catch (DataAccessException e) {
     throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe: ei voitu hakea lippuja", e);
 }
- }
+ } */
 
   
   // päivitä lippua enemmillä tiedoilla
