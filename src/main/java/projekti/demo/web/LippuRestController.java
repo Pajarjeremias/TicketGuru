@@ -117,17 +117,9 @@ public class LippuRestController {
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy id:llä " + id));
   }
 
-  /* 
- //Hae yksittäinen lippu lipun koodilla
-  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
-  @GetMapping("/api/liput")
-  public Lippu getLippuByKoodi(@RequestParam String koodi) {
-    return lippuRepository.findByKoodi(koodi)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy koodilla " + koodi));
-  }
-*/
 
-  //Hae kaikki liput
+
+  //Hae kaikki liput tai lippu koodilla
  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
  @GetMapping(value = {"/api/liput", "/api/liput/"})
  public ResponseEntity<?> getKaikkiLiputTaiKoodilla(@RequestParam(required = false) String koodi){
@@ -143,8 +135,6 @@ public class LippuRestController {
     throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe: ei voitu hakea lippuja", e);
 }
 }
-
-
   /* 
  //Hae kaikki liput
  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
