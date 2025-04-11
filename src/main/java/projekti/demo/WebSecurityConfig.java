@@ -42,8 +42,8 @@ public class WebSecurityConfig {
 				.anyRequest().authenticated())
 				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions .disable())) // for h2console
         .httpBasic(Customizer.withDefaults())
-				.formLogin(formlogin -> formlogin.loginPage("/login")
-					.defaultSuccessUrl("/index", true)
+				.formLogin(formlogin -> formlogin
+					.defaultSuccessUrl("/", true)
 					.permitAll())
 				.logout(logout -> logout.permitAll())
 				.csrf(csrf -> csrf.disable()); // not for production, just for development
