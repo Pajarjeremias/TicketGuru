@@ -136,6 +136,10 @@ public class Lippu {
         return koodi;
     }
 
+    public void setKoodi(String koodi) {
+        this.koodi = koodi;
+    }
+
 
 }
 
