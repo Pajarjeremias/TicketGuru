@@ -25,4 +25,5 @@ Endpointit Tapahtumat taulun katsomiseen ja muokkaamiseen
 * [Luo lippu](liput/create.md) : `POST /api/liput/`
 * [Muokkaa lippua](liput/put.md) : `PUT /api/liput/:pk`
 * [Näytä kaikki liput](liput/get.md) : `GET /api/liput/`
+* [Hae lippu koodilla](liput/getKoodi.md) : `GET /api/liput`
 
