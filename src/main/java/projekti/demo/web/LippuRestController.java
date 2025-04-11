@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -234,6 +235,25 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
           .body(Map.of("virhe", "Odottamaton virhe: " + e.getMessage()));
     }
   }
+
+  // Poista lippu
+    @PreAuthorize("hasAnyAuthority('Yllapitaja')")
+    @DeleteMapping("/api/liput/{id}")
+    public ResponseEntity<Void> deleteLippu(@PathVariable Long id) {
+        try { 
+        if (lippuRepository.existsById(id)) {
+            lippuRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // Palauttaa 204 NO CONTENT eli onnistunut poisto
+        } 
+        else { // Palauttaa 404 NOT_FOUND jos lippua ei löydy 
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy ID:llä " + id);
+        }
+
+    } catch (DataAccessException e) { // Palauttaa 400 BAD_REQUEST tietokantavirheille, jotta ei tule 500 koodia
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Virhe tapahtumaa poistettaessa", e);
+    }
+
+    }
 
 
   
