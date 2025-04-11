@@ -28,6 +28,7 @@ import projekti.demo.model.MyyntipisteRepository;
 import projekti.demo.model.Lippu;
 import projekti.demo.model.Maksutapa;
 import projekti.demo.model.MaksutapaRepository;
+import projekti.demo.model.Kayttaja;
 import projekti.demo.model.KayttajaRepository;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -161,6 +162,21 @@ public class MyyntiRestController {
                                                                                                 .getMaksutapa_id()
                                                                                 + " not found"));
                         }
+
+                        // Jos myyjä-id on annettu, haetaan myyjän tiedot
+if (myynti.getMyyja() != null && myynti.getMyyja().getKayttaja_id() != null) {
+    Optional<Kayttaja> myyjaOptional = kayttajaRepository
+        .findById(myynti.getMyyja().getKayttaja_id());
+    if (myyjaOptional.isPresent()) {
+        myynti.setMyyja(myyjaOptional.get());
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Map.of("Not Found",
+                " invalid id value for Myyja. Id must be valid. Myyja ID "
+                + myynti.getMyyja().getKayttaja_id()
+                + " not found"));
+    }
+}
 
                         // haetaan myyntipisteen ja maksutavan tiedot
                         Optional<Myyntipiste> myyntipisteOptional = myyntipisteRepository

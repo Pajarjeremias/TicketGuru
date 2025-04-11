@@ -39,6 +39,10 @@ public class Myynti {
     @NotNull
     private Maksutapa maksutapa;
 
+    @ManyToOne
+    @JoinColumn(name = "myyja_id")
+    private Kayttaja myyja;
+
     // Constructorit
     public Myynti() { }
 
@@ -50,11 +54,19 @@ public class Myynti {
         this.maksutapa = maksutapa;
     }
 
+    public Myynti(LocalDate myyntipaiva, Myyntipiste myyntipiste, Maksutapa maksutapa, Kayttaja myyja) {
+        this.myyntipaiva = myyntipaiva;
+        this.myyntipiste = myyntipiste;
+        this.maksutapa = maksutapa;
+        this.myyja = myyja;
+    }
+
     public Myynti(LocalDate myyntipaiva, Myyntipiste myyntipiste, Maksutapa maksutapa) {
         this.myyntipaiva = myyntipaiva;
         this.myyntipiste = myyntipiste;
         this.maksutapa = maksutapa;
     }
+    
 
     // Getterit ja setterit
     public Long getMyynti_id() {
@@ -105,11 +117,21 @@ public class Myynti {
         this.maksutapa = maksutapa;
     }
 
+    public Kayttaja getMyyja() {
+        return myyja;
+
+    }
+
+    public void setMyyja(Kayttaja myyja) {
+        this.myyja = myyja;
+
+    }
+
     // To string
     @Override
     public String toString() {
         return "Myynti [myynti_id=" + myynti_id + ", liput=" + liput + ", asiakas=" + asiakas + ", myyntipaiva="
-                + myyntipaiva + ", myyntipiste=" + myyntipiste + ", maksutapa=" + maksutapa + "]";
+                + myyntipaiva + ", myyntipiste=" + myyntipiste + ", maksutapa=" + maksutapa + ", myyja" + myyja + "]";
     }
 
 }
