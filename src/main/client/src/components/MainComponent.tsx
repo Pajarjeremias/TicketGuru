@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { config as defaultConfig } from "../config/default";
-import { config as pixeliConfig } from "../config/pixeli";
-import { config as scrummeriConfig } from "../config/scrummerit";
+//import { config as pixeliConfig } from "../config/pixeli";
+//import { config as scrummeriConfig } from "../config/scrummerit";
 
 export default function MainComponent() {
   const [koodi, setKoodi] = useState('');
@@ -10,11 +10,13 @@ export default function MainComponent() {
 
   const getTicketInfo = async () => {
     console.log(defaultConfig.apiBaseUrl)
+    console.log(koodi)
     return;
   }
 
   const markTicketAsUsed = async () => {
     console.log(defaultConfig.apiBaseUrl)
+    console.log(id)
     return;
   }
 
