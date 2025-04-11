@@ -189,6 +189,8 @@ public class DemoApplication {
 				lippuRepository.save(lippu1); 
 			}
 
+			
+
 
 
 			logger.info("lisätään käyttäjätyypät");
