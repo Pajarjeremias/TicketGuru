@@ -30,6 +30,7 @@ import projekti.demo.model.Maksutapa;
 import projekti.demo.model.MaksutapaRepository;
 import projekti.demo.model.KayttajaRepository;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
