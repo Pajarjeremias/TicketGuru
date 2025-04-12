@@ -18,13 +18,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
+
+    private final CustomCorsConfiguration customCorsConfiguration;
 	
 	//@Autowired
 	private UserDetailsService userDetailsService; // type of attribute -> interface
 	
 	// Constructor injection
-	public WebSecurityConfig(UserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService; 
+	public WebSecurityConfig(UserDetailsService userDetailsService, CustomCorsConfiguration customCorsConfiguration) {
+		this.userDetailsService = userDetailsService;
+		this.customCorsConfiguration = customCorsConfiguration; 
 	}
 
 	private static final AntPathRequestMatcher[] WHITE_LIST_URLS = {
@@ -46,6 +49,7 @@ public class WebSecurityConfig {
 					.defaultSuccessUrl("/", true)
 					.permitAll())
 				.logout(logout -> logout.permitAll())
+				.cors(c -> c.configurationSource(customCorsConfiguration))
 				.csrf(csrf -> csrf.disable()); // not for production, just for development
 
 		return http.build();
