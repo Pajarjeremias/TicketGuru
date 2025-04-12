@@ -23,7 +23,7 @@ const tyhjaScrummeritLippu = {
 export default function MainComponent() {
   const [koodi, setKoodi] = useState('');
   const [id, setId] = useState('');
-  const [envi, setEnvi] = useState('Localhost');
+  const [envi, setEnvi] = useState('Scrummerit');
   const [scrummeritLippu, setScrummeritLippu] = useState(tyhjaScrummeritLippu);
   const [errorMsg, setErrorMsg] = useState('');
   //const [loading, setLoading] = useState(false);
@@ -111,7 +111,6 @@ export default function MainComponent() {
 
       default:
     }
-
   }
 
   const markTicketAsUsed = async () => {
