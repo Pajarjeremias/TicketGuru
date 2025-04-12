@@ -26,13 +26,13 @@ export default function MainComponent() {
   const [envi, setEnvi] = useState('Scrummerit');
   const [scrummeritLippu, setScrummeritLippu] = useState(tyhjaScrummeritLippu);
   const [errorMsg, setErrorMsg] = useState('');
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
 
   const getTicketInfo = async () => {
     let result;
     let data;
 
-    setLoading(true)
+
     switch (envi) {
       case 'Localhost':
         result = await fetch(`${defaultConfig.apiBaseUrl}/liput?koodi=${koodi}`, {
@@ -111,7 +111,6 @@ export default function MainComponent() {
 
       default:
     }
-    setLoading(false)
   }
 
   const markTicketAsUsed = async () => {
