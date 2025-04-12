@@ -30,11 +30,17 @@ import projekti.demo.model.Maksutapa;
 import projekti.demo.model.MaksutapaRepository;
 import projekti.demo.model.KayttajaRepository;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @EnableMethodSecurity(securedEnabled = true)
+@CrossOrigin(origins = {
+    "http://localhost:8080",
+    "http://localhost:5173",
+    "https://ticket-guru-git-ticketguru4ever.2.rahtiapp.fi"
+})
 public class MyyntiRestController {
    
 

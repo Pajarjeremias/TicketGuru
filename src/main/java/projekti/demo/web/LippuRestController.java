@@ -28,12 +28,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
 @EnableMethodSecurity(securedEnabled = true)
+@CrossOrigin(origins = {
+    "http://localhost:8080",
+    "http://localhost:5173",
+    "https://ticket-guru-git-ticketguru4ever.2.rahtiapp.fi"
+})
 public class LippuRestController {
 
   LippuRepository lippuRepository;
