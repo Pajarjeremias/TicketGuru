@@ -138,6 +138,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Tarkastanut_id | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
 > Tarkistus_pvm | date | Päivämäärä, jolloin lippu on tarkasettu ovella, eli käytetty
 > Myynti_id | int, FK, not null | Myyntitapahtuma, johon lippu liittyy, viittaus [Myynnit](#Myynnit)-tauluun
+> Koodi | string, not nullable | Lipun tarkastuksessa käytettävä uniikki koodi. Luodaan lipulle automaattisesti.
 >
 > ### _Tapahtuman_lipputyypit_
 > _Tapahtuman_lipputyypit-taulu sisältää tietoa siitä millaisia lippuja mihinkin tapahtumaan on myynnissä ja paljonko ne maksavat._

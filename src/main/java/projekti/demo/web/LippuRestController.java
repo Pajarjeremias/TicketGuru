@@ -26,8 +26,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -117,6 +119,24 @@ public class LippuRestController {
   }
 
 
+
+  //Hae kaikki liput tai lippu koodilla
+ @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
+ @GetMapping(value = {"/api/liput", "/api/liput/"})
+ public ResponseEntity<?> getKaikkiLiputTaiKoodilla(@RequestParam(required = false) String koodi){
+  try{
+    if (koodi != null) {
+      return ResponseEntity.ok(lippuRepository.findByKoodi(koodi)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy koodilla " + koodi)));      
+    } else {
+      return ResponseEntity.ok(lippuRepository.findAll());
+    }
+  
+} catch (DataAccessException e) {
+    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe: ei voitu hakea lippuja", e);
+}
+}
+  /* 
  //Hae kaikki liput
  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
  @GetMapping(value = {"/api/liput", "/api/liput/"})
@@ -126,7 +146,7 @@ public class LippuRestController {
 } catch (DataAccessException e) {
     throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Tietokantavirhe: ei voitu hakea lippuja", e);
 }
- }
+ } */
 
   
   // päivitä lippua enemmillä tiedoilla
@@ -215,6 +235,25 @@ if (lippuTiedot.getTapahtuman_lipputyypit_id()!=null){
           .body(Map.of("virhe", "Odottamaton virhe: " + e.getMessage()));
     }
   }
+
+  // Poista lippu
+    @PreAuthorize("hasAnyAuthority('Yllapitaja')")
+    @DeleteMapping("/api/liput/{id}")
+    public ResponseEntity<Void> deleteLippu(@PathVariable Long id) {
+        try { 
+        if (lippuRepository.existsById(id)) {
+            lippuRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // Palauttaa 204 NO CONTENT eli onnistunut poisto
+        } 
+        else { // Palauttaa 404 NOT_FOUND jos lippua ei löydy 
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lippua ei löydy ID:llä " + id);
+        }
+
+    } catch (DataAccessException e) { // Palauttaa 400 BAD_REQUEST tietokantavirheille, jotta ei tule 500 koodia
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Virhe tapahtumaa poistettaessa", e);
+    }
+
+    }
 
 
   

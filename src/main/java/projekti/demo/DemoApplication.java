@@ -2,6 +2,7 @@ package projekti.demo;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -187,6 +188,16 @@ public class DemoApplication {
 			Lippu lippu1 = new Lippu(tapahtuma1_aikuinen, (float) 3, myyty, myynti2);
 			if (lippuRepository.count() == 0) {
 				lippuRepository.save(lippu1); 
+			}
+
+			
+			for (long i = 1; i <= 4; i++) {
+				lippuRepository.findById(i).ifPresent(lippu -> {
+					if (lippu.getKoodi() == null) {
+						lippu.setKoodi(UUID.randomUUID().toString());
+						lippuRepository.save(lippu);
+					}
+				});
 			}
 
 
