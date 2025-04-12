@@ -11,6 +11,21 @@ export default function MainComponent() {
   const getTicketInfo = async () => {
     console.log(defaultConfig.apiBaseUrl)
     console.log(koodi)
+
+
+    let result;
+    let data;
+    switch (envi) {
+      case 'Localhost':
+        result = await fetch(`${defaultConfig.apiBaseUrl}/liput?koodi=${koodi}`)
+        data = await result.json();
+        console.log(data)
+        break;
+      default:
+
+    }
+
+
     return;
   }
 
