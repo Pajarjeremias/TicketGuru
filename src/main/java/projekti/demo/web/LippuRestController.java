@@ -154,34 +154,28 @@ public class LippuRestController {
         Tila tila = lippu.getTila();
         System.out.println("Lipun tila on: " + tila.getTila());
         if (tila.getTila().equals("Tarkastettu")) {
-          System.out.println("Lippu on jo tarkastettu "+lippu.getTarkastus_pvm());
           return ResponseEntity.status(HttpStatus.BAD_REQUEST)
               .body(Map.of("virhe", "Lippu_Id " + id + " on jo käytetty. Tarkastusaika: "+lippu.getTarkastus_pvm()));
         } else if (tila.getTila().equals("Peruttu")) {
           return ResponseEntity.status(HttpStatus.BAD_REQUEST)
               .body(Map.of("virhe", "Lippu_Id " + id + " on peruttu."));
         } else {
-          System.out.println("!! PÄÄSTIIN TÄNNE  - LIPUN TILA EI OLE Tarkastettu tai Peruttu");
           tila = tilaRepository.findByTila("Tarkastettu");
           lippu.setTila(tila);
           lippu.setTarkastus_pvm(kayttohetki);
           lippuRepository.save(lippu);
-          System.out.println("EHKÄ KAIKKI ROKKAA");
           System.out.println("Tilaid:" + tila.getTila_id() + " tilanimi: " + tila.getTila());
           Lippu tallennettuLippu = lippuRepository.save(lippu);
-          System.out.println("Tallennettu tila: " + tallennettuLippu.getTila().getTila());
-          System.out.println("Tarkastus_pvm: " + tallennettuLippu.getTarkastus_pvm());
           Optional<Lippu> haettulippuopt = lippuRepository.findById(id);
           if (haettulippuopt.isPresent()) {
             Lippu haettulippu = haettulippuopt.get();
             System.out.println("haettulippu tila: " + haettulippu.getTila().getTila());
             System.out.println("haettulippu pvm: " + haettulippu.getTarkastus_pvm());
-            System.out.println(haettulippu);
             lippu = haettulippu;
           }
 
           // Palautetaan ok ja muutettu lippu
-          return new ResponseEntity<Lippu>(lippu, HttpStatus.ACCEPTED);
+          return new ResponseEntity<Lippu>(lippu, HttpStatus.OK);
         }
       } else
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
