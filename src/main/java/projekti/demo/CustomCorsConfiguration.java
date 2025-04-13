@@ -19,7 +19,7 @@ public class CustomCorsConfiguration implements CorsConfigurationSource {
             "http://localhost:5173",
             "https://ticket-guru-git-ticketguru4ever.2.rahtiapp.fi/api"
             ));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         config.setAllowedHeaders(List.of("*"));
         return config;
     }
