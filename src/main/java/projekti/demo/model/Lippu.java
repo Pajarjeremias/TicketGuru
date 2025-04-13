@@ -53,7 +53,8 @@ public class Lippu {
     @JoinColumn(name = "myynti_id")
     private Myynti myynti;
 
-    @Column(nullable = false, unique = true)
+    //@Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String koodi;
 
     @PrePersist
