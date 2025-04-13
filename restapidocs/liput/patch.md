@@ -2,7 +2,7 @@
 
 Hakee koodilla lipun tiedot. Bodyyn laitetaan json tieto tarkastusajankohdsta. 
 
-**URL** : `/api/liput/{id}` 
+**URL** : `/api/liput/:pk` 
 
 **Method** : `PATCH`
 
