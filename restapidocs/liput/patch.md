@@ -4,36 +4,21 @@ Hakee koodilla lipun tiedot. Bodyyn laitetaan json tieto tarkastusajankohdsta.
 
 **URL** : `/api/liput/{id}` 
 
-**BODY**: tarkastu päivämäärä ja kellonaika JSON muodossa yyyy-MM-dd'T'HH:mm:ss
+**Method** : `PATCH`
+
+**Auth required** : Sallittu käyttäjäyypeille Yllapitaja, Tapahtumavastaava ja Lipunmyyja
+
+**Permissions required** : 
+
+**Data constraints**: tarkastu päivämäärä ja kellonaika JSON muodossa yyyy-MM-dd'T'HH:mm:ss
 esimerkki
+
 ...json
  { 
     "used": "2023-11-07T07:03:46
     "}
 ...
 
-**Method** : `PATCH`
-
-**Auth required** : Sallittu käyttäjäyypeille Yllapitaja, Tapahtumavastaava ja Lipunmyyja
-
-**Permissions required** : Ei
-
-**Data constraints**
-
-```json
-    {
-          {
-            "lippu_id": "[Integer, REQUIRED]",
-            "tapahtuman_lipputyyppi": "[Integer, REQUIRED viittaa Tapahtuman_lipputyyppi-olioon]",
-            "hinta": "[Float, OPTIONAL]",
-            "tila": "[Integer, REQUIRED viittaa Tila-olioon]",
-            "tarkastanut": "[Integer, PTIONAL viittaa lipun tarkastaneeseen Kayttaja-olioon]",
-            "tarkastus_pvm": "[LocalDateTime]",
-            "myynti": "[Integer, REQUIRED viittaa Myynti-olioon]",
-            "koodi":"[String, luodaan automaattisesti]
-        }
-}
-```
 
 ## Success Responses
 
