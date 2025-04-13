@@ -82,4 +82,25 @@ Lippujen tiedot. Alla esimerkki.
 
 Lippu on joko jo tarkastettu tai peruttu.
 
+
+**Code** : `--- NOT FOUNDT`
+Mikäli pk numerolla ei löydy lippua
+
+virhe, Lippu_Id  {pk}  ei ole olemassa.
+
+
+**Code** : `--- BAD REQUEST`
+Mikäli lippu on jo käytetty
+
+virhe, Lippu_Id  {pk}  on jo käytetty. Tarkastusaika: 2023-11-07T07:03:46
+
+
+**Code** : `--- BAD REQUEST`
+Mikäli lippu on peruttu
+
+virhe, Lippu_Id  {pk}  on peruttu.
+
+
+
+
 ```
