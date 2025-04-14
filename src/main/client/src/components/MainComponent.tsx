@@ -25,13 +25,13 @@ export default function MainComponent() {
   const [id, setId] = useState('');
   const [envi, setEnvi] = useState('Scrummerit');
   const [scrummeritLippu, setScrummeritLippu] = useState(tyhjaScrummeritLippu);
+  const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   //const [loading, setLoading] = useState(false);
 
   const getTicketInfo = async () => {
     let result;
     let data;
-
 
     switch (envi) {
       case 'Localhost':
@@ -60,9 +60,11 @@ export default function MainComponent() {
             }
           });
           setErrorMsg('');
+          setSuccessMsg('Lipun haku onnistui.')
           console.log(scrummeritLippu)
         } else {
           setErrorMsg(result.status + " Lipun haku ei onnistunut.")
+          setSuccessMsg('')
           setScrummeritLippu(tyhjaScrummeritLippu);
         }
         break;
@@ -113,9 +115,112 @@ export default function MainComponent() {
     }
   }
 
+  const clearTicketInfo = () => {
+    setKoodi('');
+    setId('');
+    setErrorMsg('')
+    setSuccessMsg('')
+    setScrummeritLippu(tyhjaScrummeritLippu);
+  }
+
   const markTicketAsUsed = async () => {
     console.log(defaultConfig.apiBaseUrl)
     console.log(id)
+    console.log(new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0])
+
+    let result;
+    let data;
+
+    switch (envi) {
+      case 'Localhost':
+        result = await fetch(`${defaultConfig.apiBaseUrl}/liput/${id}`, {
+          method: "PATCH",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`,
+          },
+          body: JSON.stringify({
+            'used': new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0]
+          })
+        })
+        if (result.status === 200) {
+          data = await result.json();
+          setScrummeritLippu({
+            id: data.lippu_id,
+            koodi: data.koodi,
+            lipputyyppi: data.tapahtuman_lipputyyppi.lipputyyppi.lipputyyppi,
+            hinta: data.hinta,
+            tila: {
+              id: data.tila.tila_id,
+              tila: data.tila.tila
+            },
+            tarkastanut: data.tarkastanut == null ? '': data.tarkastanut,
+            tarkastuspvm: data.tarkastus_pvm == null ? '' : data.tarkastus_pvm,
+            myynti: {
+              myyntipaiva: data.myynti.myyntipaiva,
+              maksutapa: data.myynti.maksutapa.maksutapa
+            }
+          });
+          setSuccessMsg('Lippu merkitty tarkastetuksi')
+          setErrorMsg('');
+          console.log(scrummeritLippu)
+        } else {
+          setErrorMsg(result.status + " Lippu on jo tarkastettu.")
+          setSuccessMsg('');
+        }
+        break;
+
+      case 'Scrummerit':
+        try {
+          result = await fetch(`${scrummeriConfig.apiBaseUrl}/liput/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`,
+            },
+            body: JSON.stringify({
+              'used': new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0]
+            })
+          })
+          if (result.status === 200) {
+            data = await result.json();
+            setScrummeritLippu({
+              id: data.lippu_id,
+              koodi: data.koodi,
+              lipputyyppi: data.tapahtuman_lipputyyppi.lipputyyppi.lipputyyppi,
+              hinta: data.hinta,
+              tila: {
+                id: data.tila.tila_id,
+                tila: data.tila.tila
+              },
+              tarkastanut: data.tarkastanut == null ? '': data.tarkastanut,
+              tarkastuspvm: data.tarkastus_pvm == null ? '' : data.tarkastus_pvm,
+              myynti: {
+                myyntipaiva: data.myynti.myyntipaiva,
+                maksutapa: data.myynti.maksutapa.maksutapa
+              }
+            });
+            setSuccessMsg('Lippu merkitty tarkastetuksi')
+            setErrorMsg('');
+            console.log(scrummeritLippu)
+          } else {
+            setErrorMsg(result.status + " Lippu on jo tarkastettu.")
+            setSuccessMsg('');
+          }
+        } catch(e) {
+          setScrummeritLippu(tyhjaScrummeritLippu)
+          if (e instanceof TypeError) {
+            setErrorMsg("CORS-virhe")
+          } else {
+            setErrorMsg("Tuntematon virhe")
+          }
+          setSuccessMsg('');
+        }
+        break;
+
+      default:
+    }
+
     return;
   }
 
@@ -141,19 +246,40 @@ export default function MainComponent() {
           <h2>Hae Lippu koodilla</h2>
           <div className="mt-3 mb-2">Syötä haettavan lipun koodi ja paina "Hae lipun tiedot"</div>
           <div className="mb-3">
-            <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Kirjoita tähän koodi" onChange={e => setKoodi(e.target.value)}></input>
+            <input type="text" value={koodi} className="form-control" id="exampleFormControlInput1" placeholder="Kirjoita tähän koodi" onChange={e => setKoodi(e.target.value)}></input>
 
             <button className="btn btn-primary mt-2" onClick={getTicketInfo}>
               Hae lipun tiedot
-
+            </button>
+            <button className="btn btn-outline-secondary mt-2 ms-2" onClick={clearTicketInfo}>
+              Tyhjennä kaikki kentät
             </button>
           </div>
+        </div>
+        <div className="col-6">
+        <h2>Merkitse lippu käytetyksi</h2>
+          <div className="mt-3 mb-2">Syötä käytetyksi merkattavan lipun ID ja paina "Merkitse käytetyksi"</div>
+          <div className="mb-3">
+            <input type="text" value={id} className="form-control" id="exampleFormControlInput1" placeholder="Kirjoita tähän id" onChange={e => setId(e.target.value)}></input>
+            <button className="btn btn-primary mt-2" onClick={markTicketAsUsed}>Merkitse käytetyksi</button>
+          </div>
+        </div>
+      </div>
 
-          {errorMsg &&
+      <div className="row">
+        <div className="col-12">
+
+        {successMsg &&
+          <p className="text-success">{successMsg}</p>
+        }
+
+        {errorMsg &&
             <p className="text-danger">{errorMsg}</p>
           }
 
           {scrummeritLippu.id &&
+          <div>
+            <h3>Lipun tiedot</h3>
             <table className="table">
               <tbody>
                 <tr>
@@ -194,15 +320,9 @@ export default function MainComponent() {
                 </tr>
               </tbody>
             </table>
+            </div>
           }
-        </div>
-        <div className="col-6">
-        <h2>Merkitse lippu käytetyksi</h2>
-          <div className="mt-3 mb-2">Syötä käytetyksi merkattavan lipun ID ja paina "Merkitse käytetyksi"</div>
-          <div className="mb-3">
-            <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Kirjoita tähän id" onChange={e => setId(e.target.value)}></input>
-            <button className="btn btn-primary mt-2" onClick={markTicketAsUsed}>Merkitse käytetyksi</button>
-          </div>
+
         </div>
       </div>
     </div>
