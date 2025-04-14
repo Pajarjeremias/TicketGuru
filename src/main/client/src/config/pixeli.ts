@@ -1,5 +1,5 @@
 const config = {
-  apiBaseUrl: "http://localhost:8080/api"
+  apiBaseUrl: "https://ticket-guru-git1-ticketguru-1.2.rahtiapp.fi/api"
 }
 
 export {
