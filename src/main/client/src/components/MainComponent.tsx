@@ -30,6 +30,7 @@ const tyhjaPixeliLippu = {
 }
 
 export default function MainComponent() {
+  // Tab 1 - Tarkasta lippu stuffs
   const [koodi, setKoodi] = useState('');
   const [id, setId] = useState('');
   const [envi, setEnvi] = useState('Scrummerit');
@@ -39,6 +40,12 @@ export default function MainComponent() {
   const [errorMsg, setErrorMsg] = useState('');
   const [lipunHakuLoading, setLipunHakuLoading] = useState(false);
   const [lipunTarkastusLoading, setLipunTarkastusLoading] = useState(false);
+
+  // Tab 2 - Myy lippu stuffs
+
+
+  // Common for both tabs
+  const [activeTab, setActiveTab] = useState(1);
 
   const getTicketInfo = async () => {
     let result;
@@ -350,168 +357,191 @@ export default function MainComponent() {
     setLipunTarkastusLoading(false);
   }
 
+  const switchTab = () => {
+    if (activeTab === 1) {
+      setActiveTab(2);
+    } else {
+      setActiveTab(1);
+    }
+  }
+
   return(
     <>
-      <div className="container">
-        <div className="row my-4">
-          <div className="col-12">
-          Valitse käytettävä back-end:
-            <div className="form-check">
-              <input type="radio" value="Localhost" name="envi" className="form-check-input" checked={envi === "Localhost"} onChange={e => setEnvi(e.target.value)}/>
-              Localhost
-            </div>
-            <div className="form-check">
-              <input type="radio" value="Pixelipioneerit" name="envi" className="form-check-input" checked={envi === "Pixelipioneerit"} onChange={e => setEnvi(e.target.value)}/>
-              Pixelipioneerit Rahti
-            </div>
-            <div className="form-check">
-              <input type="radio" value="Scrummerit" name="envi" className="form-check-input" checked={envi === "Scrummerit"} onChange={e => setEnvi(e.target.value)} />
-              Scrummerit Rahti
-            </div>
-          </div>
-        </div>
-        <div className="row my-4">
-          <div className="col-6 pe-4">
-            <h2>Hae Lippu koodilla</h2>
-            <div className="mt-3 mb-2">
-              Syötä haettavan lipun koodi ja paina "Hae lipun tiedot"
-            </div>
+      <div className="container my-4">
+        
+        {/***** Tab navigation *****/}
+        <ul className="nav nav-tabs">
+          <li className="nav-item">
+            <a className={"nav-link " + (activeTab === 1 ? "active" : "")} onClick={switchTab}>Tarkista lippu</a>
+          </li>
+          <li className="nav-item">
+            <a className={"nav-link " + (activeTab === 2 ? "active" : "")} onClick={switchTab}>Myy lippu</a>
+          </li>
+        </ul>
+      
 
-            <div className="mb-3">
-              <input type="text" value={koodi} className="form-control" id="exampleFormControlInput1" placeholder="Kirjoita tähän koodi" onChange={e => setKoodi(e.target.value)}></input>
-
-              {!lipunHakuLoading &&
-                <button className="btn btn-primary mt-2" onClick={getTicketInfo} style={{width: "9em"}} >
-                  Hae lipun tiedot
-                </button>  
-              }
-
-              {lipunHakuLoading &&
-                <button className="btn btn-primary mt-2" style={{width: "9em"}} type="button" disabled id="book-search-spinner">
-                  <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                </button>
-              }
-
-              <button className="btn btn-outline-secondary mt-2 ms-2" onClick={clearTicketInfo}>
-                Tyhjennä kaikki kentät
-              </button>
+      {/***** Tab 1 - Tarkasta lippu *****/}
+        <div className={"container " + (activeTab === 1 ? "" : "display-none")}>
+          <div className="row my-4">
+            <div className="col-12">
+              Valitse käytettävä back-end:
+              <div className="form-check">
+                <input type="radio" value="Localhost" name="envi" className="form-check-input" checked={envi === "Localhost"} onChange={e => setEnvi(e.target.value)}/>
+                Localhost
+              </div>
+              <div className="form-check">
+                <input type="radio" value="Pixelipioneerit" name="envi" className="form-check-input" checked={envi === "Pixelipioneerit"} onChange={e => setEnvi(e.target.value)}/>
+                Pixelipioneerit Rahti
+              </div>
+              <div className="form-check">
+                <input type="radio" value="Scrummerit" name="envi" className="form-check-input" checked={envi === "Scrummerit"} onChange={e => setEnvi(e.target.value)} />
+                Scrummerit Rahti
+              </div>
             </div>
           </div>
-          <div className="col-6">
-          <h2>Merkitse lippu käytetyksi</h2>
-            <div className="mt-3 mb-2">
-              Syötä käytetyksi merkattavan lipun ID ja paina "Merkitse käytetyksi"
+          <div className="row my-4">
+            <div className="col-6 pe-4">
+              <h2>Hae Lippu koodilla</h2>
+              <div className="mt-3 mb-2">
+                Syötä haettavan lipun koodi ja paina "Hae lipun tiedot"
+              </div>
+
+              <div className="mb-3">
+                <input type="text" value={koodi} className="form-control" id="exampleFormControlInput1" placeholder="Kirjoita tähän koodi" onChange={e => setKoodi(e.target.value)}></input>
+
+                {!lipunHakuLoading &&
+                  <button className="btn btn-primary mt-2" onClick={getTicketInfo} style={{width: "9em"}} >
+                    Hae lipun tiedot
+                  </button>  
+                }
+
+                {lipunHakuLoading &&
+                  <button className="btn btn-primary mt-2" style={{width: "9em"}} type="button" disabled id="book-search-spinner">
+                    <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                  </button>
+                }
+
+                <button className="btn btn-outline-secondary mt-2 ms-2" onClick={clearTicketInfo}>
+                  Tyhjennä kaikki kentät
+                </button>
+              </div>
             </div>
-            <div className="mb-3">
-              <input type="text" value={id} className="form-control" id="exampleFormControlInput1" placeholder="Kirjoita tähän id" onChange={e => setId(e.target.value)}></input>
+            <div className="col-6">
+            <h2>Merkitse lippu käytetyksi</h2>
+              <div className="mt-3 mb-2">
+                Syötä käytetyksi merkattavan lipun ID ja paina "Merkitse käytetyksi"
+              </div>
+              <div className="mb-3">
+                <input type="text" value={id} className="form-control" id="exampleFormControlInput1" placeholder="Kirjoita tähän id" onChange={e => setId(e.target.value)}></input>
 
-              {!lipunTarkastusLoading &&
-                <button className="btn btn-primary mt-2" style={{width: "11em"}} onClick={markTicketAsUsed}>
-                  Merkitse käytetyksi
-                </button>
-              }
+                {!lipunTarkastusLoading &&
+                  <button className="btn btn-primary mt-2" style={{width: "11em"}} onClick={markTicketAsUsed}>
+                    Merkitse käytetyksi
+                  </button>
+                }
 
-              {lipunTarkastusLoading &&
-                <button className="btn btn-primary mt-2" style={{width: "11em"}} type="button" disabled id="book-search-spinner">
-                  <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                </button>
-              }
+                {lipunTarkastusLoading &&
+                  <button className="btn btn-primary mt-2" style={{width: "11em"}} type="button" disabled id="book-search-spinner">
+                    <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                  </button>
+                }
 
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className="col-12">
+          <div className="row">
+            <div className="col-12">
 
-          {successMsg &&
-            <p className="text-success" style={{fontSize: "20px"}}>{successMsg}</p>
-          }
+            {successMsg &&
+              <p className="text-success" style={{fontSize: "20px"}}>{successMsg}</p>
+            }
 
-          {errorMsg &&
-            <p className="text-danger" style={{fontSize: "20px"}}>{errorMsg}</p>
-          }
+            {errorMsg &&
+              <p className="text-danger" style={{fontSize: "20px"}}>{errorMsg}</p>
+            }
 
-          {scrummeritLippu.id &&
-            <div>
-              <h3>Lipun tiedot (Scrummerit)</h3>
-              <table className="table">
-                <tbody>
-                  <tr>
-                    <th scope="row">Id</th>
-                    <td>{scrummeritLippu.id}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Koodi</th>
-                    <td>{scrummeritLippu.koodi}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Lipputyyppi</th>
-                    <td>{scrummeritLippu.lipputyyppi}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Hinta</th>
-                    <td>{scrummeritLippu.hinta + " €"}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Tila</th>
-                    <td>{scrummeritLippu.tila.tila}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Myyntipäivä</th>
-                    <td>{scrummeritLippu.myynti.myyntipaiva}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Maksutapa</th>
-                    <td>{scrummeritLippu.myynti.maksutapa}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Tarkastuspvm</th>
-                    <td>{scrummeritLippu.tarkastuspvm ? scrummeritLippu.tarkastuspvm : '-'}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Tarkastanut</th>
-                    <td>{scrummeritLippu.tarkastanut ? scrummeritLippu.tarkastanut : '-'}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          }
+            {scrummeritLippu.id &&
+              <div>
+                <h3>Lipun tiedot (Scrummerit)</h3>
+                <table className="table">
+                  <tbody>
+                    <tr>
+                      <th scope="row">Id</th>
+                      <td>{scrummeritLippu.id}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Koodi</th>
+                      <td>{scrummeritLippu.koodi}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Lipputyyppi</th>
+                      <td>{scrummeritLippu.lipputyyppi}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Hinta</th>
+                      <td>{scrummeritLippu.hinta + " €"}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Tila</th>
+                      <td>{scrummeritLippu.tila.tila}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Myyntipäivä</th>
+                      <td>{scrummeritLippu.myynti.myyntipaiva}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Maksutapa</th>
+                      <td>{scrummeritLippu.myynti.maksutapa}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Tarkastuspvm</th>
+                      <td>{scrummeritLippu.tarkastuspvm ? scrummeritLippu.tarkastuspvm : '-'}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Tarkastanut</th>
+                      <td>{scrummeritLippu.tarkastanut ? scrummeritLippu.tarkastanut : '-'}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            }
 
-          {pixeliLippu.id &&
-            <div>
-              <h3>Lipun tiedot (Pixelipioneerit)</h3>
-              <table className="table">
-                <tbody>
-                  <tr>
-                    <th scope="row">Id</th>
-                    <td>{pixeliLippu.id}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Koodi</th>
-                    <td>{pixeliLippu.koodi}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Lipputyyppi</th>
-                    <td>{pixeliLippu.lipputyyppi}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Hinta</th>
-                    <td>{pixeliLippu.hinta + " €"}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Tapahtuma</th>
-                    <td>{pixeliLippu.tapahtuma}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Käytetty</th>
-                    <td>{pixeliLippu.kaytetty}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          }
+            {pixeliLippu.id &&
+              <div>
+                <h3>Lipun tiedot (Pixelipioneerit)</h3>
+                <table className="table">
+                  <tbody>
+                    <tr>
+                      <th scope="row">Id</th>
+                      <td>{pixeliLippu.id}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Koodi</th>
+                      <td>{pixeliLippu.koodi}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Lipputyyppi</th>
+                      <td>{pixeliLippu.lipputyyppi}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Hinta</th>
+                      <td>{pixeliLippu.hinta + " €"}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Tapahtuma</th>
+                      <td>{pixeliLippu.tapahtuma}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Käytetty</th>
+                      <td>{pixeliLippu.kaytetty}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            }
 
+          </div>
         </div>
       </div>
     </div>
