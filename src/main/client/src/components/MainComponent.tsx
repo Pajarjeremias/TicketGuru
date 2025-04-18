@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { config as defaultConfig } from "../config/default";
 import { config as pixeliConfig } from "../config/pixeli";
 import { config as scrummeriConfig } from "../config/scrummerit";
@@ -42,10 +42,20 @@ export default function MainComponent() {
   const [lipunTarkastusLoading, setLipunTarkastusLoading] = useState(false);
 
   // Tab 2 - Myy lippu stuffs
-
+  const [tapahtumat, setTapahtumat] = useState([ ]);
+  const [lippuForm, setLippuForm] = useState({
+    tapahtuma: '',
+    lipputyyppiId: 0,
+    maara: 1,
+    hinta: 0
+  });
 
   // Common for both tabs
   const [activeTab, setActiveTab] = useState(1);
+
+  useEffect(() => {
+    fetchTapahtumat();
+  }, [])
 
   const getTicketInfo = async () => {
     let result;
@@ -357,6 +367,25 @@ export default function MainComponent() {
     setLipunTarkastusLoading(false);
   }
 
+  const fetchTapahtumat = async () => {
+    try {
+      const result = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`,
+        }
+      })
+      if (result.status === 200) {
+        const data = await result.json();
+        setTapahtumat(data);
+      }
+
+    } catch(e) {
+      console.error(e)
+    }
+    
+  }
+
   const switchTab = () => {
     if (activeTab === 1) {
       setActiveTab(2);
@@ -542,6 +571,71 @@ export default function MainComponent() {
             }
 
           </div>
+        </div>
+      </div>
+
+      {/***** Tab 2 - Myy lippu *****/}
+      <div className={"container " + (activeTab === 2 ? "" : "display-none")}>
+          <div className="row my-4">
+          <h2 className="pb-2">Myy lippu</h2>
+            <div className="col-6">
+              
+              <label htmlFor="tapahtuma-select" className="form-label">Valitse tapahtuma</label>
+              <select id="tapahtuma-select" className="form-select mb-2" onChange={(event) => setLippuForm({...lippuForm, tapahtuma: event.target.value})}>
+                <option selected disabled>Tapahtuma</option>
+                {tapahtumat[0] && 
+                  tapahtumat.map(tapahtuma => {
+                    return(
+                      <option value={tapahtuma.nimi}>
+                        {tapahtuma.nimi}
+                      </option>
+                    )
+                  })}
+              </select>
+
+              <label htmlFor="tapahtuma-select" className="form-label">Valitse lipputyyppi</label>
+                <select id="tapahtuma-select" className="form-select mb-2" aria-label="Default select example" disabled={lippuForm.tapahtuma == '' ? true : false} onChange={(event) => setLippuForm({...lippuForm, lipputyyppiId: parseInt(event.target.value)})}>
+                  <option selected disabled>Lipputyyppi</option>
+                    {tapahtumat && lippuForm.tapahtuma &&
+                      tapahtumat.find(tapahtuma => tapahtuma.nimi == lippuForm.tapahtuma)?.tapahtuman_lipputyypit.map(lipputyyppi => {
+                        return (
+                          <option value={lipputyyppi.tapahtuma_lipputyyppi_id}>
+                            {lipputyyppi.lipputyyppi.lipputyyppi}
+                            </option>
+                        )
+                      })
+                    }
+                </select>
+
+                <label htmlFor="exampleFormControlInput1" className="form-label">Määrä</label>
+                <input type="number" className="form-control" id="exampleFormControlInput1" value={lippuForm.maara} disabled={lippuForm.tapahtuma == '' ? true : false}></input>
+                
+                <button className="btn btn-primary mt-3">
+                Myy liput
+              </button>
+            </div>
+
+            <div className="col-3">
+
+            </div>
+
+            <div className="col-3">
+
+            </div>
+
+            <div className="col-3">
+
+            </div>
+          </div>
+
+          <div className="row my-4">
+
+          </div>
+
+          <div className="row">
+            <div className="col-12">
+
+            </div>
         </div>
       </div>
     </div>
