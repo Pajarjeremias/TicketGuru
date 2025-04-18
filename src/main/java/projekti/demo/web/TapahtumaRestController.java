@@ -215,12 +215,18 @@ public class TapahtumaRestController {
     public ResponseEntity<?> haeMyydytLiput(@PathVariable Long id) {
         Tapahtuma tapahtuma = tapahtumaRepository.findById(id).orElse(null);
         List<Tapahtuman_lipputyyppi> lipputyypit = tapahtuman_lipputyyppiRepository.findByTapahtuma(tapahtuma);
+        List<Lippu> kaikki = (List<Lippu>) lippuRepository.findAll();
         int summa = 0;
-        for(Tapahtuman_lipputyyppi tyyppi : lipputyypit) {
-            //List<Lippu> liput = lippuRepository.findByTapahtumanLipputyyppi(tyyppi);
-            //System.out.println(liput.size());
+
+        for(Lippu lippu : kaikki) {
+            for(Tapahtuman_lipputyyppi tyyppi : lipputyypit) {
+                if(lippu.getTapahtuman_lipputyyppi().getTapahtuma_lipputyyppi_id() == tyyppi.getTapahtuma_lipputyyppi_id()) {
+                    summa++;
+                }
+            }
+
         }
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(summa);
     }
     
     // Käsittelee not found -virheet

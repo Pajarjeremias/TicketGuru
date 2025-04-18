@@ -1,17 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { config as scrummeriConfig } from "../config/scrummerit";
-import { config as defaultConfig } from "../config/default";
+//import { config as defaultConfig } from "../config/default";
 
 const tyhjaLippuForm = {
   tapahtuma: 0,
   lipputyyppiId: 0,
   maara: 1,
-  hinta: 0
+  hinta: 0,
+  myydytLiput: 0,
+  maxLiput: 0
 }
 
 export default function MyyLippuComponent() {
-    const [tapahtumat, setTapahtumat] = useState([ ]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [tapahtumat, setTapahtumat] = useState<any[]>([ ]);
     const [lippuForm, setLippuForm] = useState(tyhjaLippuForm);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [uudetLiput, setUudetLiput] = useState<any[]>([ ]);
     const [message, setMessage] = useState('');
 
@@ -21,7 +25,7 @@ export default function MyyLippuComponent() {
 
   const fetchTapahtumat = async () => {
     try {
-      const result = await fetch(`${defaultConfig.apiBaseUrl}/tapahtumat`, {
+      const result = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`,
@@ -39,7 +43,7 @@ export default function MyyLippuComponent() {
 
   const createTickets = async () => {
     // Luodaan myynti ja otetaan talteen myyntiId
-    const response = await fetch(`${defaultConfig.apiBaseUrl}/myynnit`, {
+    const response = await fetch(`${scrummeriConfig.apiBaseUrl}/myynnit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,14 +60,14 @@ export default function MyyLippuComponent() {
         }
       })
     })
-    let data = await response.json();
+    const data = await response.json();
     const myyntiId = data.myynti_id;
 
     // Luodaan liput
     const postLoop = async () => {
       const holder = [];
       for (let i = 0; i < lippuForm.maara; i++) {
-        const res = await fetch(`${defaultConfig.apiBaseUrl}/liput`, {
+        const res = await fetch(`${scrummeriConfig.apiBaseUrl}/liput`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -80,12 +84,14 @@ export default function MyyLippuComponent() {
       return Promise.all(holder);
     }
     setUudetLiput(await postLoop());
-    setMessage('Liput luotu tietokantaan onnistuneesti')
+    setMessage('Liput luotu tietokantaan onnistuneesti');
+    setLippuForm({...lippuForm, myydytLiput: lippuForm.myydytLiput + lippuForm.maara});
   }
 
-  const setTyyppiAndHinta = (event) => {
+  const setTyyppiAndHinta = (event: ChangeEvent<HTMLSelectElement>) => {
     tapahtumat.forEach(tapahtuma => {
-      tapahtuma.tapahtuman_lipputyypit.forEach(lipputyyppi => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      tapahtuma.tapahtuman_lipputyypit.forEach((lipputyyppi: { tapahtuma_lipputyyppi_id: string; hinta: any; }) => {
         if(lipputyyppi.tapahtuma_lipputyyppi_id == event.target.value) {
           setLippuForm({...lippuForm, hinta: lipputyyppi.hinta, lipputyyppiId: parseInt(event.target.value)})
         }
@@ -99,25 +105,28 @@ export default function MyyLippuComponent() {
     setUudetLiput([]);
   }
 
-  const setTapahtumaAndFetchNoTickets = async (event) => {
-    setLippuForm({...lippuForm, tapahtuma: parseInt(event.target.value)})
-    const res = await fetch(`${defaultConfig.apiBaseUrl}/tapahtumat/${lippuForm.tapahtuma}/myydytliput`, {
+  const setTapahtumaAndFetchNoTickets = async (event: ChangeEvent<HTMLSelectElement>) => {
+    const tapahtuma = tapahtumat.find(tapahtuma => tapahtuma.tapahtuma_id == event.target.value);
+
+    const res = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat/${event.target.value}/myydytliput`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
       }
     })
+
+    setLippuForm({...lippuForm, myydytLiput: await res.json(), tapahtuma: tapahtuma?.tapahtuma_id, maxLiput: tapahtuma?.lippumaara});
   }
 
   return (
     <>
       <div className="row my-4">
         <h2 className="pb-2">Myy lippuja</h2>
-        <div className="col-6">
+        <div className="col-12">
 
-          <label htmlFor="tapahtuma-select" className="form-label">Valitse tapahtuma</label>
-          <select defaultValue={""} id="tapahtuma-select" className="form-select mb-2" onChange={(event => setTapahtumaAndFetchNoTickets(event))}>
-            <option disabled value="" key={0}></option>
+          <label htmlFor="tapahtuma-select" className="form-label">Tapahtuma</label>
+          <select defaultValue={0} id="tapahtuma-select" className="form-select mb-2" onChange={(event => setTapahtumaAndFetchNoTickets(event))}>
+            <option disabled value={0} key={0}></option>
             {tapahtumat[0] && 
               tapahtumat.map(tapahtuma => {
                 return(
@@ -128,11 +137,18 @@ export default function MyyLippuComponent() {
             })}
           </select>
 
-          <label htmlFor="tapahtuma-select" className="form-label">Valitse lipputyyppi</label>
-          <select defaultValue={""} id="tapahtuma-select" className="form-select mb-2" aria-label="Default select example" disabled={lippuForm.tapahtuma == '' ? true : false} onChange={(event) => setTyyppiAndHinta(event)}>
-            <option disabled value="" key={0}>Lipputyyppi</option>
+          {lippuForm.maxLiput != 0 &&
+            <p>
+              <b>Lippuja myyty: {lippuForm.myydytLiput}/{lippuForm.maxLiput}</b>
+            </p>
+          }
+
+          <label htmlFor="tapahtuma-select" className="form-label">Lipputyyppi</label>
+          <select defaultValue={""} id="tapahtuma-select" className="form-select mb-2" aria-label="Default select example" disabled={lippuForm.tapahtuma == 0 ? true : false} onChange={(event) => setTyyppiAndHinta(event)}>
+            <option disabled value="" key={0}></option>
             {tapahtumat && lippuForm.tapahtuma &&
-              tapahtumat.find(tapahtuma => tapahtuma.tapahtuma_id == lippuForm.tapahtuma)?.tapahtuman_lipputyypit.map(lipputyyppi => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              tapahtumat.find(tapahtuma => tapahtuma.tapahtuma_id == lippuForm.tapahtuma)?.tapahtuman_lipputyypit.map((lipputyyppi: any) => {
                 return (
                   <option value={lipputyyppi.tapahtuma_lipputyyppi_id} key={lipputyyppi.tapahtuma_lipputyyppi_id}>
                     {lipputyyppi.lipputyyppi.lipputyyppi}
