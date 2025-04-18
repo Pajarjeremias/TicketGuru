@@ -23,7 +23,7 @@ export default function MainComponent() {
             <a className={"nav-link " + (activeTab === 1 ? "active" : "")} onClick={switchTab}>Tarkista lippu</a>
           </li>
           <li className="nav-item">
-            <a className={"nav-link " + (activeTab === 2 ? "active" : "")} onClick={switchTab}>Myy lippu</a>
+            <a className={"nav-link " + (activeTab === 2 ? "active" : "")} onClick={switchTab}>Myy lippuja</a>
           </li>
         </ul>
 

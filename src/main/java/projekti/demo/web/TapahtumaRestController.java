@@ -34,9 +34,13 @@ import org.springframework.http.HttpStatus;
 
 import projekti.demo.model.Jarjestaja;
 import projekti.demo.model.JarjestajaRepository;
+import projekti.demo.model.Lippu;
+import projekti.demo.model.LippuRepository;
 import projekti.demo.model.PutTapahtumaModel;
 import projekti.demo.model.Tapahtuma;
 import projekti.demo.model.TapahtumaRepository;
+import projekti.demo.model.Tapahtuman_lipputyyppi;
+import projekti.demo.model.Tapahtuman_lipputyyppiRepository;
 import projekti.demo.model.Tapahtumapaikka;
 import projekti.demo.model.TapahtumapaikkaRepository;
 
@@ -54,6 +58,12 @@ public class TapahtumaRestController {
 
     @Autowired
     private JarjestajaRepository jarjestajaRepository;
+
+    @Autowired
+    private Tapahtuman_lipputyyppiRepository tapahtuman_lipputyyppiRepository;
+
+    @Autowired
+    private LippuRepository lippuRepository;
 
 
     // Hae kaikki tapahtumat
@@ -198,6 +208,20 @@ public class TapahtumaRestController {
         }
     }
 
+
+    // Hae tietyn tapahtuman myytyjen lippujen määrä
+    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava')")
+    @GetMapping("/api/tapahtumat/{id}/myydytliput")
+    public ResponseEntity<?> haeMyydytLiput(@PathVariable Long id) {
+        Tapahtuma tapahtuma = tapahtumaRepository.findById(id).orElse(null);
+        List<Tapahtuman_lipputyyppi> lipputyypit = tapahtuman_lipputyyppiRepository.findByTapahtuma(tapahtuma);
+        int summa = 0;
+        for(Tapahtuman_lipputyyppi tyyppi : lipputyypit) {
+            //List<Lippu> liput = lippuRepository.findByTapahtumanLipputyyppi(tyyppi);
+            //System.out.println(liput.size());
+        }
+        return ResponseEntity.ok(null);
+    }
     
     // Käsittelee not found -virheet
     @ExceptionHandler(IllegalArgumentException.class)

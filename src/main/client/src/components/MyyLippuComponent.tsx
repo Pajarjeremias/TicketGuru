@@ -2,16 +2,18 @@ import { useState, useEffect } from "react";
 import { config as scrummeriConfig } from "../config/scrummerit";
 import { config as defaultConfig } from "../config/default";
 
+const tyhjaLippuForm = {
+  tapahtuma: 0,
+  lipputyyppiId: 0,
+  maara: 1,
+  hinta: 0
+}
 
 export default function MyyLippuComponent() {
     const [tapahtumat, setTapahtumat] = useState([ ]);
-    const [lippuForm, setLippuForm] = useState({
-      tapahtuma: '',
-      lipputyyppiId: 0,
-      maara: 1,
-      hinta: 0
-    });
+    const [lippuForm, setLippuForm] = useState(tyhjaLippuForm);
     const [uudetLiput, setUudetLiput] = useState<any[]>([ ]);
+    const [message, setMessage] = useState('');
 
   useEffect(() => {
     fetchTapahtumat();
@@ -37,7 +39,7 @@ export default function MyyLippuComponent() {
 
   const createTickets = async () => {
     // Luodaan myynti ja otetaan talteen myyntiId
-    let response = await fetch(`${defaultConfig.apiBaseUrl}/myynnit`, {
+    const response = await fetch(`${defaultConfig.apiBaseUrl}/myynnit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +63,7 @@ export default function MyyLippuComponent() {
     const postLoop = async () => {
       const holder = [];
       for (let i = 0; i < lippuForm.maara; i++) {
-        let res = await fetch(`${defaultConfig.apiBaseUrl}/liput`, {
+        const res = await fetch(`${defaultConfig.apiBaseUrl}/liput`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -77,8 +79,8 @@ export default function MyyLippuComponent() {
       }
       return Promise.all(holder);
     }
-
     setUudetLiput(await postLoop());
+    setMessage('Liput luotu tietokantaan onnistuneesti')
   }
 
   const setTyyppiAndHinta = (event) => {
@@ -91,19 +93,35 @@ export default function MyyLippuComponent() {
     })
   }
 
+  const resetFields = () => {
+    setLippuForm(tyhjaLippuForm);
+    setMessage('');
+    setUudetLiput([]);
+  }
+
+  const setTapahtumaAndFetchNoTickets = async (event) => {
+    setLippuForm({...lippuForm, tapahtuma: parseInt(event.target.value)})
+    const res = await fetch(`${defaultConfig.apiBaseUrl}/tapahtumat/${lippuForm.tapahtuma}/myydytliput`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
+      }
+    })
+  }
+
   return (
     <>
       <div className="row my-4">
-        <h2 className="pb-2">Myy lippu</h2>
+        <h2 className="pb-2">Myy lippuja</h2>
         <div className="col-6">
 
           <label htmlFor="tapahtuma-select" className="form-label">Valitse tapahtuma</label>
-          <select defaultValue={""} id="tapahtuma-select" className="form-select mb-2" onChange={(event) => setLippuForm({...lippuForm, tapahtuma: event.target.value})}>
+          <select defaultValue={""} id="tapahtuma-select" className="form-select mb-2" onChange={(event => setTapahtumaAndFetchNoTickets(event))}>
             <option disabled value="" key={0}></option>
             {tapahtumat[0] && 
               tapahtumat.map(tapahtuma => {
                 return(
-                  <option value={tapahtuma.nimi} key={tapahtuma.tapahtuma_id}>
+                  <option value={tapahtuma.tapahtuma_id} key={tapahtuma.tapahtuma_id}>
                     {tapahtuma.nimi}
                   </option>
                 )
@@ -114,7 +132,7 @@ export default function MyyLippuComponent() {
           <select defaultValue={""} id="tapahtuma-select" className="form-select mb-2" aria-label="Default select example" disabled={lippuForm.tapahtuma == '' ? true : false} onChange={(event) => setTyyppiAndHinta(event)}>
             <option disabled value="" key={0}>Lipputyyppi</option>
             {tapahtumat && lippuForm.tapahtuma &&
-              tapahtumat.find(tapahtuma => tapahtuma.nimi == lippuForm.tapahtuma)?.tapahtuman_lipputyypit.map(lipputyyppi => {
+              tapahtumat.find(tapahtuma => tapahtuma.tapahtuma_id == lippuForm.tapahtuma)?.tapahtuman_lipputyypit.map(lipputyyppi => {
                 return (
                   <option value={lipputyyppi.tapahtuma_lipputyyppi_id} key={lipputyyppi.tapahtuma_lipputyyppi_id}>
                     {lipputyyppi.lipputyyppi.lipputyyppi}
@@ -130,8 +148,72 @@ export default function MyyLippuComponent() {
           <button className="btn btn-primary mt-3" onClick={createTickets}>
             Myy liput
           </button>
+
+          <button className="btn btn-outline-secondary ms-2 mt-3" onClick={resetFields}>
+            Tyhjennä kentät
+          </button>
+
+          {message &&
+            <p className="text-success mt-3">
+              {message}
+            </p>
+          }
+
         </div>
 
+      </div>
+
+      <div className="row my-4">
+          <div className="col-12">
+          {uudetLiput &&
+            uudetLiput.map((lippu, index) => {
+              return(
+                <div>
+                <h3>{"Lippu " + (index + 1)}</h3>
+                <table className="table mb-4">
+                <tbody>
+                    <tr>
+                      <th scope="row">Koodi</th>
+                      <td>{lippu.koodi}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Lipputyyppi</th>
+                      <td>{lippu.tapahtuman_lipputyyppi.lipputyyppi.lipputyyppi}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Hinta</th>
+                      <td>{lippu.hinta + " €"}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Tila</th>
+                      <td>{lippu.tila.tila}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Myyntipäivä</th>
+                      <td>{lippu.myynti.myyntipaiva}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Maksutapa</th>
+                      <td>{lippu.myynti.maksutapa.maksutapa}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Tarkastuspvm</th>
+                      <td>{lippu.tila.tarkastus_pvm ? lippu.tarkastuspvm : '-'}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Tarkastanut</th>
+                      <td>{lippu.tila.tarkastanut ? lippu.tarkastanut : '-'}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              )
+            })
+
+
+
+        }
+          </div>
       </div>
     </>
   )
