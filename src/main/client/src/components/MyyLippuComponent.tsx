@@ -1,27 +1,28 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { config as scrummeriConfig } from "../config/scrummerit";
-//import { config as defaultConfig } from "../config/default";
-
-const tyhjaLippuForm = {
-  tapahtuma: 0,
-  lipputyyppiId: 0,
-  maara: 1,
-  hinta: 0,
-  myydytLiput: 0,
-  maxLiput: 0
-}
 
 export default function MyyLippuComponent() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [tapahtumat, setTapahtumat] = useState<any[]>([ ]);
-    const [lippuForm, setLippuForm] = useState(tyhjaLippuForm);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [uudetLiput, setUudetLiput] = useState<any[]>([ ]);
-    const [message, setMessage] = useState('');
+  const [valittuTapahtumaId, setValittuTapahtumaId] = useState("-1");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
+  const [myydytLiput, setMyydytLiput] = useState("-");
+  const [maxLiput, setMaxLiput] = useState("-");
+  const [valittuLipputyyppiId, setValittuLipputyyppiId] = useState("-1");
+  const [lippuMaara, setLippuMaara] = useState("1");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [uudetLiput, setUudetLiput] = useState<any[]>([]);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetchTapahtumat();
   }, [])
+
+  const reset = () => {
+    setMyydytLiput("-");
+    setMaxLiput("-");
+    setValittuLipputyyppiId("-1");
+    setLippuMaara("1");
+  }
 
   const fetchTapahtumat = async () => {
     try {
@@ -33,11 +34,31 @@ export default function MyyLippuComponent() {
       })
       if (result.status === 200) {
         const data = await result.json();
-        setTapahtumat(data);
+        setKaikkiTapahtumat(data);
       }
 
     } catch(e) {
       console.error(e)
+    }
+  }
+
+  const setTapahtumaIdAndFetchTicketAmount = async (e: ChangeEvent<HTMLSelectElement>) => {
+    setValittuTapahtumaId(e.target.value);
+
+    if (e.target.value !== "-1") {
+      const res = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat/${e.target.value}/myydytliput`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
+        }
+      })
+      setMyydytLiput(await res.json());
+      if(kaikkiTapahtumat) {
+        const valittuTap = kaikkiTapahtumat.find(t => t.tapahtuma_id == e.target.value);
+        setMaxLiput(valittuTap.lippumaara.toString());
+      }
+    } else {
+      reset();
     }
   }
 
@@ -66,7 +87,7 @@ export default function MyyLippuComponent() {
     // Luodaan liput
     const postLoop = async () => {
       const holder = [];
-      for (let i = 0; i < lippuForm.maara; i++) {
+      for (let i = 0; i < parseInt(lippuMaara); i++) {
         const res = await fetch(`${scrummeriConfig.apiBaseUrl}/liput`, {
           method: 'POST',
           headers: {
@@ -75,8 +96,8 @@ export default function MyyLippuComponent() {
           },
           body: JSON.stringify({
             myynti_id: myyntiId,
-            tapahtuman_lipputyypit_id: lippuForm.lipputyyppiId,
-            hinta: lippuForm.hinta
+            tapahtuman_lipputyypit_id: parseInt(valittuLipputyyppiId),
+            hinta: (kaikkiTapahtumat.find(t => t.tapahtuma_id == valittuTapahtumaId).tapahtuman_lipputyypit.find(l => l.tapahtuma_lipputyyppi_id == valittuLipputyyppiId)).hinta
           })
         })
         holder.push(await res.json());
@@ -85,50 +106,26 @@ export default function MyyLippuComponent() {
     }
     setUudetLiput(await postLoop());
     setMessage('Liput luotu tietokantaan onnistuneesti');
-    setLippuForm({...lippuForm, myydytLiput: lippuForm.myydytLiput + lippuForm.maara});
+    setValittuTapahtumaId("-1");
+    reset();
   }
 
-  const setTyyppiAndHinta = (event: ChangeEvent<HTMLSelectElement>) => {
-    tapahtumat.forEach(tapahtuma => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      tapahtuma.tapahtuman_lipputyypit.forEach((lipputyyppi: { tapahtuma_lipputyyppi_id: string; hinta: any; }) => {
-        if(lipputyyppi.tapahtuma_lipputyyppi_id == event.target.value) {
-          setLippuForm({...lippuForm, hinta: lipputyyppi.hinta, lipputyyppiId: parseInt(event.target.value)})
-        }
-      })
-    })
-  }
 
-  const resetFields = () => {
-    setLippuForm(tyhjaLippuForm);
-    setMessage('');
-    setUudetLiput([]);
-  }
-
-  const setTapahtumaAndFetchNoTickets = async (event: ChangeEvent<HTMLSelectElement>) => {
-    const tapahtuma = tapahtumat.find(tapahtuma => tapahtuma.tapahtuma_id == event.target.value);
-
-    const res = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat/${event.target.value}/myydytliput`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
-      }
-    })
-
-    setLippuForm({...lippuForm, myydytLiput: await res.json(), tapahtuma: tapahtuma?.tapahtuma_id, maxLiput: tapahtuma?.lippumaara});
-  }
-
-  return (
+  return(
     <>
       <div className="row my-4">
         <h2 className="pb-2">Myy lippuja</h2>
         <div className="col-12">
-
           <label htmlFor="tapahtuma-select" className="form-label">Tapahtuma</label>
-          <select defaultValue={0} id="tapahtuma-select" className="form-select mb-2" onChange={(event => setTapahtumaAndFetchNoTickets(event))}>
-            <option disabled value={0} key={0}></option>
-            {tapahtumat[0] && 
-              tapahtumat.map(tapahtuma => {
+          <select
+            value={valittuTapahtumaId}
+            onChange={e => setTapahtumaIdAndFetchTicketAmount(e)}
+            className="form-select mb-2"
+            id="tapahtuma-select"
+          >
+            <option value={"-1"}></option>
+            {kaikkiTapahtumat && 
+              kaikkiTapahtumat.map(tapahtuma => {
                 return(
                   <option value={tapahtuma.tapahtuma_id} key={tapahtuma.tapahtuma_id}>
                     {tapahtuma.nimi}
@@ -136,37 +133,46 @@ export default function MyyLippuComponent() {
                 )
             })}
           </select>
+          <div>
+            <b>Myydyt liput: </b>{myydytLiput}/{valittuTapahtumaId === "-1" ? "-" : maxLiput}
+          </div>
 
-          {lippuForm.maxLiput != 0 &&
-            <p>
-              <b>Lippuja myyty: {lippuForm.myydytLiput}/{lippuForm.maxLiput}</b>
-            </p>
-          }
-
-          <label htmlFor="tapahtuma-select" className="form-label">Lipputyyppi</label>
-          <select defaultValue={""} id="tapahtuma-select" className="form-select mb-2" aria-label="Default select example" disabled={lippuForm.tapahtuma == 0 ? true : false} onChange={(event) => setTyyppiAndHinta(event)}>
-            <option disabled value="" key={0}></option>
-            {tapahtumat && lippuForm.tapahtuma &&
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              tapahtumat.find(tapahtuma => tapahtuma.tapahtuma_id == lippuForm.tapahtuma)?.tapahtuman_lipputyypit.map((lipputyyppi: any) => {
+          <label htmlFor="lipputyyppi-select" className="form-label mt-3">Lipputyyppi</label>
+          <select
+            value={valittuLipputyyppiId}
+            onChange={e => setValittuLipputyyppiId(e.target.value)}
+            className="form-select mb-2"
+            id="lipputyyppi-select"
+          >
+            <option value={"-1"}></option>
+            {valittuTapahtumaId != "-1" &&
+              kaikkiTapahtumat.find(t => t.tapahtuma_id == valittuTapahtumaId)?.tapahtuman_lipputyypit.map((lipputyyppi: any) => {
                 return (
                   <option value={lipputyyppi.tapahtuma_lipputyyppi_id} key={lipputyyppi.tapahtuma_lipputyyppi_id}>
                     {lipputyyppi.lipputyyppi.lipputyyppi}
-                    </option>
-                  )
-                })
-              }
+                  </option>
+                )
+              })
+            }
           </select>
 
-          <label htmlFor="exampleFormControlInput1" className="form-label">Määrä</label>
-          <input min={1} max={10} type="number" className="form-control" id="exampleFormControlInput1" value={lippuForm.maara} disabled={lippuForm.lipputyyppiId == 0 ? true : false} onChange={event => setLippuForm({...lippuForm, maara: parseInt(event.target.value)})}></input>
-                
-          <button className="btn btn-primary mt-3" onClick={createTickets}>
-            Myy liput
-          </button>
+          <label htmlFor="maara-input" className="form-label">Määrä</label>
+          <input
+            value={lippuMaara}
+            onChange={e => setLippuMaara(e.target.value)}
+            min={1}
+            max={10}
+            type="number"
+            className="form-control"
+            id="maara-input">
+          </input>
 
-          <button className="btn btn-outline-secondary ms-2 mt-3" onClick={resetFields}>
-            Tyhjennä kentät
+          <button
+            className="btn btn-primary mt-3"
+            onClick={createTickets}
+            disabled={valittuTapahtumaId === "-1" || valittuLipputyyppiId === "-1" ? true : false}
+          >
+            Myy liput
           </button>
 
           {message &&
@@ -174,20 +180,18 @@ export default function MyyLippuComponent() {
               {message}
             </p>
           }
-
         </div>
-
       </div>
 
       <div className="row my-4">
-          <div className="col-12">
-          {uudetLiput &&
-            uudetLiput.map((lippu, index) => {
-              return(
-                <div>
+        <div className="col-12">
+        {uudetLiput &&
+          uudetLiput.map((lippu, index) => {
+            return(
+              <div>
                 <h3>{"Lippu " + (index + 1)}</h3>
                 <table className="table mb-4">
-                <tbody>
+                  <tbody>
                     <tr>
                       <th scope="row">Koodi</th>
                       <td>{lippu.koodi}</td>
@@ -223,14 +227,11 @@ export default function MyyLippuComponent() {
                   </tbody>
                 </table>
               </div>
-              )
-            })
-
-
-
+            )
+          })
         }
-          </div>
       </div>
+    </div>
     </>
   )
 }
