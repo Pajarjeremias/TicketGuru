@@ -6,5 +6,7 @@ public interface PostitoimipaikkaRepository extends CrudRepository<Postitoimipai
 
     Postitoimipaikka findByPostitoimipaikka (Postitoimipaikka postinumero);
 
+    Postitoimipaikka findByPostitoimipaikka(String string);
+
     
 } 

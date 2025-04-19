@@ -86,9 +86,10 @@ public class LippuRestTest {
         Tapahtuma tapahtuma = new Tapahtuma("Testitapahtuma", LocalDate.of(2025, Month.JULY, 18).atStartOfDay(), "Paras testi ikinä.", 250);
         tapahtuma = tapahtumaRepository.save(tapahtuma);
 
-        Lipputyyppi opiskelija = new Lipputyyppi("Opiskelija");
-		lipputyyppiRepository.save(opiskelija);
-			
+        Lipputyyppi opiskelija = lipputyyppiRepository.findByLipputyyppi("opiskelija");
+        if (opiskelija == null) {
+            opiskelija = lipputyyppiRepository.save(new Lipputyyppi("opiskelija"));
+        }			
 
         Tapahtuman_lipputyyppi tapahtuma1_aikuinen = new Tapahtuman_lipputyyppi(tapahtuma, opiskelija, (float) 30.00);
         tapahtumanLipputyyppiId = tapahtuman_lipputyyppiRepository.save(tapahtuma1_aikuinen).getTapahtuma_lipputyyppi_id();
@@ -96,9 +97,11 @@ public class LippuRestTest {
         Maksutapa maksutapa1 = new Maksutapa("ePassi");
         maksutapaId = maksutapaRepository.save(maksutapa1).getMaksutapa_id();
 
-        Postitoimipaikka postitmpk1 = new Postitoimipaikka("00100", "Helsinki", "Suomi");
-        postitoimipaikkaId = postitoimipaikkaRepository.save(postitmpk1).getPostinumero();
-
+        Postitoimipaikka postitmpk1 = postitoimipaikkaRepository.findByPostitoimipaikka("00100");
+        if (postitmpk1 == null) {
+            postitmpk1 = postitoimipaikkaRepository.save(new Postitoimipaikka("00100", "Helsinki", "Suomi" ));
+        }
+        
         Myyntipiste myyntipiste1 = new Myyntipiste("Testimyyntipiste", "Messuaukio 1", postitmpk1);
         myyntipisteId = myyntipisteRepository.save(myyntipiste1).getMyyntipisteId();
 
