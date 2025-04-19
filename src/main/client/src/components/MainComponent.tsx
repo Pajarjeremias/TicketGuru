@@ -2,6 +2,7 @@ import { useState } from "react";
 import TarkastaLippuComponent from "./TarkastaLippuComponent";
 import MyyLippuComponent from "./MyyLippuComponent";
 
+
 export default function MainComponent() {
   const [activeTab, setActiveTab] = useState(1);
 
