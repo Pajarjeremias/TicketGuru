@@ -140,5 +140,21 @@ public class LippuRestTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Invalid value for 'myynti', please check.Id must be a valid id-number."));
     }
+
+    @Test
+    public void testLippuHaku() throws Exception {
+        mockMvc.perform(get("/api/liput"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+    
+
+    @Test
+    public void testiYhdenLipunHaku() throws Exception {
+        mockMvc.perform(get("/api/liput/{id}", 1))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.koodi").exists());
+    }
     
 }

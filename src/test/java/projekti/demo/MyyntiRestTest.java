@@ -147,7 +147,21 @@ public class MyyntiRestTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(virheellinenMaksutapaJson))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string({"Not Found":"Invalid value for 'maksutapa', please check.Id must be a valid id-number."}));
+                .andExpect(jsonPath("$.['Not Found']").value(" invalid id value for maksutapa. Please check id. Id must be a valid id number. Maksutapa ID 999 not found"));
+    }
+
+    @Test
+    public void testMyyntienuHaku() throws Exception {
+        mockMvc.perform(get("/api/myynnit"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void testiYhdenMyynninHaku() throws Exception {
+        mockMvc.perform(get("/api/myynnit/{id}", 1))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
     
 }
