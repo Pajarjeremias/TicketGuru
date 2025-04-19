@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import { config as defaultConfig } from "../config/default";
 import { config as pixeliConfig } from "../config/pixeli";
 import { config as scrummeriConfig } from "../config/scrummerit";
