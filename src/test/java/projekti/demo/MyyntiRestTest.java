@@ -10,6 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import projekti.demo.model.LippuRepository;
 import projekti.demo.model.Lipputyyppi;
 import projekti.demo.model.LipputyyppiRepository;
 import projekti.demo.model.Maksutapa;
@@ -41,7 +42,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WithMockUser(username = "yllapitaja", authorities = {"Yllapitaja"})
 
-public class LippuRestTest {
+public class MyyntiRestTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -107,38 +109,45 @@ public class LippuRestTest {
     }
 
     @Test
-    public void testLippuPostOk() throws Exception {
-        String uusiLippuJson = """
+    public void testMyyntiPostOk() throws Exception {
+        String uusiMyyntiJson = """
         {
-            "myynti_id": %d,
-            "tapahtuman_lipputyypit_id": %d,
-            "hinta": 30.00
+            "liput": [],
+            "myyntipiste": {
+                "myyntipisteId": %d
+            },
+            "maksutapa": {
+                "maksutapa_id": %d
+            }
         }
-        """.formatted(myyntiId, tapahtumanLipputyyppiId);
+        """.formatted(myyntipisteId, maksutapaId);
 
-        mockMvc.perform(post("/api/liput")
+        mockMvc.perform(post("/api/myynnit")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(uusiLippuJson))
+                .content(uusiMyyntiJson))
             .andExpect(status().isCreated())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.koodi").exists());
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    public void testLippuPost_invlidMyynti() throws Exception {
-        String virheellinenMyyntiJson = """
+    public void testMyyntiPost_invalidMaksutapa() throws Exception {
+        String virheellinenMaksutapaJson = """
                 {
-                    "myynti_id": 9999,
-                    "tapahtuman_lipputyypit_id": %d
-    
+                    "liput": [],
+                    "myyntipiste": {
+                        "myyntipisteId": %d
+                    },
+                    "maksutapa": {
+                        "maksutapa_id":999
+                    }
                 }
-                """.formatted(tapahtumanLipputyyppiId);
+                """.formatted(myyntipisteId);
 
-                mockMvc.perform(post("/api/liput")
+                mockMvc.perform(post("/api/myynnit")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(virheellinenMyyntiJson))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid value for 'myynti', please check.Id must be a valid id-number."));
+                    .content(virheellinenMaksutapaJson))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string({"Not Found":"Invalid value for 'maksutapa', please check.Id must be a valid id-number."}));
     }
     
 }
