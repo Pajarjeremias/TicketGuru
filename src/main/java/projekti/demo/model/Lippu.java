@@ -68,7 +68,8 @@ public class Lippu {
 
     public Lippu(
             @NotNull(message = "Tapahtuman lipputyyppi on pakollinen") Tapahtuman_lipputyyppi tapahtuman_lipputyyppi,
-            @NotNull(message = "Hinta on pakollinen")  @Min(value = 0, message = "Hinta ei voi olla miinusmerkkinen") Float hinta, @NotNull(message = "Tila on pakollinen") Tila tila,
+            @NotNull(message = "Hinta on pakollinen")  @Min(value = 0, message = "Hinta ei voi olla miinusmerkkinen") Float hinta, 
+            @NotNull(message = "Tila on pakollinen") Tila tila,
             @NotNull(message = "Myynti on pakollinen") Myynti myynti) {
         this.tapahtuman_lipputyyppi = tapahtuman_lipputyyppi;
         this.hinta = hinta;
