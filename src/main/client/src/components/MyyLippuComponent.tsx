@@ -97,7 +97,8 @@ export default function MyyLippuComponent() {
           body: JSON.stringify({
             myynti_id: myyntiId,
             tapahtuman_lipputyypit_id: parseInt(valittuLipputyyppiId),
-            hinta: (kaikkiTapahtumat.find(t => t.tapahtuma_id == valittuTapahtumaId).tapahtuman_lipputyypit.find(l => l.tapahtuma_lipputyyppi_id == valittuLipputyyppiId)).hinta
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            hinta: (kaikkiTapahtumat.find(t => t.tapahtuma_id == valittuTapahtumaId).tapahtuman_lipputyypit.find((l: any) => l.tapahtuma_lipputyyppi_id == valittuLipputyyppiId)).hinta
           })
         })
         holder.push(await res.json());
@@ -146,6 +147,7 @@ export default function MyyLippuComponent() {
           >
             <option value={"-1"}></option>
             {valittuTapahtumaId != "-1" &&
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               kaikkiTapahtumat.find(t => t.tapahtuma_id == valittuTapahtumaId)?.tapahtuman_lipputyypit.map((lipputyyppi: any) => {
                 return (
                   <option value={lipputyyppi.tapahtuma_lipputyyppi_id} key={lipputyyppi.tapahtuma_lipputyyppi_id}>
