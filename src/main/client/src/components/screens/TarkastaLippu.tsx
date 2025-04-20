@@ -24,6 +24,13 @@ export function tarkastaLippu() {
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const clearTicketInfo = () => {
+      setKoodi('');
+      setErrorMsg('');
+      setSuccessMsg('');
+      setScrummeritLippu(tyhjaScrummeritLippu);
+    };
   
     const getTicket = async () => {
         if (!koodi) {
@@ -72,6 +79,7 @@ export function tarkastaLippu() {
       markAsUsed,
       errorMsg,
       successMsg,
-      loading
+      loading,
+      clearTicketInfo
     };
   }

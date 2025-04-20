@@ -9,7 +9,8 @@ export default function TarkastaLippuComponent() {
     markAsUsed,
     successMsg,
     errorMsg,
-    loading
+    loading,
+    clearTicketInfo
   } = tarkastaLippu();
 
   return (
@@ -31,17 +32,21 @@ export default function TarkastaLippuComponent() {
           <button
             className="btn btn-primary me-2"
             onClick={getTicket}
-            disabled={loading}
-          >
+            disabled={loading}>
             Hae lipun tiedot
           </button>
           <button
             className="btn btn-success"
             onClick={markAsUsed}
-            disabled={loading}
-          >
+            disabled={loading}>
             Merkitse käytetyksi
           </button>
+          <button
+          className="btn btn-outline-secondary"
+          onClick={clearTicketInfo}
+          disabled={loading}>
+              Tyhjennä kaikki kentät
+            </button>
         </div>
       </div>
   
