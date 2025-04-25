@@ -30,7 +30,10 @@ export default function MyyLippuComponentUusi() {
         const holder: LipunMyyntiTapahtuma[] = []
         data.forEach((tapahtuma: any) => {
           holder.push({
+            id: tapahtuma.tapahtuma_id,
             nimi: tapahtuma.nimi,
+            maxLiput: tapahtuma.lippumaara,
+            currentLiput: 0,
             aika: new Date(tapahtuma.paivamaara),
             kuvaus: tapahtuma.kuvaus,
             lipputyypit: tapahtuma.tapahtuman_lipputyypit.map((l: { tapahtuma_lipputyyppi_id: any; lipputyyppi: { lipputyyppi: any; }; hinta: any; }) => {
@@ -43,6 +46,31 @@ export default function MyyLippuComponentUusi() {
             })
           })
         })
+
+        const getLippumaara = async () => {
+          const currentLiputPromises: Promise<any>[] = [];
+
+          holder.forEach(t => {
+            currentLiputPromises.push(
+              fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat/${t.id}/myydytliput`, {
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
+                },
+              }).then(async res => {
+                return {id: t.id, maara: await res.json()}
+              })
+            );
+          })
+          return await Promise.all(currentLiputPromises);
+        }
+        const lippudata = await getLippumaara();
+
+        lippudata.forEach(data => {
+          const indx = holder.findIndex(t => t.id === data.id);
+          holder[indx].currentLiput = data.maara;
+        })
+
         setMyyLippuLista(holder)
       }
     } catch(e) {
@@ -55,7 +83,12 @@ export default function MyyLippuComponentUusi() {
     holder.forEach(t => {
       t.lipputyypit.forEach(l => {
         if (l.id.toString() === event.target.id) {
-          l.maara = parseInt(event.target.value);
+          if (parseInt(event.target.value) > 10) {
+            l.maara = 10;
+          } else {
+            l.maara = parseInt(event.target.value);
+          }
+          
         }
       })
     })
@@ -189,13 +222,13 @@ export default function MyyLippuComponentUusi() {
       {myyntiYhteenveto.id != -1 &&
         <>
           <div className="row mb-3 pb-3">
-            <div className="col-5" style={{fontSize: "1em"}}>
+            <div className="col-12 col-sm-6" style={{fontSize: "1em"}}>
               <div className="mb-1">Myynti ID: <b>{myyntiYhteenveto.id}</b></div>
               <div className="mb-1">Maksettu: <b>{`${format(myyntiYhteenveto.aika, "dd.MM.yyyy")} klo ${format(myyntiYhteenveto.aika, "hh:mm")}`}</b></div>
               <div className="mb-1">Summa: <b>€{myyntiYhteenveto.summa.toFixed(2)}</b></div>
             </div>
 
-            <div className="col-6 ms-auto" style={{width: "fit-content"}}>
+            <div className="col-12 col-sm-6 ms-md-auto mt-2 mt-md-0" style={{width: "fit-content"}}>
               <button className="btn btn-primary" disabled>
                 Tulosta liput
               </button>
@@ -269,30 +302,31 @@ export default function MyyLippuComponentUusi() {
                         <div className="accordion-item">
                           <h2 className="accordion-header" id={`header-${index}`}>
                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${index}`} aria-expanded="true" aria-controls="collapseOne">
-                              <b>{tapahtuma.nimi}</b>
+                              <b className="col-6">{tapahtuma.nimi}</b>
                               <span className="ms-auto me-5">{`${format(tapahtuma.aika, "dd.MM.yyyy")} klo ${format(tapahtuma.aika, "hh:mm")}`}</span>
                             </button>
                           </h2>
                           <div id={`collapse-${index}`} className="accordion-collapse collapse collapse" aria-labelledby={`header-${index}`} data-bs-parent={`#accordion-${index}`}>
                             <div className="accordion-body">
                               <div className="row">
-                                <div className="pb-2 col-9">
+                                <div className="pb-2 col-5 col-md-9">
                                   {tapahtuma.kuvaus}
                                 </div>
-                                {/*
-                                  <div className="col-3 ms-auto me-2" style={{width: "fit-content"}}>
-                                    Lippuja myyty: -/-
-                                  </div> 
-                                */}
+                                <div className="col-3 ms-auto me-2" style={{width: "fit-content"}}>
+                                  Lippuja myyty: <b>{tapahtuma.currentLiput}/{tapahtuma.maxLiput}</b>
+                                </div> 
                               </div>
                                 {tapahtuma.lipputyypit &&
                                   <form className="my-2 pt-3" style={{borderTop: "1px solid lightgrey"}}>
+                                    {tapahtuma.lipputyypit.length === 0 &&
+                                      <div className="text-danger">Tapahtumalle ei ole luotu lipputyyppejä</div>
+                                    }
                                     {tapahtuma.lipputyypit.map((l, indx) => {
                                       return(
                                         <div key={indx}>
-                                          <div className="form-group row mb-1">
-                                            <label className="col-sm-2 col-form-label">{l.nimi}<span className="ms-2">€{l.hinta.toFixed(2)}</span></label>
-                                            <div className="col-sm-1">
+                                          <div className="row mb-1">
+                                            <div style={{minWidth: "10em"}} className="col-2">{l.nimi}<span className="ms-2">€{l.hinta.toFixed(2)}</span></div>
+                                            <div className="col-2 col-lg-1" style={{minWidth: "6em"}}>
                                               <input id={l.id.toString()} type="number" min={0} max={10} className="form-control maara-input" placeholder="Email" value={l.maara}
                                               onChange={event => updateLista(event)}
                                               ></input>
