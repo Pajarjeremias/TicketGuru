@@ -1,0 +1,320 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ChangeEvent, useEffect, useState } from "react"
+import { LipunMyyntiTapahtuma } from "../types/LipunMyyntiTapahtuma"
+import { config as scrummeriConfig } from "../config/scrummerit";
+import { format } from "date-fns";
+import { Myyntiraportti, tyhjaMyyntiRportti } from "../types/Myyntiraportti";
+
+export default function MyyLippuComponentUusi() {
+  const [myyLippuLista, setMyyLippuLista] = useState<LipunMyyntiTapahtuma[]>([]);
+  const [hintaYhteensa, setHintaYhteensa] = useState(0);
+  const [myyntiError, setMyyntiError] = useState('');
+  const [myyntiYhteenveto, setMyyntiYhteenveto] = useState<Myyntiraportti>(tyhjaMyyntiRportti);
+  const [shouldReload, setShouldReload] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchTapahtumat();
+  }, [shouldReload])
+
+  const fetchTapahtumat = async () => {
+    try {
+      const result = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`,
+        }
+      })
+      if (result.status === 200) {
+        const data = await result.json();
+        const holder: LipunMyyntiTapahtuma[] = []
+        data.forEach((tapahtuma: any) => {
+          holder.push({
+            nimi: tapahtuma.nimi,
+            aika: new Date(tapahtuma.paivamaara),
+            kuvaus: tapahtuma.kuvaus,
+            lipputyypit: tapahtuma.tapahtuman_lipputyypit.map((l: { tapahtuma_lipputyyppi_id: any; lipputyyppi: { lipputyyppi: any; }; hinta: any; }) => {
+              return({
+                id: l.tapahtuma_lipputyyppi_id,
+                nimi: l.lipputyyppi.lipputyyppi,
+                hinta: l.hinta,
+                maara: 0
+              })
+            })
+          })
+        })
+        setMyyLippuLista(holder)
+      }
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+  const updateLista = (event: ChangeEvent<HTMLInputElement>) => {
+    const holder = Array.from(myyLippuLista, t => t);
+    holder.forEach(t => {
+      t.lipputyypit.forEach(l => {
+        if (l.id.toString() === event.target.id) {
+          l.maara = parseInt(event.target.value);
+        }
+      })
+    })
+    setMyyLippuLista(holder);
+    updateHintaYhteensa();
+  }
+
+  const updateHintaYhteensa = () => {
+    let total = 0;
+    myyLippuLista.forEach(t => {
+      t.lipputyypit.forEach(l => {
+        total += (l.maara * l.hinta);
+      })
+    })
+    setHintaYhteensa(total);
+  }
+
+  const countLiput = () => {
+    let total = 0;
+    myyLippuLista.forEach(t => {
+      t.lipputyypit.forEach(l => {
+        total += l.maara;
+      })
+    })
+    return total;
+  }
+
+  const createTickets = async () => {
+    // Luodaan myynti ja otetaan talteen myyntiId
+    const response = await fetch(`${scrummeriConfig.apiBaseUrl}/myynnit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
+      },
+      body: JSON.stringify({
+        liput: [],
+        asiakas: null,
+        myyntipiste: {
+            myyntipisteId: 1
+        },
+        maksutapa: {
+            maksutapa_id: 2
+        }
+      })
+    })
+    const data = await response.json();
+    const myyntiId = data.myynti_id;
+
+    // Luodaan liput
+    const postLoop = async () => {
+      const ticketPromises: Promise<any>[] = [];
+    
+      myyLippuLista.forEach(t => {
+        t.lipputyypit.forEach(l => {
+          for (let i = 0; i < Math.min(l.maara, 10); i++) {
+            ticketPromises.push(
+              fetch(`${scrummeriConfig.apiBaseUrl}/liput`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
+                },
+                body: JSON.stringify({
+                  myynti_id: myyntiId,
+                  tapahtuman_lipputyypit_id: l.id,
+                  hinta: l.hinta
+                })
+              }).then(res => res.json())
+            );
+          }
+        });
+      });
+
+      return await Promise.all(ticketPromises);
+    };
+
+    return [myyntiId, await postLoop()]
+  }
+
+  const myyLiput = async () => {
+    setLoading(true);
+    if (countLiput() === 0) {
+      setMyyntiError('Myynti ei sisällä lippuja');
+
+    } else {
+      setMyyntiError('');
+      const [myyntiId, uudetLiput] = await createTickets();
+      setMyyntiYhteenveto({
+        ...myyntiYhteenveto,
+        id: myyntiId,
+        aika: new Date(),
+        summa: hintaYhteensa,
+        liput: [...uudetLiput]
+      });
+
+    }
+    setLoading(false)
+  }
+
+  const getTapahtumaNimi = (lippu: { tapahtuman_lipputyyppi: { tapahtuma_lipputyyppi_id: number; }; }) => {
+    let nimi = "Ei löytynyt";
+    myyLippuLista.forEach(t => {
+      t.lipputyypit.forEach(l => {
+        if (lippu.tapahtuman_lipputyyppi.tapahtuma_lipputyyppi_id === l.id) {
+          nimi = t.nimi;
+        }
+      })
+    })
+    return nimi;
+  }
+
+  const reset = () => {
+    setMyyLippuLista([]);
+    setHintaYhteensa(0);
+    setMyyntiError('');
+    setMyyntiYhteenveto(tyhjaMyyntiRportti);
+    setShouldReload(!shouldReload);
+  }
+
+  return(
+    <>
+      <div className="row mt-4">
+        <h2 className="pb-2">Myy lippuja
+          {myyntiYhteenveto.id != -1 &&
+            <span> - Raportti</span>
+          }
+        </h2>
+      </div>
+
+      {myyntiYhteenveto.id != -1 &&
+        <>
+          <div className="row mb-3 pb-3">
+            <div className="col-5" style={{fontSize: "1em"}}>
+              <div className="mb-1">Myynti ID: <b>{myyntiYhteenveto.id}</b></div>
+              <div className="mb-1">Maksettu: <b>{`${format(myyntiYhteenveto.aika, "dd.MM.yyyy")} klo ${format(myyntiYhteenveto.aika, "hh:mm")}`}</b></div>
+              <div className="mb-1">Summa: <b>€{myyntiYhteenveto.summa.toFixed(2)}</b></div>
+            </div>
+
+            <div className="col-6 ms-auto" style={{width: "fit-content"}}>
+              <button className="btn btn-primary" disabled>
+                Tulosta liput
+              </button>
+
+              <button className="ms-2 btn btn-outline-secondary" onClick={reset}>
+                Uusi myyntitapahtuma
+              </button>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-12">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Tapahtuma</th>
+                    <th scope="col">Lipputyyppi</th>
+                    <th scope="col">Hinta</th>
+                    <th scope="col">Koodi</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {myyntiYhteenveto.liput.map((lippu, indx) => {
+                    return(
+                      <tr key={indx}>
+                        <td>{getTapahtumaNimi(lippu)}</td>
+                        <td>{lippu.tapahtuman_lipputyyppi.lipputyyppi.lipputyyppi}</td>
+                        <td>€{lippu.hinta.toFixed(2)}</td>
+                      <td>{lippu.koodi}</td>
+                    </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      }
+
+      {myyntiYhteenveto.id === -1 &&
+        <>
+          <div className="row mb-3">
+            <div className="col-5" style={{fontSize: "1em"}}>
+              Hinta yhteensä: <b>€{hintaYhteensa.toFixed(2)}</b>
+            </div>
+
+            <div className="col-5">
+              <span className="text-danger">{myyntiError}</span>
+            </div>
+
+            <div className="col-2 ms-auto" style={{width: "fit-content"}}>
+              <button className="btn btn-primary" onClick={myyLiput} style={{width: "6em"}} disabled={loading? true : false}>
+              {loading &&
+                <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
+              }
+              {!loading &&
+                <span>Myy liput</span>
+              }
+              </button>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-12">
+              {myyLippuLista &&
+                <div>
+                  {myyLippuLista.map((tapahtuma, index) => {
+                    return(
+                      <div className="accordion mb-1" id={`accordion-${index}`} key={index}>
+                        <div className="accordion-item">
+                          <h2 className="accordion-header" id={`header-${index}`}>
+                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${index}`} aria-expanded="true" aria-controls="collapseOne">
+                              <b>{tapahtuma.nimi}</b>
+                              <span className="ms-auto me-5">{`${format(tapahtuma.aika, "dd.MM.yyyy")} klo ${format(tapahtuma.aika, "hh:mm")}`}</span>
+                            </button>
+                          </h2>
+                          <div id={`collapse-${index}`} className="accordion-collapse collapse collapse" aria-labelledby={`header-${index}`} data-bs-parent={`#accordion-${index}`}>
+                            <div className="accordion-body">
+                              <div className="row">
+                                <div className="pb-2 col-9">
+                                  {tapahtuma.kuvaus}
+                                </div>
+                                {/*
+                                  <div className="col-3 ms-auto me-2" style={{width: "fit-content"}}>
+                                    Lippuja myyty: -/-
+                                  </div> 
+                                */}
+                              </div>
+                                {tapahtuma.lipputyypit &&
+                                  <form className="my-2 pt-3" style={{borderTop: "1px solid lightgrey"}}>
+                                    {tapahtuma.lipputyypit.map((l, indx) => {
+                                      return(
+                                        <div key={indx}>
+                                          <div className="form-group row mb-1">
+                                            <label className="col-sm-2 col-form-label">{l.nimi}<span className="ms-2">€{l.hinta.toFixed(2)}</span></label>
+                                            <div className="col-sm-1">
+                                              <input id={l.id.toString()} type="number" min={0} max={10} className="form-control maara-input" placeholder="Email" value={l.maara}
+                                              onChange={event => updateLista(event)}
+                                              ></input>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )
+                                    })}
+                                  </form>
+                                }
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              }
+            </div>
+          </div>
+        </>
+      }
+    </>
+  )
+}
