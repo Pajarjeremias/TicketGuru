@@ -2,6 +2,7 @@ import { useState } from "react";
 import TarkastaLippuComponent from "./TarkastaLippuComponent";
 import MyyLippuComponent from "./MyyLippuComponent";
 import SelaaLippujaComponent from "./SelaaLippujaComponent";
+import MyyntiraportitComponent from "./MyyntiraportitComponent";
 
 
 export default function MainComponent() {
@@ -26,6 +27,9 @@ export default function MainComponent() {
           </li>
           <li className="nav-item">
             <a id="3" className={"nav-link " + (activeTab === 3 ? "active" : "")} onClick={e => switchTab(e)}>Selaa lippuja</a>
+          </li> 
+          <li className="nav-item">
+            <a id="4" className={"nav-link " + (activeTab === 4 ? "active" : "")} onClick={e => switchTab(e)}>Myyntiraportit</a>
           </li>
         </ul>
 
@@ -43,6 +47,11 @@ export default function MainComponent() {
         {/***** Tab 3 - Selaa lippuja *****/}
         <div className={"container " + (activeTab === 3 ? "" : "display-none")}>
           <SelaaLippujaComponent />
+        </div>
+
+        {/***** Tab 4 - Myyntiraportit *****/}
+        <div className={"container " + (activeTab === 4 ? "" : "display-none")}>
+          <MyyntiraportitComponent />
         </div>
 
       </div>
