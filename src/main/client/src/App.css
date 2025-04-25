@@ -9,3 +9,11 @@
 .form-select, .form-control {
   width: 30em;
 }
+
+.accordion-button::after {
+  margin: 0;
+}
+
+.maara-input {
+  width: 100%;
+}
