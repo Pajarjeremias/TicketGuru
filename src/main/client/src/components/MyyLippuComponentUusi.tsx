@@ -12,12 +12,14 @@ export default function MyyLippuComponentUusi() {
   const [myyntiYhteenveto, setMyyntiYhteenveto] = useState<Myyntiraportti>(tyhjaMyyntiRportti);
   const [shouldReload, setShouldReload] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingTapahtumat, setLoadingTapahtumat] = useState(false);
 
   useEffect(() => {
     fetchTapahtumat();
   }, [shouldReload])
 
   const fetchTapahtumat = async () => {
+    setLoadingTapahtumat(true);
     try {
       const result = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
         headers: {
@@ -71,7 +73,8 @@ export default function MyyLippuComponentUusi() {
           holder[indx].currentLiput = data.maara;
         })
 
-        setMyyLippuLista(holder)
+        setMyyLippuLista(holder);
+        setLoadingTapahtumat(false);
       }
     } catch(e) {
       console.error(e)
@@ -269,7 +272,25 @@ export default function MyyLippuComponentUusi() {
         </>
       }
 
-      {myyntiYhteenveto.id === -1 &&
+      {loadingTapahtumat &&
+        <div className="container text-center mt-5">
+          <div className="row">
+            <div className="col-12">
+              <div className="spinner-border" role="status">
+                <span className="sr-only"></span>
+              </div>
+            </div>
+          </div>
+
+          <div className="row mt-1">
+            <div className="col-12">
+              Haetaan tapahtumia...
+            </div>
+          </div>
+        </div>
+      }
+
+      {myyntiYhteenveto.id === -1 && loadingTapahtumat === false &&
         <>
           <div className="row mb-3">
             <div className="col-5" style={{fontSize: "1em"}}>
@@ -313,7 +334,7 @@ export default function MyyLippuComponentUusi() {
                                   {tapahtuma.kuvaus}
                                 </div>
                                 <div className="col-3 ms-auto me-2" style={{width: "fit-content"}}>
-                                  Lippuja myyty: <b>{tapahtuma.currentLiput}/{tapahtuma.maxLiput}</b>
+                                  Lippuja myyty: <b>{tapahtuma.currentLiput}/{tapahtuma.maxLiput}</b> kpl
                                 </div> 
                               </div>
                                 {tapahtuma.lipputyypit &&
