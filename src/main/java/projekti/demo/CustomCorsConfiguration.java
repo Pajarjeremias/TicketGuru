@@ -17,7 +17,8 @@ public class CustomCorsConfiguration implements CorsConfigurationSource {
         config.setAllowedOrigins(List.of(
             "http://localhost:8080",
             "http://localhost:5173",
-            "https://ticket-guru-git-ticketguru4ever.2.rahtiapp.fi"
+            "https://ticket-guru-git-ticketguru4ever.2.rahtiapp.fi",
+            "https://ticket-guru-bookedin.2.rahtiapp.fi"
             ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         config.setAllowedHeaders(List.of("*"));
