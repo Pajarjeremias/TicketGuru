@@ -75,6 +75,8 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 ## Käyttöliittymä
 
+Suunnitelma käyttöliittymästä:
+
 **Käyttöliittymä ja lippujen myynti**
 ![alt text](tgimage1.png "Käyttöliittymä ja lippujen myynti")
 
@@ -83,6 +85,9 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 **Myyntiraportit**
 ![alt text](tgimage3.png "Käyttöliittymä ja lippujen myynti")
+
+
+Toteutunut käyttöliittymä: 
 
 
 
@@ -116,6 +121,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > Lipputyyppi_id | int PK, not null | Lipputyypin yksilöivä avain/id
+> Tapahtuman_Lipputyypit | list | Lista tapahtumien_lipputyypestä, jotka liittyvät lipputyyppiin
 > Lipputyyppi | varchar(30), not null | Lipptyypin nimi, esim. aikuinen, eläkeläinen, opsikelija, lapsi
 > 
 > ### _Tilat_
@@ -125,6 +131,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > ------ | ------ | ------
 > Tila_id | int PK | Tilan yksilöivä avain/id
 > Tila | varchar(30) | Tilan nimi, esim. myymättä, myyty, tarkastettu, peruttu
+> Liput | list | Lista lipuista, joilla on ko tila
 >
 > ### _Liput_
 > _Liput-taulu sisältää yksilölliset liput. Jokainen lippu liittyy vain yhteen tapahtumaan, tyyppiin, lipputyyppiin, tilaan ja käyttäjään._
@@ -132,12 +139,12 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > Lippu_id | int PK, not null | Lipun yksilöivä avain/id
-> Tapahtuma_lipputyyppi_id | int FK, not null | Tapahtuma + lipputyyppi, viittaus [Tapahtuman_lipputyypit](#Tapahtuman_lipputyypit)-tauluun
+> Tapahtuma_lipputyyppi | int FK, not null | Tapahtuma + lipputyyppi, viittaus [Tapahtuman_lipputyypit](#Tapahtuman_lipputyypit)-tauluun
 > Hinta | decimal(2) | Lipun lopullinen myyntihinta
-> Tila_id | int FK | Lipun tila, viittaus [Tilat](#Tilat)-tauluun
-> Tarkastanut_id | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
+> Tila | int FK | Lipun tila, viittaus [Tilat](#Tilat)-tauluun
+> Tarkastanut | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
 > Tarkistus_pvm | date | Päivämäärä, jolloin lippu on tarkasettu ovella, eli käytetty
-> Myynti_id | int, FK, not null | Myyntitapahtuma, johon lippu liittyy, viittaus [Myynnit](#Myynnit)-tauluun
+> Myynti | int, FK, not null | Myyntitapahtuma, johon lippu liittyy, viittaus [Myynnit](#Myynnit)-tauluun
 > Koodi | string, not nullable | Lipun tarkastuksessa käytettävä uniikki koodi. Luodaan lipulle automaattisesti.
 >
 > ### _Tapahtuman_lipputyypit_
@@ -146,9 +153,10 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus 
 > ------ | ------ | ------
 > Tapahtuma_lipputyyppi_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key 
-> Tapahtuma_id | int, FK, NOT NULL | Viittaus [Tapahtumat](#Tapahtumat) -tauluun
-> Lipputyyppi_id | int, FK, NOT NULL | Viittaus [Lipputyypit](#Lipputyypit) -tauluun
+> Tapahtuma | int, FK, NOT NULL | Viittaus [Tapahtumat](#Tapahtumat) -tauluun
+> Lipputyyppi | int, FK, NOT NULL | Viittaus [Lipputyypit](#Lipputyypit) -tauluun
 > Hinta | decimal(2), NOT NULL | Lipun myyntihinta
+> Liput | list | Tapahtman lipputyyppiin liittyvät liput
 >
 > ### _Tapahtumat_
 > _Tapahtumat-taulu sisältää tapahtumat, jotka järjestetään tietyssä paikassa tietyllä päivämäärällä. Tapahtumalla on myös kuvaus ja viittaus järjestäjään. Tapahtumilla on yksilöivät tunnisteet._
@@ -160,8 +168,9 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Paivamaara | date | Päivämäärä ja kellonaika, jolloin tapahtuma alkaa
 > Kuvaus | varchar(2500) | Tapahtuman kuvaus
 > Tapahtumapaikka | int FK | Viittaus [Tapahtumapaikat](#Tapahtumapaikat)-taulun, Tapahtumapaikka_id avaimeen
-> Jarjestaja_id | int FK | Tapahtuman järjestäjä. Viittaus [Jarjestajat](#jarjestajat)-tauluun
+> Jarjestaja | int FK | Tapahtuman järjestäjä. Viittaus [Jarjestajat](#jarjestajat)-tauluun
 > Lippumaara | int, not null | Tapahtumaan myytävien lippujen määrä
+> Tapahtuman_lipputyypit | list | Tapahtuman lipputyypit
 >
 > ### _Tapahtumapaikat_
 > _Tapahtumapaikat-taulu sisältää paikat, joissa tapahtumat järjestetään. Nimen lisäksi se sisältää osoitteen, viittauksen postinumerotauluun ja ihmisten maksimimäärän._
@@ -173,6 +182,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Katuosoite | varchar(30) | Tapahtumapaikan osoite
 > Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
 > Maksimi_osallistujat | int | Maksimimmäärä, mitä paikassa saa olla ihmisiä mukaanlukien esiintyjät, henkilökunta ja lipun ostajat
+> Tapahtuma | int FK | Viittaus [Tapahtumat](#Tapahtumat)-taulun, tapahtuma avaimeen
 >
 > ### _Kayttajat_
 > _Kayttajat-taulu sisältää tietoa liittyen yksittäiseen käyttäjään. Käyttäjiä voivat olla esim. lipunmyyjä, asiakas sekä ylläpitäjä._
@@ -198,6 +208,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kayttajatyyppi_id | int, autonumber, PK, not null | Yksilöivä tunniste ja primary key
 > Kayttajatyyppi | varchar(20), not null |  Kayttajatyypin nimi esim. asiakas, lipuntarkastaja, lipunmyyjä, tapahtumavastaava tai ylläpitäjä.
 > Kuvaus | varchar(500) | Vapaaehtoinen kuvaus käyttäjätyypille
+> Käyttäjät | list | Lista käyttäjistä, joilla on ko käyttäjätyyppi
 >
 > ### _Myynnit_
 > _Myynnit-taulu sisältää tietoa lippujen myymisestä asiakkaalle (myyntitapahtumat)._
@@ -205,10 +216,11 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus 
 > ------ | ------ | ------
 > Myynti_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key 
-> Asiakas_id | int, FK | Viittaus [Kayttajat](#Kayttaja_id) -tauluun
+> Asiakas | int, FK | Viittaus [Kayttajat](#Kayttaja_id) -tauluun
 > Myyntipaiva | date, NOT NULL | Päivämäärä sekä kellonaika jolloin myynti tapahtui
-> Myyntipiste_id | int, FK, NOT NULL | Viittaus [Myyntipisteet](#Myyntipiste_id) -tauluun
-> Maksutapa_id | int, FK, NOT NULL | Maksutapa, viittaus [Maksutavat](#Maksutavat) -tauluun
+> Myyntipiste | int, FK, NOT NULL | Viittaus [Myyntipisteet](#Myyntipiste_id) -tauluun
+> Maksutapa | int, FK, NOT NULL | Maksutapa, viittaus [Maksutavat](#Maksutavat) -tauluun
+> Liput | list | Lista myynnin lipuista
 >
 > ### _Maksutavat_
 > _Maksutavat_-taulu sisältää tietoa maksutavoista
@@ -227,6 +239,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Nimi | varchar(100), NOT NULL | Myyntipisteen nimi
 > Katuosoite | varchar(100), NOT NULL | Myyntipisteen katuosoite
 > Postinumero | int, FK, NOT NULL | Viittaus [Postitoimipaikat](#Postinumero) - tauluun
+> Myynnit | list | Lista myyntipisteen myynneistä
 
 
 ## Tekninen kuvaus
