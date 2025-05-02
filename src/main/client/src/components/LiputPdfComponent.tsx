@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document, Page, Text, Image, StyleSheet } from '@react-pdf/renderer';
+import { PDFprops } from '../types/PDFprops';
 
 // Create styles
 const styles = StyleSheet.create({
@@ -47,11 +49,11 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-export default function LiputPDFComponent({ myyntiYhteenveto, myyLippuLista, qrDataUrls }) {
+export default function LiputPDFComponent( props: PDFprops ) {
   const getTapahtumaNimi = (lippu: { tapahtuman_lipputyyppi: { tapahtuma_lipputyyppi_id: number; }; }) => {
     let nimi = "Ei löytynyt";
-    myyLippuLista.forEach(t => {
-      t.lipputyypit.forEach(l => {
+    props.myyLippuLista.forEach((t:any) => {
+      t.lipputyypit.forEach((l:any) => {
         if (lippu.tapahtuman_lipputyyppi.tapahtuma_lipputyyppi_id === l.id) {
           nimi = t.nimi;
         }
@@ -62,10 +64,10 @@ export default function LiputPDFComponent({ myyntiYhteenveto, myyLippuLista, qrD
 
   return(
     <Document>
-      {myyntiYhteenveto.liput.map((l, index) =>
+      {props.myyntiYhteenveto.liput.map((l, index) =>
         <Page size="A4" style={styles.body} key={index}>
           <Text style={styles.header}>
-            {index + 1} / {myyntiYhteenveto.liput.length}
+            {index + 1} / {props.myyntiYhteenveto.liput.length}
           </Text>
           <Text style={styles.title}>
             Lippu {index + 1}
@@ -86,7 +88,7 @@ export default function LiputPDFComponent({ myyntiYhteenveto, myyLippuLista, qrD
 
           <Image
             key={index}
-            src={qrDataUrls[index]}
+            src={props.qrDataUrls[index]}
             style={{ width: 200, height: 200, marginLeft: "auto", marginRight: "auto" }}
           />
         </Page>
