@@ -7,9 +7,9 @@ Timo Lampinen, Jeremias Pajari
 
 TicketGuru on lipunmyyntijärjestelmä, joka on suunniteltu helpottamaan lipunmyyntitoimistojen arkea. Järjestelmä tehostaa lippujen myyntiä, lippujen tulostamista ja niiden tarkastamista tapahtumissaan. TicketGuru-järjestelmä palvelee lipputoimiston eri käyttäjäryhmiä, kuten lipunmyyjiä, tapahtumajärjestäjiä, henkilökuntaa ovella sekä asiakkaita. 
 
-TicketGuru mahdollistaa tapahtuman luomisen ja hallinnan, myyntiraporttien tarkastelun sekä lippujen myynnin. Liput voidaan merkitä käytetyiksi ovella. Myyntipisteessä järjestelmä tukee lippujen tulostamista asikkailleen. Ennakkomyynnistä ylijääneet liput voidaan tulostaa ovelle myytäviksi. Asiakas voi ostaa lipun itselleen lipunmyyntipisteeltä tai tapahtuman ovelta.  
+TicketGuru mahdollistaa tapahtuman luomisen ja hallinnan, myyntiraporttien tarkastelun sekä lippujen myynnin. Liput voidaan merkitä käytetyiksi ovella. Myyntipisteessä järjestelmä tukee lippujen tulostamista asikkailleen. Asiakas voi ostaa lipun itselleen lipunmyyntipisteeltä tai tapahtuman ovelta.  
 
-TicketGuru hyödyntää Javaa toimiakseen. Käyttöliittymä on responsiivinen ja toteutetaan nykyaikaisia työkaluja, kuten Reactia käyttämällä. Käyttöliittymää on selkeä navigoida ja sisältää keskeiset toiminnot. Eri käyttäjäryhmille on omat näkymät. Järjestelmän tiedot tallennetaan relaatiotietokantaan.  
+TicketGuru hyödyntää SpringBoot-kehystä ja Javaa toimiakseen. Käyttöliittymä toteutetaan nykyaikaisia työkaluja, kuten Reactia käyttämällä. Käyttöliittymää on selkeä navigoida ja sisältää keskeiset toiminnot sekä kirjautumisen. Järjestelmän tiedot tallennetaan relaatiotietokantaan ja julkaistaan Rahti-palvelun avulla.  
 
 
 ## Järjestelmän määrittely
@@ -255,7 +255,19 @@ ratkaisut, esim.
     UML-sekvenssikaavioilla.
 -   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
 
-Tämän lisäksi
+Järjestelmän komponentit:
+- Backend ajetaan CSC Rahti ympäristössä Docker-konttina.
+- Tietokanta sijaitsee samassa CSC Rahti projektissa erillisenä palveluna.
+- frontend toimii selaimessa ja se on yhteydessä backendiin REST-rajapinnan kautta. 
+
+Käytetyt teknologiat: Spring Boot, Java, PostreSQL, React, Node.js
+Deployment on totetutettu CSCn Rahti-pavelussa. 
+
+Rajapinnat: Käytössä on REST-rajapinta. Endpointit ovat kaikki muodossa /api/entieetinNimiMonikossa, esim /api/liput. Mikäli tietoa haetaan tai muokataan id:n perusteella, osoitteen perässä on /id, kuten /api/liput/1. Rajapinta käyttää HTTP-metodeja GET, POST, PUT ja DELETE. 
+
+Turvallisuus on varmistettu HTTP Basic-autentikoinnilla. Rajapinnan metodien käyttöoikeudet on määritelty käyttäjätyyppien mukaan. Sovelluksen käyttäjien salasanat on hash-koodattu. Tietokannan kirjautumistiedoton tallennettu Rahtiin ympäristömuuttujiin, eikä niitä ole kovakoodattu tai julkaistu versionhallinnassa. 
+
+### Tämän lisäksi
 
 -   ohjelmakoodin tulee olla kommentoitua
 -   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
@@ -265,32 +277,53 @@ Tämän lisäksi
 
 ## Testaus
 
-Tässä kohdin selvitetään, miten ohjelmiston oikea toiminta varmistetaan
-testaamalla projektin aikana: millaisia testauksia tehdään ja missä vaiheessa.
-Testauksen tarkemmat sisällöt ja testisuoritusten tulosten raportit kirjataan
-erillisiin dokumentteihin.
+Järjestelmää testataan yksikkötesteillä, integraatiotesteillä ja end-to-end testeillä.
+Yksikkötesteillä testataan entieettejä ja niiden metodeja ja repositoryja. Integraatiotesteillä testataan sovelluksen ja tietokannan välistä toimintaa: controlleireita ja repositorioita. 
 
-Tänne kirjataan myös lopuksi järjestelmän tunnetut ongelmat, joita ei ole korjattu.
+Tarkemmat testikuvaukset löytyvät erillisestä dokumentista: [testausdokumentaatio](testausdokumentaatio.pdf)
+
+### Korjausta vaativat ongelmat
+
+Ei taida olla?
 
 ## Asennustiedot
 
-Järjestelmän asennus on syytä dokumentoida kahdesta näkökulmasta:
+### järjestelmän kehitysympäristö: 
+Järjestelmän kehitysympäristön rakentaminen toiseen koneeseen:
 
--   järjestelmän kehitysympäristö: miten järjestelmän kehitysympäristön saisi
-    rakennettua johonkin toiseen koneeseen
+1. Vaatimukset:
+- Java
+- Node.js
+- PostgreSQL
+- Ohjelmointiympäristö, esim VS Code
 
--   järjestelmän asentaminen tuotantoympäristöön: miten järjestelmän saisi
-    asennettua johonkin uuteen ympäristöön.
+2. Back-end
+- Luo uusi Spring Boot -projekti esim. VS Coden Spring Initializer-palvelulla
+- Lisää riippuvuudet: spring-boot-starter-thymeleaf, spring-boot-starter-web, spring-boot-devtools, spring-boot-starter-test, h2, spring-boot-starter-data-jpa, spring-boot-starter-validation, spring-boot-starter-security, thymeleaf-extras-springsecurity6, postgresql, spring-security-test
+- Määritä -application.properties'-tiedostoon yhteys Postgre-tietokantaan ja luo tietokanta.
+
+3. Front-end
+- Luo React-projekti
+- Määritä 'scrummeriConfig.js' -tiedostoon osoite "https://ticket-guru-2-ticketguru4ever2.2.rahtiapp.fi/login"
+
+4. Käynnistäminen
+- Käynnistä Back-end ohjelmointiympäristössä
+- Käynnistä Front-end komennolla npm run dev
+
+
+
+### järjestelmän asentaminen uuteen tuotantoympäristöön:
+
+- Tietokannaksi määritellään PostgreSQL
 
 Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
 käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
 käyttäjätunnus, salasana, tietokannan luonti yms.).
 
+
 ## Käynnistys- ja käyttöohje
 
-Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
-mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
-käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
-
-Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
-järjestelmän pariin !
+Käynnistykseen tarvittava URL: https://ticket-guru-2-ticketguru4ever2.2.rahtiapp.fi/login
+Tunnukset ylläpitäjänä kirjautumiseen:
+Käyttäjätunnus: yllapitaja
+Salasana:
