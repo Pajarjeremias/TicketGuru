@@ -274,7 +274,7 @@ export default function MyyLippuComponentUusi() {
               {myyntiYhteenveto.id != -1 && qrDataUrls.length != 0 &&
                 <BlobProvider document={LiputPDF()}>
                 {({ url }) => (
-                  <a className="btn btn-primary" href={url} target="_blank">Tulosta liput</a>
+                  <a className="btn btn-primary" href={url || ""} target="_blank">Tulosta liput</a>
                 )}
                 </BlobProvider>
               }
