@@ -4,6 +4,9 @@ import { LipunMyyntiTapahtuma } from "../types/LipunMyyntiTapahtuma"
 import { config as scrummeriConfig } from "../config/scrummerit";
 import { format } from "date-fns";
 import { Myyntiraportti, tyhjaMyyntiRportti } from "../types/Myyntiraportti";
+import { BlobProvider } from "@react-pdf/renderer";
+import LiputPDFComponent from "./LiputPdfComponent";
+import QRCode from 'qrcode';
 
 export default function MyyLippuComponentUusi() {
   const [myyLippuLista, setMyyLippuLista] = useState<LipunMyyntiTapahtuma[]>([]);
@@ -13,10 +16,23 @@ export default function MyyLippuComponentUusi() {
   const [shouldReload, setShouldReload] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingTapahtumat, setLoadingTapahtumat] = useState(false);
+  const [qrDataUrls, setQrDataUrls] = useState<any[]>([])
 
   useEffect(() => {
     fetchTapahtumat();
-  }, [shouldReload])
+  }, [shouldReload]);
+
+  useEffect(() => {
+    if (myyntiYhteenveto.id != -1) {
+      const loadQrCodes = async () => {
+        const qrCodes = await fetchCodes();
+        setQrDataUrls(qrCodes); // Store array of strings
+      };
+    
+      loadQrCodes();
+    }
+
+  }, [myyntiYhteenveto])
 
   const fetchTapahtumat = async () => {
     setLoadingTapahtumat(true);
@@ -192,6 +208,20 @@ export default function MyyLippuComponentUusi() {
     setLoading(false)
   }
 
+  const fetchCodes = async (): Promise<string[]> => {
+    const codeListPromises = myyntiYhteenveto.liput.map(l => generateQrDataURL(l.koodi));
+    return await Promise.all(codeListPromises);
+  };
+
+  const generateQrDataURL = async (value: string): Promise<string> => {
+    try {
+      return await QRCode.toDataURL(value);
+    } catch (err) {
+      console.error("QR generation failed:", err);
+      return "";
+    }
+  };
+
   const getTapahtumaNimi = (lippu: { tapahtuman_lipputyyppi: { tapahtuma_lipputyyppi_id: number; }; }) => {
     let nimi = "Ei löytynyt";
     myyLippuLista.forEach(t => {
@@ -210,6 +240,15 @@ export default function MyyLippuComponentUusi() {
     setMyyntiError('');
     setMyyntiYhteenveto(tyhjaMyyntiRportti);
     setShouldReload(!shouldReload);
+  }
+
+  const LiputPDF = () => {
+    return(
+      <LiputPDFComponent
+        myyntiYhteenveto={myyntiYhteenveto}
+        myyLippuLista={myyLippuLista}
+        qrDataUrls={qrDataUrls} />
+    )
   }
 
   return(
@@ -232,10 +271,13 @@ export default function MyyLippuComponentUusi() {
             </div>
 
             <div className="col-12 col-sm-6 ms-md-auto mt-2 mt-md-0" style={{width: "fit-content"}}>
-              <button className="btn btn-primary" disabled>
-                Tulosta liput
-              </button>
-
+              {myyntiYhteenveto.id != -1 && qrDataUrls.length != 0 &&
+                <BlobProvider document={LiputPDF()}>
+                {({ url }) => (
+                  <a className="btn btn-primary" href={url} target="_blank">Tulosta liput</a>
+                )}
+                </BlobProvider>
+              }
               <button className="ms-2 btn btn-outline-secondary" onClick={reset}>
                 Uusi myyntitapahtuma
               </button>
