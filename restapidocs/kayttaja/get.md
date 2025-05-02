@@ -8,7 +8,7 @@ Hakee kaikki luodut käyttäjät ja niihin liittyvät tiedot.
 
 **Auth required** : Kyllä
 
-**Permissions required** : Kyllä, sallitty käyttäjätyypille 'Yllapitaja'
+**Permissions required** : Käyttäjä on ylläpitäjä tai tapahtumavastaaja
 
 **Data constraints**
 
