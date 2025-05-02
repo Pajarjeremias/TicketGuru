@@ -3,7 +3,6 @@ import { config as scrummeriConfig } from "../config/scrummerit";
 
 
 export default function TapahtumanMyynnitComponent() {
-  const [liput, setLiput] = useState<any[]>([]);
   const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
   const [valittuTapahtumaId, setValittuTapahtumaId] = useState("-1");
   const [myynnit, setMyynnit] =useState<any[]>([]);
@@ -54,7 +53,6 @@ export default function TapahtumanMyynnitComponent() {
         console.log(data);
         const valittuTapahtumaLipputyypitIdLista = valittuTapahtuma.tapahtuman_lipputyypit.map((liTy: any) => liTy.tapahtuma_lipputyyppi_id);
         let suodatetutLiput = data.filter((lip: any) => valittuTapahtumaLipputyypitIdLista.includes(lip.tapahtuman_lipputyyppi.tapahtuma_lipputyyppi_id));
-        setLiput(suodatetutLiput);
         type MyyntiTiedot = {
             myynti_id: number;
             myyntipaiva: string; 

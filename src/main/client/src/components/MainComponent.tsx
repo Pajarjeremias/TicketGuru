@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TarkastaLippuComponent from "./TarkastaLippuComponent";
-import MyyLippuComponent from "./MyyLippuComponent";
 import SelaaLippujaComponent from "./SelaaLippujaComponent";
+import MyyLippuComponentUusi from "./MyyLippuComponentUusi";
 import MyyntiraportitComponent from "./MyyntiraportitComponent";
 import TapahtumatComponent from "./TapahtumatComponent";
 
@@ -45,7 +45,7 @@ export default function MainComponent() {
 
         {/***** Tab 2 - Myy lippu *****/}
         <div className={"container " + (activeTab === 2 ? "" : "display-none")}>
-          <MyyLippuComponent />
+          <MyyLippuComponentUusi />
         </div>
 
         {/***** Tab 3 - Selaa lippuja *****/}
