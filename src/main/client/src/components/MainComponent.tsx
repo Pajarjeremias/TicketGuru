@@ -3,6 +3,7 @@ import TarkastaLippuComponent from "./TarkastaLippuComponent";
 import MyyLippuComponent from "./MyyLippuComponent";
 import SelaaLippujaComponent from "./SelaaLippujaComponent";
 import MyyntiraportitComponent from "./MyyntiraportitComponent";
+import TapahtumatComponent from "./TapahtumatComponent";
 
 
 export default function MainComponent() {
@@ -31,6 +32,9 @@ export default function MainComponent() {
           <li className="nav-item">
             <a id="4" className={"nav-link " + (activeTab === 4 ? "active" : "")} onClick={e => switchTab(e)}>Myyntiraportit</a>
           </li>
+          <li className="nav-item">
+            <a id="5" className={"nav-link " + (activeTab === 5 ? "active" : "")} onClick={e => switchTab(e)}>Tapahtumat</a>
+          </li>
         </ul>
 
         {/***** Tab 1 - Tarkasta lippu *****/}
@@ -52,6 +56,11 @@ export default function MainComponent() {
         {/***** Tab 4 - Myyntiraportit *****/}
         <div className={"container " + (activeTab === 4 ? "" : "display-none")}>
           <MyyntiraportitComponent />
+        </div>
+
+        {/***** Tab 5 - Luo tapahtuma *****/}
+        <div className={"container " + (activeTab === 5 ? "" : "display-none")}>
+          <TapahtumatComponent />
         </div>
 
       </div>
