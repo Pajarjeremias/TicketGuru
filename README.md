@@ -84,7 +84,7 @@ Toteutunut käyttöliittymä:
 
 ## Tietokanta
 
-![tietokantakaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokantakaavio.png)
+![tietokantakaavio](tietokantakaavio.png)
 
 > ### _Jarjestajat_
 > _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
