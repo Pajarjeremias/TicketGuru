@@ -140,13 +140,13 @@ export default function LuoTapahtumaComponent() {
                         </input>
 
                         {/* Input lipputyypit ja lipputyypin hinta */}
-                        <label htmlFor="maara-input" className="form-label">Lisää lipputyyppi tapahtumalle</label>
+                        <label htmlFor="maara-input" className="form-label">Lisää lipputyyppi tapahtumalle (demo, ei tallennu)</label>
                         <input
                             value={uusiLipputyyppi}
                             onChange={e => setUusiLipputyyppi(e.target.value)}
                             placeholder="Lipun tyyppi (esim. aikuinen)"
                             className="form-control mb-2"
-                        /> Lipun hinta
+                        /> Lipun hinta (demo, ei tallennu)
                         <input
                             value={lippuhinta}
                             onChange={e => setLippuhinta(e.target.value)}
@@ -158,7 +158,7 @@ export default function LuoTapahtumaComponent() {
                         </input>
 
                         {/* Dropdown for Existing Lipputyypit */}
-                        <label className="form-label">Valitse lipputyyppi</label>
+                        <label className="form-label">Valitse lipputyyppi (demo, ei tallennu)</label>
                         <select
                             className="form-select mb-2"
                             value={uusiLipputyyppi}
