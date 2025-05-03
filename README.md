@@ -31,7 +31,6 @@ Taho, joka järjestää tapahtuman ja käyttää tapahtuman lipunmyynnissä apun
 
 Henkilö, joka myy tapahtuman ovella lippuja asiakkaille lipunmyyntipisteessä.
 - Tulostaa ostetun lipun asiakkaalle
-- Tulostaa myymättä jääneet liput tapahtuman ovella
   
 **3. Henkilökunta ovella**
   
@@ -47,10 +46,6 @@ Henkilö, joka ostaa lipun tapahtumaan lipunmyyntipisteestä tai ovelta.
 
 Henkilö/taho, joka vastaa ohjelmiston teknisestä ylläpidosta. Esim. käyttäjäryhmien- ja oikeuksien määrittelemisestä.
 
-**6. Tulostin**
-
-Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväksi.
-
 ### Käyttötapauskaavio
 
 ![käyttötapauskaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/k%C3%A4ytt%C3%A4j%C3%A4roolit.png)
@@ -61,15 +56,11 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 **Lipputoimiston työntekijänä**, **haluan** nähdä myyntiraportit, **jotta** voin seurata myynnin kehitystä.
 
-**Lippumyyjänä**, **haluan** tulostaa loput ennakkomyynnistä ylijääneet liput, **jotta** voin myydä ne tapahtuman ovella.
-
 **Lipputoimiston työntekijänä**, **haluan** pystyä hallinnoimaan tapahtumia järjestelmässä, **jotta** voin hallita lippuja sekä päivittää tapahtumatietoja.
 
 **Asiakkaana**, **haluan** mahdollisuuden maksaa liput eri maksutavoilla, **jotta** voin valita itselleni sopivan maksutavan.
 
 **Tapahtuman järjestäjänä**, **haluan** määritellä erilaisia lipputyyppejä, **jotta** osaan tarjota oikeanlaisia hintoja eläkeläisille, lapsille sekä opiskelijoille.
-
-**Järjestelmän ylläpitäjänä**, **haluan** määritellä eri käyttäjärooleja, **jotta** voin hallita järjestelmän käyttöoikeuksia turvallisesti.
 
 **Lippumyyjänä**, **haluan** myydä ja tulostaa liput asiakkalle vaivattomasti, **jotta** asiakas saa ostoksensa sujuvasti.
 
@@ -93,7 +84,7 @@ Toteutunut käyttöliittymä:
 
 ## Tietokanta
 
-![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokaavio.png)
+![tietokantakaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokantakaavio.png)
 
 > ### _Jarjestajat_
 > _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
@@ -244,21 +235,10 @@ Toteutunut käyttöliittymä:
 
 ## Tekninen kuvaus
 
-Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-ratkaisut, esim.
-
--   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
--   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
--   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-    UML-sekvenssikaavioilla.
--   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
-
 Järjestelmän komponentit:
 - Backend ajetaan CSC Rahti ympäristössä Docker-konttina.
 - Tietokanta sijaitsee samassa CSC Rahti projektissa erillisenä palveluna.
-- frontend toimii selaimessa ja se on yhteydessä backendiin REST-rajapinnan kautta. 
+- Frontend toimii selaimessa ja se on yhteydessä backendiin REST-rajapinnan kautta. 
 
 Käytetyt teknologiat: Spring Boot, Java, PostreSQL, React, Node.js
 Deployment on totetutettu CSCn Rahti-pavelussa. 
@@ -278,7 +258,7 @@ Turvallisuus on varmistettu HTTP Basic-autentikoinnilla. Rajapinnan metodien kä
 ## Testaus
 
 Järjestelmää testataan yksikkötesteillä, integraatiotesteillä ja end-to-end testeillä.
-Yksikkötesteillä testataan entieettejä ja niiden metodeja ja repositoryja. Integraatiotesteillä testataan sovelluksen ja tietokannan välistä toimintaa: controlleireita ja repositorioita. 
+Yksikkötesteillä testataan entieettejä ja niiden metodeja ja repositoryja. Integraatiotesteillä testataan sovelluksen ja tietokannan välistä toimintaa: controlleireita ja repositorioita. Yksikkö- ja integraatiotesteissä käytetään ajonaikaista testitietokantaa.
 
 Tarkemmat testikuvaukset löytyvät erillisestä dokumentista: [testausdokumentaatio](testausdokumentaatio.pdf)
 
@@ -291,34 +271,23 @@ Ei taida olla?
 ### järjestelmän kehitysympäristö: 
 Järjestelmän kehitysympäristön rakentaminen toiseen koneeseen:
 
-1. Vaatimukset:
+Vaatimukset:
 - Java
 - Node.js
 - PostgreSQL
 - Ohjelmointiympäristö, esim VS Code
 
-2. Back-end
-- Luo uusi Spring Boot -projekti esim. VS Coden Spring Initializer-palvelulla
-- Lisää riippuvuudet: spring-boot-starter-thymeleaf, spring-boot-starter-web, spring-boot-devtools, spring-boot-starter-test, h2, spring-boot-starter-data-jpa, spring-boot-starter-validation, spring-boot-starter-security, thymeleaf-extras-springsecurity6, postgresql, spring-security-test
-- Määritä -application.properties'-tiedostoon yhteys Postgre-tietokantaan ja luo tietokanta.
-
-3. Front-end
-- Luo React-projekti
-- Määritä 'scrummeriConfig.js' -tiedostoon osoite "https://ticket-guru-2-ticketguru4ever2.2.rahtiapp.fi/login"
-
-4. Käynnistäminen
-- Käynnistä Back-end ohjelmointiympäristössä
-- Käynnistä Front-end komennolla npm run dev
-
+Projekti löytyy githubista ja se kloonataan paikalliseen tiedostoon.
+Frontendia varten tulee siirtyä client hakemistoon ja siellä suorittaa npm install -komento, jolla ajetaan tarvittavat asennukset. Clientin kehitysympäristön saa käyntiin npm run dev -komennolla. Kehitysympäristö on yhteydessä CSC Rahti-palvelussa määriteltyyn tietokantaan, käytössä on PostgreSQL. 
 
 
 ### järjestelmän asentaminen uuteen tuotantoympäristöön:
 
-- Tietokannaksi määritellään PostgreSQL
-
-Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
-käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
-käyttäjätunnus, salasana, tietokannan luonti yms.).
+Kloonaa Repository ja suorita asennukset clientia varten samoin, kuin kehitysympäristössä.
+Järjestelmä on suunniteltu julkaistavaksi CSC Rahti -palevelussa. Ottaaksesi uuden tuotantoympäristön käyttöön:
+- luo uusi projekti my.csc.fi -sivulla ja linkitä siihen tämä repository
+- luo projekti rahti.csc.fi -sivulla ja yhdistä se CSC projektiin
+- lisää projektille PostgreSQL tietokanta ja ympäristömuuttujiin URL, dbname, username, password, profiles_active 
 
 
 ## Käynnistys- ja käyttöohje
