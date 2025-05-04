@@ -42,7 +42,7 @@ export default function TarkastaLippuComponent() {
             Merkitse käytetyksi
           </button>
           <button
-          className="btn btn-outline-secondary"
+          className="btn btn-outline-secondary ms-2"
           onClick={clearTicketInfo}
           disabled={loading}>
               Tyhjennä kaikki kentät

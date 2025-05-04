@@ -9,7 +9,7 @@ database.
 
 **Method** : `DELETE`
 
-**Auth required** : `Kyllä (myöhemmässä vaiheessa, kun käyttöoikeudet on määritelty)`
+**Auth required** : `Kyllä`
 
 **Permissions required**: `Käyttäjä on ylläpitäjä`
 

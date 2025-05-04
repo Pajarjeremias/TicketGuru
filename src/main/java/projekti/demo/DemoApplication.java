@@ -192,7 +192,7 @@ public class DemoApplication {
 				lippuRepository.save(lippu1); 
 			}
 
-			
+			/*
 			for (long i = 1; i <= 4; i++) {
 				lippuRepository.findById(i).ifPresent(lippu -> {
 					if (lippu.getKoodi() == null) {
@@ -201,6 +201,7 @@ public class DemoApplication {
 					}
 				});
 			}
+				*/
 
 
 
