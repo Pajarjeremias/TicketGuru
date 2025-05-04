@@ -7,9 +7,9 @@ Timo Lampinen, Jeremias Pajari
 
 TicketGuru on lipunmyyntijärjestelmä, joka on suunniteltu helpottamaan lipunmyyntitoimistojen arkea. Järjestelmä tehostaa lippujen myyntiä, lippujen tulostamista ja niiden tarkastamista tapahtumissaan. TicketGuru-järjestelmä palvelee lipputoimiston eri käyttäjäryhmiä, kuten lipunmyyjiä, tapahtumajärjestäjiä, henkilökuntaa ovella sekä asiakkaita. 
 
-TicketGuru mahdollistaa tapahtuman luomisen ja hallinnan, myyntiraporttien tarkastelun sekä lippujen myynnin. Liput voidaan merkitä käytetyiksi ovella. Myyntipisteessä järjestelmä tukee lippujen tulostamista asikkailleen. Ennakkomyynnistä ylijääneet liput voidaan tulostaa ovelle myytäviksi. Asiakas voi ostaa lipun itselleen lipunmyyntipisteeltä tai tapahtuman ovelta.  
+TicketGuru mahdollistaa tapahtuman luomisen ja hallinnan, myyntiraporttien tarkastelun sekä lippujen myynnin. Liput voidaan merkitä käytetyiksi ovella. Myyntipisteessä järjestelmä tukee lippujen tulostamista asikkailleen. Asiakas voi ostaa lipun itselleen lipunmyyntipisteeltä tai tapahtuman ovelta.  
 
-TicketGuru hyödyntää Javaa toimiakseen. Käyttöliittymä on responsiivinen ja toteutetaan nykyaikaisia työkaluja, kuten Reactia käyttämällä. Käyttöliittymää on selkeä navigoida ja sisältää keskeiset toiminnot. Eri käyttäjäryhmille on omat näkymät. Järjestelmän tiedot tallennetaan relaatiotietokantaan.  
+TicketGuru hyödyntää SpringBoot-kehystä ja Javaa toimiakseen. Käyttöliittymä toteutetaan nykyaikaisia työkaluja, kuten Reactia käyttämällä. Käyttöliittymää on selkeä navigoida ja sisältää keskeiset toiminnot sekä kirjautumisen. Järjestelmän tiedot tallennetaan relaatiotietokantaan ja julkaistaan Rahti-palvelun avulla.  
 
 
 ## Järjestelmän määrittely
@@ -31,7 +31,6 @@ Taho, joka järjestää tapahtuman ja käyttää tapahtuman lipunmyynnissä apun
 
 Henkilö, joka myy tapahtuman ovella lippuja asiakkaille lipunmyyntipisteessä.
 - Tulostaa ostetun lipun asiakkaalle
-- Tulostaa myymättä jääneet liput tapahtuman ovella
   
 **3. Henkilökunta ovella**
   
@@ -47,10 +46,6 @@ Henkilö, joka ostaa lipun tapahtumaan lipunmyyntipisteestä tai ovelta.
 
 Henkilö/taho, joka vastaa ohjelmiston teknisestä ylläpidosta. Esim. käyttäjäryhmien- ja oikeuksien määrittelemisestä.
 
-**6. Tulostin**
-
-Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväksi.
-
 ### Käyttötapauskaavio
 
 ![käyttötapauskaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/k%C3%A4ytt%C3%A4j%C3%A4roolit.png)
@@ -61,19 +56,17 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 
 **Lipputoimiston työntekijänä**, **haluan** nähdä myyntiraportit, **jotta** voin seurata myynnin kehitystä.
 
-**Lippumyyjänä**, **haluan** tulostaa loput ennakkomyynnistä ylijääneet liput, **jotta** voin myydä ne tapahtuman ovella.
-
 **Lipputoimiston työntekijänä**, **haluan** pystyä hallinnoimaan tapahtumia järjestelmässä, **jotta** voin hallita lippuja sekä päivittää tapahtumatietoja.
 
 **Asiakkaana**, **haluan** mahdollisuuden maksaa liput eri maksutavoilla, **jotta** voin valita itselleni sopivan maksutavan.
 
 **Tapahtuman järjestäjänä**, **haluan** määritellä erilaisia lipputyyppejä, **jotta** osaan tarjota oikeanlaisia hintoja eläkeläisille, lapsille sekä opiskelijoille.
 
-**Järjestelmän ylläpitäjänä**, **haluan** määritellä eri käyttäjärooleja, **jotta** voin hallita järjestelmän käyttöoikeuksia turvallisesti.
-
 **Lippumyyjänä**, **haluan** myydä ja tulostaa liput asiakkalle vaivattomasti, **jotta** asiakas saa ostoksensa sujuvasti.
 
 ## Käyttöliittymä
+
+Suunnitelma käyttöliittymästä:
 
 **Käyttöliittymä ja lippujen myynti**
 ![alt text](tgimage1.png "Käyttöliittymä ja lippujen myynti")
@@ -85,10 +78,13 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 ![alt text](tgimage3.png "Käyttöliittymä ja lippujen myynti")
 
 
+Toteutunut käyttöliittymä: 
+
+
 
 ## Tietokanta
 
-![tietokaavio](https://github.com/Pajarjeremias/TicketGuru/blob/develop/tietokaavio.png)
+![tietokantakaavio](tietokantakaavio.png)
 
 > ### _Jarjestajat_
 > _Jarjestajat-taulu sisältää organisaatiot, jotka järjestävät tapahtuman. Järjestäjä voi järjestää monta tapahtumaa. Järjestäjillä on yksilöivät tunnisteet._
@@ -116,6 +112,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > Lipputyyppi_id | int PK, not null | Lipputyypin yksilöivä avain/id
+> Tapahtuman_Lipputyypit | list | Lista tapahtumien_lipputyypestä, jotka liittyvät lipputyyppiin
 > Lipputyyppi | varchar(30), not null | Lipptyypin nimi, esim. aikuinen, eläkeläinen, opsikelija, lapsi
 > 
 > ### _Tilat_
@@ -125,6 +122,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > ------ | ------ | ------
 > Tila_id | int PK | Tilan yksilöivä avain/id
 > Tila | varchar(30) | Tilan nimi, esim. myymättä, myyty, tarkastettu, peruttu
+> Liput | list | Lista lipuista, joilla on ko tila
 >
 > ### _Liput_
 > _Liput-taulu sisältää yksilölliset liput. Jokainen lippu liittyy vain yhteen tapahtumaan, tyyppiin, lipputyyppiin, tilaan ja käyttäjään._
@@ -132,12 +130,12 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > Lippu_id | int PK, not null | Lipun yksilöivä avain/id
-> Tapahtuma_lipputyyppi_id | int FK, not null | Tapahtuma + lipputyyppi, viittaus [Tapahtuman_lipputyypit](#Tapahtuman_lipputyypit)-tauluun
+> Tapahtuma_lipputyyppi | int FK, not null | Tapahtuma + lipputyyppi, viittaus [Tapahtuman_lipputyypit](#Tapahtuman_lipputyypit)-tauluun
 > Hinta | decimal(2) | Lipun lopullinen myyntihinta
-> Tila_id | int FK | Lipun tila, viittaus [Tilat](#Tilat)-tauluun
-> Tarkastanut_id | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
+> Tila | int FK | Lipun tila, viittaus [Tilat](#Tilat)-tauluun
+> Tarkastanut | int FK | Lipun tarkastanut henkilö, viittaus käyttäjään [Kayttajat](#Kayttajat)-taulussa
 > Tarkistus_pvm | date | Päivämäärä, jolloin lippu on tarkasettu ovella, eli käytetty
-> Myynti_id | int, FK, not null | Myyntitapahtuma, johon lippu liittyy, viittaus [Myynnit](#Myynnit)-tauluun
+> Myynti | int, FK, not null | Myyntitapahtuma, johon lippu liittyy, viittaus [Myynnit](#Myynnit)-tauluun
 > Koodi | string, not nullable | Lipun tarkastuksessa käytettävä uniikki koodi. Luodaan lipulle automaattisesti.
 >
 > ### _Tapahtuman_lipputyypit_
@@ -146,9 +144,10 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus 
 > ------ | ------ | ------
 > Tapahtuma_lipputyyppi_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key 
-> Tapahtuma_id | int, FK, NOT NULL | Viittaus [Tapahtumat](#Tapahtumat) -tauluun
-> Lipputyyppi_id | int, FK, NOT NULL | Viittaus [Lipputyypit](#Lipputyypit) -tauluun
+> Tapahtuma | int, FK, NOT NULL | Viittaus [Tapahtumat](#Tapahtumat) -tauluun
+> Lipputyyppi | int, FK, NOT NULL | Viittaus [Lipputyypit](#Lipputyypit) -tauluun
 > Hinta | decimal(2), NOT NULL | Lipun myyntihinta
+> Liput | list | Tapahtman lipputyyppiin liittyvät liput
 >
 > ### _Tapahtumat_
 > _Tapahtumat-taulu sisältää tapahtumat, jotka järjestetään tietyssä paikassa tietyllä päivämäärällä. Tapahtumalla on myös kuvaus ja viittaus järjestäjään. Tapahtumilla on yksilöivät tunnisteet._
@@ -160,8 +159,9 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Paivamaara | date | Päivämäärä ja kellonaika, jolloin tapahtuma alkaa
 > Kuvaus | varchar(2500) | Tapahtuman kuvaus
 > Tapahtumapaikka | int FK | Viittaus [Tapahtumapaikat](#Tapahtumapaikat)-taulun, Tapahtumapaikka_id avaimeen
-> Jarjestaja_id | int FK | Tapahtuman järjestäjä. Viittaus [Jarjestajat](#jarjestajat)-tauluun
+> Jarjestaja | int FK | Tapahtuman järjestäjä. Viittaus [Jarjestajat](#jarjestajat)-tauluun
 > Lippumaara | int, not null | Tapahtumaan myytävien lippujen määrä
+> Tapahtuman_lipputyypit | list | Tapahtuman lipputyypit
 >
 > ### _Tapahtumapaikat_
 > _Tapahtumapaikat-taulu sisältää paikat, joissa tapahtumat järjestetään. Nimen lisäksi se sisältää osoitteen, viittauksen postinumerotauluun ja ihmisten maksimimäärän._
@@ -173,6 +173,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Katuosoite | varchar(30) | Tapahtumapaikan osoite
 > Postinumero | int FK | Viittaus [Postitoimipaikat](#Postitoimipaikat)-taulun, postinumero avaimeen
 > Maksimi_osallistujat | int | Maksimimmäärä, mitä paikassa saa olla ihmisiä mukaanlukien esiintyjät, henkilökunta ja lipun ostajat
+> Tapahtuma | int FK | Viittaus [Tapahtumat](#Tapahtumat)-taulun, tapahtuma avaimeen
 >
 > ### _Kayttajat_
 > _Kayttajat-taulu sisältää tietoa liittyen yksittäiseen käyttäjään. Käyttäjiä voivat olla esim. lipunmyyjä, asiakas sekä ylläpitäjä._
@@ -198,6 +199,7 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kayttajatyyppi_id | int, autonumber, PK, not null | Yksilöivä tunniste ja primary key
 > Kayttajatyyppi | varchar(20), not null |  Kayttajatyypin nimi esim. asiakas, lipuntarkastaja, lipunmyyjä, tapahtumavastaava tai ylläpitäjä.
 > Kuvaus | varchar(500) | Vapaaehtoinen kuvaus käyttäjätyypille
+> Käyttäjät | list | Lista käyttäjistä, joilla on ko käyttäjätyyppi
 >
 > ### _Myynnit_
 > _Myynnit-taulu sisältää tietoa lippujen myymisestä asiakkaalle (myyntitapahtumat)._
@@ -205,10 +207,11 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Kenttä | Tyyppi | Kuvaus 
 > ------ | ------ | ------
 > Myynti_id | int, PK, NOT NULL | Yksilöivä tunniste ja primary key 
-> Asiakas_id | int, FK | Viittaus [Kayttajat](#Kayttaja_id) -tauluun
+> Asiakas | int, FK | Viittaus [Kayttajat](#Kayttaja_id) -tauluun
 > Myyntipaiva | date, NOT NULL | Päivämäärä sekä kellonaika jolloin myynti tapahtui
-> Myyntipiste_id | int, FK, NOT NULL | Viittaus [Myyntipisteet](#Myyntipiste_id) -tauluun
-> Maksutapa_id | int, FK, NOT NULL | Maksutapa, viittaus [Maksutavat](#Maksutavat) -tauluun
+> Myyntipiste | int, FK, NOT NULL | Viittaus [Myyntipisteet](#Myyntipiste_id) -tauluun
+> Maksutapa | int, FK, NOT NULL | Maksutapa, viittaus [Maksutavat](#Maksutavat) -tauluun
+> Liput | list | Lista myynnin lipuista
 >
 > ### _Maksutavat_
 > _Maksutavat_-taulu sisältää tietoa maksutavoista
@@ -227,22 +230,24 @@ Järjestelmäkäyttäjä, jonka kautta tulostetaan ylijääneet liput myytäväk
 > Nimi | varchar(100), NOT NULL | Myyntipisteen nimi
 > Katuosoite | varchar(100), NOT NULL | Myyntipisteen katuosoite
 > Postinumero | int, FK, NOT NULL | Viittaus [Postitoimipaikat](#Postinumero) - tauluun
+> Myynnit | list | Lista myyntipisteen myynneistä
 
 
 ## Tekninen kuvaus
 
-Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-ratkaisut, esim.
+Järjestelmän komponentit:
+- Backend ajetaan CSC Rahti ympäristössä Docker-konttina.
+- Tietokanta sijaitsee samassa CSC Rahti projektissa erillisenä palveluna.
+- Frontend toimii selaimessa ja se on yhteydessä backendiin REST-rajapinnan kautta. 
 
--   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
--   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
--   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-    UML-sekvenssikaavioilla.
--   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
+Käytetyt teknologiat: Spring Boot, Java, PostreSQL, React, Node.js
+Deployment on totetutettu CSCn Rahti-pavelussa. 
 
-Tämän lisäksi
+Rajapinnat: Käytössä on REST-rajapinta. Endpointit ovat kaikki muodossa /api/entieetinNimiMonikossa, esim /api/liput. Mikäli tietoa haetaan tai muokataan id:n perusteella, osoitteen perässä on /id, kuten /api/liput/1. Rajapinta käyttää HTTP-metodeja GET, POST, PUT ja DELETE. 
+
+Turvallisuus on varmistettu HTTP Basic-autentikoinnilla. Rajapinnan metodien käyttöoikeudet on määritelty käyttäjätyyppien mukaan. Sovelluksen käyttäjien salasanat on hash-koodattu. Tietokannan kirjautumistiedoton tallennettu Rahtiin ympäristömuuttujiin, eikä niitä ole kovakoodattu tai julkaistu versionhallinnassa. 
+
+### Tämän lisäksi
 
 -   ohjelmakoodin tulee olla kommentoitua
 -   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
@@ -252,32 +257,43 @@ Tämän lisäksi
 
 ## Testaus
 
-Tässä kohdin selvitetään, miten ohjelmiston oikea toiminta varmistetaan
-testaamalla projektin aikana: millaisia testauksia tehdään ja missä vaiheessa.
-Testauksen tarkemmat sisällöt ja testisuoritusten tulosten raportit kirjataan
-erillisiin dokumentteihin.
+Järjestelmää testataan yksikkötesteillä, integraatiotesteillä ja end-to-end testeillä.
+Yksikkötesteillä testataan entieettejä ja niiden metodeja ja repositoryja. Integraatiotesteillä testataan sovelluksen ja tietokannan välistä toimintaa: controlleireita ja repositorioita. Yksikkö- ja integraatiotesteissä käytetään ajonaikaista testitietokantaa.
 
-Tänne kirjataan myös lopuksi järjestelmän tunnetut ongelmat, joita ei ole korjattu.
+Tarkemmat testikuvaukset löytyvät erillisestä dokumentista: [testausdokumentaatio](testausdokumentaatio.pdf)
+
+### Korjausta vaativat ongelmat
+
+Ei taida olla?
 
 ## Asennustiedot
 
-Järjestelmän asennus on syytä dokumentoida kahdesta näkökulmasta:
+### järjestelmän kehitysympäristö: 
+Järjestelmän kehitysympäristön rakentaminen toiseen koneeseen:
 
--   järjestelmän kehitysympäristö: miten järjestelmän kehitysympäristön saisi
-    rakennettua johonkin toiseen koneeseen
+Vaatimukset:
+- Java
+- Node.js
+- PostgreSQL
+- Ohjelmointiympäristö, esim VS Code
 
--   järjestelmän asentaminen tuotantoympäristöön: miten järjestelmän saisi
-    asennettua johonkin uuteen ympäristöön.
+Projekti löytyy githubista ja se kloonataan paikalliseen tiedostoon.
+Frontendia varten tulee siirtyä client hakemistoon ja siellä suorittaa npm install -komento, jolla ajetaan tarvittavat asennukset. Clientin kehitysympäristön saa käyntiin npm run dev -komennolla. Kehitysympäristö on yhteydessä CSC Rahti-palvelussa määriteltyyn tietokantaan, käytössä on PostgreSQL. 
 
-Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
-käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
-käyttäjätunnus, salasana, tietokannan luonti yms.).
+
+### järjestelmän asentaminen uuteen tuotantoympäristöön:
+
+Kloonaa Repository ja suorita asennukset clientia varten samoin, kuin kehitysympäristössä.
+Järjestelmä on suunniteltu julkaistavaksi CSC Rahti -palevelussa. Ottaaksesi uuden tuotantoympäristön käyttöön:
+- luo uusi projekti my.csc.fi -sivulla ja linkitä siihen tämä repository
+- luo projekti rahti.csc.fi -sivulla ja yhdistä se CSC projektiin
+- lisää projektille PostgreSQL tietokanta ja ympäristömuuttujiin URL, dbname, username, password, profiles_active 
+
 
 ## Käynnistys- ja käyttöohje
 
-Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
-mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
-käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
-
-Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
-järjestelmän pariin !
+Käynnistykseen tarvittava URL: https://ticket-guru-2-ticketguru4ever2.2.rahtiapp.fi/login
+Tunnukset ylläpitäjänä kirjautumiseen:
+Käyttäjätunnus: yllapitaja
+Salasana:
+"
