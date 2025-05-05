@@ -99,7 +99,7 @@ export default function LuoTapahtumaComponent() {
         const fetchTapahtumapaikat = async () => {
 
             try {
-                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
+                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat/api/tapahtumapaikat`, {
                     headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
                 });
                 const data = await response.json();

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import projekti.demo.model.Tapahtumapaikka;
 import projekti.demo.model.TapahtumapaikkaRepository;
+import projekti.demo.model.PostitoimipaikkaRepository;
+import projekti.demo.model.Postitoimipaikka;
 
 import java.util.Optional;
 
@@ -16,6 +18,9 @@ public class TapahtumapaikkaRestController {
 
     @Autowired
     private TapahtumapaikkaRepository repository;
+
+    @Autowired
+    private PostitoimipaikkaRepository prepository;
 
     @GetMapping(value = { "/api/tapahtumapaikat", "/api/tapahtumapaikat/" })
     public Iterable<Tapahtumapaikka> getAll() {
@@ -36,7 +41,13 @@ public class TapahtumapaikkaRestController {
         if (repository.existsById(uusiTapahtumapaikka.getTapahtumapaikka_id())) {
             return ResponseEntity.badRequest().build();
         }
+        Optional<Postitoimipaikka> postipaikka = prepository.findById(uusiTapahtumapaikka.getPostinumero().getPostinumero());
+        if (postipaikka.isPresent()) {
 
+        } else {
+            Postitoimipaikka postitoimipaikka = uusiTapahtumapaikka.getPostinumero();
+            prepository.save(postitoimipaikka);
+        }
         return ResponseEntity.ok(repository.save(uusiTapahtumapaikka));
     }
 

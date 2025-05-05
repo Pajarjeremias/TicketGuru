@@ -77,14 +77,7 @@ export default function MuokkaaTapahtumaaComponent() {
                     })
                 });
                 if (response.ok) {
-                    //const data = await response.json();
-                    //setMessage("Tapahtuma päivitetty tietokantaan onnistuneesti");
                     fetchTapahtumat();
-                    {/*        
-        const updatedKaikkiTapahtumat = [...kaikkiTapahtumat];
-        updatedKaikkiTapahtumat[index] = updatedTapahtuma; 
-        setKaikkiTapahtumat(updatedKaikkiTapahtumat);
-                    */}
                 }
 
             } catch (error) {

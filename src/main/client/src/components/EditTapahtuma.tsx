@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type EditTapahtumaProps = {
     tapahtuma: any;
