@@ -3,7 +3,6 @@ import TarkastaLippuComponent from "./TarkastaLippuComponent";
 import MyyLippuComponentUusi from "./MyyLippuComponentUusi";
 import MyyntiraportitComponent from "./MyyntiraportitComponent";
 import TapahtumatComponent from "./TapahtumatComponent";
-import TapahtumaLipputyyppiComponent from "./TapahtumanLipputyyppiComponent";
 import TapahtumanLipputyyppiComponentUusi from "./TapahtumanLipputyyppiComponentUusi";
 import LipputyyppienHallintaComponent from "./LipputyyppienHallintaComponent";
 

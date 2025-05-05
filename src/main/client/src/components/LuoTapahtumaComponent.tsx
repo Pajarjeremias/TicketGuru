@@ -25,7 +25,7 @@ export type TTapahtumapaikka = {
     tapahtuma_id: number,
 }
 
-const base_url = 'http://localhost:8080/api';
+//const base_url = 'http://localhost:8080/api';
 
 export default function LuoTapahtumaComponent() {
     const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("");

@@ -9,8 +9,6 @@ export type TLipputyyppi = {
     hinta: number
 };
 
-
-
 export type Tapahtuma = {
     tapahtuma_id: any;
     nimi: string;
@@ -21,17 +19,10 @@ export type Tapahtuma = {
 
 export default function TapahtumanLipputyyppiComponentUusi() {
     const [lipputyypit, setLipputyypit] = useState<any[]>([]);
-    const [tapahtumanlipputyypit, setTapahtumanlipputyypit] = useState<TLipputyyppi[]>([]);
-    const [uusiLipputyyppi, setUusiLipputyyppi] = useState<string>("");
     const [lipputyyppiHinta, setLipputyyppiHinta] = useState<number>(0);
     const [tapahtumat, setTapahtumat] = useState<Tapahtuma[]>([]);
     const [valittuTapahtuma, setValittuTapahtuma] = useState<number | null>(null);
     const [valittuLipputyyppi, setValittuLipputyyppi] = useState<number | null>(null);
-    const [muokattuLipputyypinId, setMuokattuLipputyypinId] = useState<number | null>(null);
-    const [muokattuLipputyypinNimi, setMuokattuLipputyypinNimi] = useState<string>("");
-    const [muokattuHinta, setMuokattuHinta] = useState<number>(0);
-    const [muokkausViesti, setMuokkausViesti] = useState<string | null>(null);
-    const [muokkausVirheViesti, setMuokkausVirheViesti] = useState<string | null>(null);
     const [luontiViesti, setLuontiViesti] = useState<string | null>(null);
     const [luontiVirheViesti, setLuontiVirheViesti] = useState<string | null>(null);
 
@@ -110,7 +101,7 @@ export default function TapahtumanLipputyyppiComponentUusi() {
 
         try {
             await createTapahtumanLipputyyppi(valittuTapahtuma, valittuLipputyyppi!, lipputyyppiHinta);
-            setUusiLipputyyppi("");
+            setValittuLipputyyppi(null);
             setLipputyyppiHinta(0);
             fetchLipputyypit();
         } catch (err: any) {
