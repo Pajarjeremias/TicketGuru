@@ -53,17 +53,16 @@ export default function LuoTapahtumaPaikkaComponent() {
                         postinumero: postinumero,
                         kaupunki : kaupunki,
                         maa : maa,
-                        
-                        lippumaara: lippuMaara,
+                        maksimi_osallistujat : maxOsallistujat,
                     })
                 })
                 if (!response.ok) {
-                    throw new Error("Failed to create tapahtuma");
+                    throw new Error("Failed to create tapahtumapaikka");
                 }
                 const data = await response.json();
                 setUusiTapahtuma(data);
                 if (uusiTapahtuma !== null) {
-                    setMessage('Tapahtuma luotu tietokantaan onnistuneesti');
+                    setMessage('Tapahtumapaikka luotu tietokantaan onnistuneesti');
                 }
 
             } catch (error) {
