@@ -27,12 +27,6 @@ export default function LuoTapahtumaPaikkaComponent() {
     const [kaupunki, setKaupunki] = useState<string>("");
     const [maa, setMaa] = useState<string>("");
     const [maxOsallistujat, setMaxOsallistujat] = useState("0");
-    const [tapahtuma, setTapahtuma] = useState("0");
-    const [postitoimipaikka, setPostitoimipaikka] = useState<Ptoimipaikka[]>([]);
-    const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("");
-    const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("");
-    const [paivaMaara, setPaivaMaara] = useState<string>(new Date().toISOString().slice(0, 16));;
-    const [lippuMaara, setLippuMaara] = useState("0");
     const [message, setMessage] = useState("");
     const [uusiTapahtuma, setUusiTapahtuma] = useState<Tapahtuma | null>(null);
     const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
