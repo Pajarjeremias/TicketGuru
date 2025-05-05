@@ -62,7 +62,7 @@ export default function LuoTapahtumaPaikkaComponent() {
         console.log('JSONINA lähetetaan paikkatiedot: ',jsonrivi);
         // Luodaan tapahtumapaikka
         try {
-            const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat/api/tapahtumapaikat`, {
+            const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

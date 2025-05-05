@@ -3,24 +3,9 @@ import { config as scrummeriConfig } from "../config/scrummerit";
 import EditTapahtuma from "./EditTapahtuma";
 
 export default function MuokkaaTapahtumaaComponent() {
-    //const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("null");
-    //const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("null");
-    //const [paivaMaara, setPaivaMaara] = useState<string>(new Date().toISOString().slice(0, 16));
-    //const [lippuMaara, setLippuMaara] = useState("0");
-    //const [message, setMessage] = useState("");
     const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
-    //const [uusiTapahtuma, setUusiTapahtuma] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true); // Loading state
-    //const [valittuTapahtumaId, setValittuTapahtumaId] = useState("-1");
-    //const [liput, setLiput] = useState<any[]>([]);
     const [selectedTapahtuma, setSelectedTapahtuma] = useState<any>();
-
-    /*
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPaivaMaara(e.target.value); // Päivittää valitulla arovolla
-    };
-    */
-
 
     useEffect(() => {
         fetchTapahtumat();

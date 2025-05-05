@@ -41,7 +41,23 @@ export default function LuoTapahtumaComponent() {
     };
 
         const createTapahtuma = async () => {
-            // Luodaan tapahtuma ja otetaan talteen tapahtumaiId
+            // Luodaan tapahtuma mutta tarkastetaan ensin, että jos tapahtumapaikka on valittu, lisätään se
+            let jsondata = JSON.stringify({
+                nimi: tapahtumanNimi,
+                paivamaara: paivaMaara,
+                kuvaus: tapahtumanKuvaus,
+                lippumaara: lippuMaara,
+            });
+            if (!valittuTapahtumapaikka===null){
+                    jsondata = JSON.stringify({
+                    nimi: tapahtumanNimi,
+                    paivamaara: paivaMaara,
+                    kuvaus: tapahtumanKuvaus,
+                    lippumaara: lippuMaara,
+                    tapahtumapaikka_id : valittuTapahtumapaikka,
+        });
+            }
+
             try {
                 const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
                     method: 'POST',
@@ -49,13 +65,7 @@ export default function LuoTapahtumaComponent() {
                         'Content-Type': 'application/json',
                         'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
                     },
-                    body: JSON.stringify({
-                        nimi: tapahtumanNimi,
-                        paivamaara: paivaMaara,
-                        kuvaus: tapahtumanKuvaus,
-                        lippumaara: lippuMaara,
-   //                     tapahtumapaikka_id : valittuTapahtumapaikka,
-                    })
+                    body: jsondata
                 })
                 if (!response.ok) {
                     throw new Error("Failed to create tapahtuma");
@@ -99,7 +109,7 @@ export default function LuoTapahtumaComponent() {
         const fetchTapahtumapaikat = async () => {
 
             try {
-                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat/api/tapahtumapaikat`, {
+                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
                     headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
                 });
                 const data = await response.json();
