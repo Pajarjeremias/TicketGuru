@@ -143,6 +143,7 @@ export default function TapahtumaLipputyyppiComponent() {
             setMuokattuLipputyypinNimi(selected.lipputyyppi);
         }
     };
+    /*
     const updateTapahtumanLipputyyppiHinta = async (lipputyyppiId: number, hinta: number) => {
     const response = await fetch(
         `${scrummeriConfig.apiBaseUrl}/tapahtumanlipputyypit/${lipputyyppiId}`,
@@ -155,11 +156,12 @@ export default function TapahtumaLipputyyppiComponent() {
             body: JSON.stringify({ hinta }),
         }
     );
+    
 
     if (!response.ok) {
         throw new Error('Hinnan päivittäminen epäonnistui');
     }
-};
+};*/
 
 
     const handleUpdateLipputyyppi = async () => {
@@ -191,7 +193,7 @@ export default function TapahtumaLipputyyppiComponent() {
     };
 
     return (
-        <div className="container">
+        <div className="container my-4">
             <div className="tabs">
                 <ul className="nav nav-tabs" role="tablist">
                     <li className="nav-item">
@@ -202,7 +204,7 @@ export default function TapahtumaLipputyyppiComponent() {
                     </li>
                 </ul>
                 <div className="tab-content">
-                    <div className="tab-pane fade show active" id="luonti" role="tabpanel" aria-labelledby="luonti-tab">
+                    <div className="tab-pane fade show active my-4" id="luonti" role="tabpanel" aria-labelledby="luonti-tab">
                         <h2>Lipputyypin luonti</h2>
                         <div className="mb-3">
                             <label className="form-label">Valitse tapahtuma</label>
