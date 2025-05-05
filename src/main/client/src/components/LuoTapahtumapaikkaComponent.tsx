@@ -14,6 +14,17 @@ export type Tapahtuma = {
     lippumaara: string;
 };
 
+export type TTapahtumapaikka = {
+    tapahtumapaikka_id : number;
+    nimi: string;
+    katuosoite: string;
+    postinumero: string;
+    kaupunki : string;
+    maa : string;
+    maksimi_osallistujat : number,
+    tapahtuma_id : number,
+}
+
 export type Ptoimipaikka = {
     postinumero : string;
     postitoimipaikka : string;
@@ -27,19 +38,17 @@ export default function LuoTapahtumaPaikkaComponent() {
     const [kaupunki, setKaupunki] = useState<string>("");
     const [maa, setMaa] = useState<string>("");
     const [maxOsallistujat, setMaxOsallistujat] = useState("0");
-    const [tapahtuma, setTapahtuma] = useState("0");
-    const [postitoimipaikka, setPostitoimipaikka] = useState<Ptoimipaikka[]>([]);
-    const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("");
-    const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("");
-    const [paivaMaara, setPaivaMaara] = useState<string>(new Date().toISOString().slice(0, 16));;
-    const [lippuMaara, setLippuMaara] = useState("0");
     const [message, setMessage] = useState("");
-    const [uusiTapahtuma, setUusiTapahtuma] = useState<Tapahtuma | null>(null);
-    const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
+    const [uusiTapahtumaPaikka, setUusiTapahtumaPaikka] = useState<TTapahtumapaikka | null>(null);
+    const [valittuTapahtuma, setValittuTapahtuma] = useState<number | null>(null);
+      const [tapahtumat, setTapahtumat] = useState<Tapahtuma[]>([]);
+    const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true); // Loading state
+ //   const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
 
 
         const createTapahtumapaikka = async () => {
-            // Luodaan tapahtuma ja otetaan talteen tapahtumaiId
+            // Luodaan tapahtumapaikka
             try {
                 const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
                     method: 'POST',
@@ -60,8 +69,8 @@ export default function LuoTapahtumaPaikkaComponent() {
                     throw new Error("Failed to create tapahtumapaikka");
                 }
                 const data = await response.json();
-                setUusiTapahtuma(data);
-                if (uusiTapahtuma !== null) {
+                setUusiTapahtumaPaikka(data);
+                if (uusiTapahtumaPaikka !== null) {
                     setMessage('Tapahtumapaikka luotu tietokantaan onnistuneesti');
                 }
 
@@ -72,32 +81,21 @@ export default function LuoTapahtumaPaikkaComponent() {
             }
         };
 
-        const fetchLipputyypit = async () => {
-            console.log("LIPPUTYYPIT OSOITTEESTA:",`${scrummeriConfig.apiBaseUrl}/lipputyypit`);
+    
+        const fetchTapahtumat = async () => {
             try {
-                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/lipputyypit`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`,
-                    }
-                })
-                if (!response.ok) {
-                    window.alert("Lipputyyppien haku epäonnistui");
-                    throw new Error("Failed to fetch lipputyypit");
-                }
+                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
+                    headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
+                });
                 const data = await response.json();
-                setLipputyypit(data._embedded.lipputyypit || []);
-                if (lipputyypit != null) {
-                    console.log('haettiin lipputyypit', lipputyypit);
-                }
+                setTapahtumat(data);
             } catch (e) {
-                console.error(e)
+                console.error(e);
             }
-        }
+        };
 
         useEffect(() => {
-            fetchLipputyypit();
-            console.log("Lipputyypit:",lipputyypit);
+            fetchTapahtumat();
         }, []);
 
         return (
@@ -105,6 +103,19 @@ export default function LuoTapahtumaPaikkaComponent() {
                 <div className="row my-4">
                     <h2>Luo tapahtumapaikka</h2>
                     <div className="col-12">
+                    <label className="form-label">Valitse tapahtuma</label>
+                            <select
+                                className="form-select"
+                                value={valittuTapahtuma || ""}
+                                onChange={(e) => setValittuTapahtuma(Number(e.target.value))}>
+                                <option value="">Valitse tapahtuma</option>
+                                {tapahtumat.map(tapahtuma => (
+                                    <option key={tapahtuma.tapahtuma_id} value={tapahtuma.tapahtuma_id}>
+                                        {tapahtuma.nimi}
+                                    </option>
+                                ))}
+                            </select>
+
 
                         {/* Input tapahtumapaikan Nimi */}
                         <label htmlFor="maara-input" className="form-label">Tapahtumapaikan nimi</label>
@@ -139,17 +150,17 @@ export default function LuoTapahtumaPaikkaComponent() {
                         <input
                             value={kaupunki}
                             onChange={e => setKaupunki(e.target.value)}
-                            placeholder="Postinumero"
+                            placeholder="Kaupunki"
                             className="form-control mb-2"
                         />
 
                         
-                        {/* Input postinumero */}
+                        {/* Input Maa */}
                         <label htmlFor="maara-input" className="form-label">Maa</label>
                         <input
                             value={maa}
                             onChange={e => setMaa(e.target.value)}
-                            placeholder="Postinumero"
+                            placeholder="Maa"
                             className="form-control mb-2"
                         />
 
@@ -180,31 +191,35 @@ export default function LuoTapahtumaPaikkaComponent() {
                     </div>
                 </div>
 
-                {uusiTapahtuma && (
+                {uusiTapahtumaPaikka && (
                     <div className="row my-4">
                         <div className="col-12">
                             <h3>Uuden tapahtuman tiedot</h3>
                             <table className="table mb-4">
                                 <tbody>
                                     <tr>
-                                        <th scope="row">Tapahtuman ID</th>
-                                        <td>{uusiTapahtuma.tapahtuma_id}</td>
+                                        <th scope="row">Tapahtumapaikan ID</th>
+                                        <td>{uusiTapahtumaPaikka.tapahtumapaikka_id}</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Nimi</th>
-                                        <td>{uusiTapahtuma.nimi}</td>
+                                        <td>{uusiTapahtumaPaikka.nimi}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Päivämäärä</th>
-                                        <td>{uusiTapahtuma.paivamaara}</td>
+                                        <th scope="row">Katuosoite</th>
+                                        <td>{uusiTapahtumaPaikka.katuosoite}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Kuvaus</th>
-                                        <td>{uusiTapahtuma.kuvaus}</td>
+                                        <th scope="row">Postinumero</th>
+                                        <td>{uusiTapahtumaPaikka.postinumero}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Lippujen määrä</th>
-                                        <td>{uusiTapahtuma.lippumaara}</td>
+                                        <th scope="row">Maa</th>
+                                        <td>{uusiTapahtumaPaikka.maa}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Maksimi osallistujat</th>
+                                        <td>{uusiTapahtumaPaikka.maksimi_osallistujat}</td>
                                     </tr>
                                 </tbody>
                             </table>
