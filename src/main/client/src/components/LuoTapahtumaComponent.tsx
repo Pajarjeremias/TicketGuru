@@ -14,6 +14,17 @@ export type Tapahtuma = {
     lippumaara: string;
 };
 
+export type TTapahtumapaikka = {
+    tapahtumapaikka_id: number;
+    nimi: string;
+    katuosoite: string;
+    postinumero: string;
+    kaupunki: string;
+    maa: string;
+    maksimi_osallistujat: number,
+    tapahtuma_id: number,
+}
+
 export default function LuoTapahtumaComponent() {
     const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("");
     const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("");
@@ -22,6 +33,8 @@ export default function LuoTapahtumaComponent() {
     const [message, setMessage] = useState("");
     const [uusiTapahtuma, setUusiTapahtuma] = useState<Tapahtuma | null>(null);
     const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
+    const [valittuTapahtumapaikka, setValittuTapahtumapaikka] = useState<number | null>(null);
+    const [tapahtumapaikat, setTapahtumapaikat] = useState<TTapahtumapaikka[]>([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPaivaMaara(e.target.value); // Päivittää valitulla arovolla
@@ -41,6 +54,7 @@ export default function LuoTapahtumaComponent() {
                         paivamaara: paivaMaara,
                         kuvaus: tapahtumanKuvaus,
                         lippumaara: lippuMaara,
+   //                     tapahtumapaikka_id : valittuTapahtumapaikka,
                     })
                 })
                 if (!response.ok) {
@@ -82,8 +96,41 @@ export default function LuoTapahtumaComponent() {
             }
         }
 
+        const fetchTapahtumapaikat = async () => {
+
+            try {
+                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
+                    headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
+                });
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    setTapahtumapaikat(data);
+                } else if (data._embedded?.tapahtumapaikat) {
+                    setTapahtumapaikat(data._embedded.tapahtumapaikat);
+                } else {
+                    throw new Error("Tapahtumapaikat puuttuvat vastauksesta");
+                }
+
+            } catch (e) {
+                console.error("API epäonnistui, lisätään testidata",e);
+                const TTpaikka: TTapahtumapaikka = {
+                    tapahtumapaikka_id: 1,
+                    nimi: "Monitoimiareena Merirosvo - testidata",
+                    katuosoite: "Areenakatu 2",
+                    postinumero: "02100",
+                    kaupunki: "Espoo",
+                    maa: "Suomi",
+                    maksimi_osallistujat: 50000,
+                    tapahtuma_id: 1,
+                }
+                setTapahtumapaikat([TTpaikka]);
+            }
+        };
+    
+
         useEffect(() => {
             fetchLipputyypit();
+            fetchTapahtumapaikat();
             console.log("Lipputyypit:",lipputyypit);
         }, []);
 
@@ -133,6 +180,19 @@ export default function LuoTapahtumaComponent() {
                             className="form-control"
                             id="maara-input">
                         </input>
+
+                        <label className="form-label">Valitse tapahtumapaikka</label>
+                        <select
+                            className="form-select"
+                            value={valittuTapahtumapaikka || ""}
+                            onChange={(e) => setValittuTapahtumapaikka(Number(e.target.value))}>
+                            <option value="">Valitse tapahtumapaikka</option>
+                            {tapahtumapaikat.map(tapahtumapaikka => (
+                                <option key={tapahtumapaikka.tapahtumapaikka_id} value={tapahtumapaikka.tapahtumapaikka_id}>
+                                    {tapahtumapaikka.nimi}
+                                </option>
+                            ))}
+                        </select>
 
                         <button
                             className="btn btn-primary mt-3"
