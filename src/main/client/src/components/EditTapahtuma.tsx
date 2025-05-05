@@ -1,5 +1,6 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from 'react';
 
 type EditTapahtumaProps = {
     tapahtuma: any;
@@ -8,7 +9,7 @@ type EditTapahtumaProps = {
 };
 
 export default function EditTapahtuma({ tapahtuma, index, onSave }: EditTapahtumaProps) {
-    const [tapahtuma_id, setTapahtumaId] = useState<number>(tapahtuma.tapahtuma_id);
+    const [tapahtuma_id] = useState<number>(tapahtuma.tapahtuma_id);
     const [tapahtumanNimi, setTapahtumanNimi] = useState<string>(tapahtuma.nimi);
     const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>(tapahtuma.kuvaus);
     const [paivaMaara, setPaivaMaara] = useState<string>(tapahtuma.paivamaara);
