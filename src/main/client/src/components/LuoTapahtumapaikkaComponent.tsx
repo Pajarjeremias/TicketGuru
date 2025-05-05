@@ -34,14 +34,11 @@ export type Ptoimipaikka = {
 export default function LuoTapahtumaPaikkaComponent() {
     const [paikanNimi, setPaikanNimi] = useState<string>("");
     const [katuosoite, setKatuosoite] = useState<string>("");
-    const [postinumero, setPostinumero] = useState<string>("");
-    const [kaupunki, setKaupunki] = useState<string>("");
-    const [maa, setMaa] = useState<string>("");
     const [maxOsallistujat, setMaxOsallistujat] = useState<number>(0);
     const [message, setMessage] = useState("");
     const [uusiTapahtumaPaikka, setUusiTapahtumaPaikka] = useState<TTapahtumapaikka | null>(null);
     const [valittuTapahtuma, setValittuTapahtuma] = useState<number | null>(-1);
-    const [tapahtumat, setTapahtumat] = useState<Tapahtuma[]>([]);
+   // const [tapahtumat, setTapahtumat] = useState<Tapahtuma[]>([]);
     //    const [tapahtumaid, setTapahtumaid] = useState("-1");
     //   const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
     //   const [loading, setLoading] = useState<boolean>(true); // Loading state
@@ -54,26 +51,17 @@ export default function LuoTapahtumaPaikkaComponent() {
             jsonrivi = JSON.stringify({
                 nimi: paikanNimi,
                 katuosoite: katuosoite,
-                postinumero: {
-                    postinumero: postinumero,
-                    postitoimipaikka: kaupunki,
-                    maa: maa
-                  },
-                kaupunki: kaupunki,
-                maa: maa,
+  //              postinumero: {
+  //                  postinumero: postinumero,
+  //                  postitoimipaikka: kaupunki,
+  //                  maa: maa
+  //                },
                 maksimi_osallistujat: maxOsallistujat,
             });
         } else  {
              jsonrivi = JSON.stringify({
             nimi: paikanNimi,
             katuosoite: katuosoite,
-            postinumero: {
-                postinumero: postinumero,
-                postitoimipaikka: kaupunki,
-                maa: maa
-              },
-            kaupunki: kaupunki,
-            maa: maa,
             maksimi_osallistujat: maxOsallistujat,
             tapahtuma_id: valittuTapahtuma,
         });
@@ -101,45 +89,15 @@ export default function LuoTapahtumaPaikkaComponent() {
             console.error("Virhe luotaessa tapahtumaa: ", error);
             setMessage('Virhe tapahtuman luonnissa');
         }
+        setValittuTapahtuma(-1);
     };
 
-
-    const fetchTapahtumat = async () => {
-        try {
-            const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
-                headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
-            });
-            const data = await response.json();
-            setTapahtumat(data);
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
-    useEffect(() => {
-        fetchTapahtumat();
-    }, []);
 
     return (
         <>
             <div className="row my-4">
                 <h2>Luo tapahtumapaikka</h2>
                 <div className="col-12">
-                    <div style={{ marginBottom:"8px"}}>
-                        <label className="form-label">Valitse tapahtuma</label>
-                        <select
-                            className="form-select"
-                            value={valittuTapahtuma || ""}
-                            onChange={(e) => setValittuTapahtuma(Number(e.target.value))}>
-                            <option value="">Valitse tapahtuma</option>
-                            {tapahtumat.map(tapahtuma => (
-                                <option key={tapahtuma.tapahtuma_id} value={tapahtuma.tapahtuma_id}>
-                                    {tapahtuma.nimi}
-                                </option>
-                            ))}
-                        </select>
-
-                    </div>
 
                     {/* Input tapahtumapaikan Nimi */}
                     <label htmlFor="maara-input" className="form-label">Tapahtumapaikan nimi</label>
@@ -159,35 +117,6 @@ export default function LuoTapahtumaPaikkaComponent() {
                         className="form-control mb-2"
                     />
 
-                    {/* Input postinumero */}
-                    <label htmlFor="maara-input" className="form-label">Postinumero</label>
-                    <input
-                        value={postinumero}
-                        onChange={e => setPostinumero(e.target.value)}
-                        placeholder="Postinumero"
-                        className="form-control mb-2"
-                    />
-
-
-                    {/* Input kaupunki */}
-                    <label htmlFor="maara-input" className="form-label">Kaupunki</label>
-                    <input
-                        value={kaupunki}
-                        onChange={e => setKaupunki(e.target.value)}
-                        placeholder="Kaupunki"
-                        className="form-control mb-2"
-                    />
-
-
-                    {/* Input Maa */}
-                    <label htmlFor="maara-input" className="form-label">Maa</label>
-                    <input
-                        value={maa}
-                        onChange={e => setMaa(e.target.value)}
-                        placeholder="Maa"
-                        className="form-control mb-2"
-                    />
-
                     {/* Input maksimiosallistujat */}
                     <label htmlFor="maara-input" className="form-label">Maksimi osallistujien määrä.</label>
                     <input
@@ -204,7 +133,7 @@ export default function LuoTapahtumaPaikkaComponent() {
                         className="btn btn-primary mt-3"
                         onClick={createTapahtumapaikka}
                     >
-                        Luo tapahtuma
+                        Luo tapahtumapaikka
                     </button>
 
                     {message &&
@@ -218,7 +147,7 @@ export default function LuoTapahtumaPaikkaComponent() {
             {uusiTapahtumaPaikka && (
                 <div className="row my-4">
                     <div className="col-12">
-                        <h3>Uuden tapahtumapaikann tiedot</h3>
+                        <h3>Uuden tapahtumapaikan tiedot</h3>
                         <table className="table mb-4">
                             <tbody>
                                 <tr>
@@ -232,14 +161,6 @@ export default function LuoTapahtumaPaikkaComponent() {
                                 <tr>
                                     <th scope="row">Katuosoite</th>
                                     <td>{uusiTapahtumaPaikka.katuosoite}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Postinumero</th>
-                                    <td>{uusiTapahtumaPaikka.postinumero}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Maa</th>
-                                    <td>{uusiTapahtumaPaikka.maa}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Maksimi osallistujat</th>
