@@ -115,6 +115,10 @@ public class Tapahtumapaikka {
         return tapahtumapaikka_id;
     }
 
+    public void setTapahtumapaikka_id(long tapahtumapaikka_id) {
+        this.tapahtumapaikka_id = tapahtumapaikka_id;
+    }
+
     @Override
     public String toString() {
         return "Tapahtumapaikat [tapahtumapaikka_id=" + tapahtumapaikka_id + ", nimi=" + nimi + ", katuosoite="

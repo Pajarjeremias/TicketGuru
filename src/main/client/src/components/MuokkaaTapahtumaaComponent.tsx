@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { config as scrummeriConfig } from "../config/scrummerit";
 import EditTapahtuma from "./EditTapahtuma";
-// import DatePicker from "react-datepicker";
 
-export default function LuoTapahtumaComponent() {
+export default function MuokkaaTapahtumaaComponent() {
     //const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("null");
     //const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("null");
     //const [paivaMaara, setPaivaMaara] = useState<string>(new Date().toISOString().slice(0, 16));
@@ -127,7 +125,7 @@ export default function LuoTapahtumaComponent() {
                                     <th>Tapahtumapaikka</th>
                                     <th>Lipputyypit</th>
                                     <th>Lippujen määrä</th>
-                                    <th>URL</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -166,4 +164,3 @@ export default function LuoTapahtumaComponent() {
         </>
     )
 }
-
