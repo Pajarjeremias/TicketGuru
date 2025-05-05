@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type EditTapahtumaProps = {
     tapahtuma: any;
@@ -34,7 +33,7 @@ export default function EditTapahtuma({ tapahtuma, index, onSave }: EditTapahtum
 
     return (
         <>
-            <div style={{ width: '600px', margin: '4px', padding: '15px', border: '2px solid blue' }}>
+            <div style={{ width: '600px', margin: '4px', padding: '15px', border: '1px solid lightgray' }}>
                 <div><h5>Muokkaa valittua tapahtumaa</h5></div>
                 <div className="row my-4">
                     <div className="col-12" >
