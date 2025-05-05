@@ -34,6 +34,7 @@ export default function MuokkaaTapahtumaaComponent() {
         } finally {
             setLoading(false);
         }
+        console.log("HAETUT TAPAHTUMAT:", kaikkiTapahtumat);
     };
 
     const handleEdit = (index: number) => {
@@ -43,9 +44,10 @@ export default function MuokkaaTapahtumaaComponent() {
     };
 
     const handleSave = (updatedTapahtuma: any) => {
-        console.log("MUOKATTU TAPAHTUMA:", updatedTapahtuma);
+        console.log("MUOKATTU TAPAHTUMA:", updatedTapahtuma.tapahtumapaikka_id);
 
         const saveTapahtumat = async () => {
+            console.log(updatedTapahtuma);
             try {
                 const thisId = updatedTapahtuma.id;
                 const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat/${thisId}`, {
@@ -58,7 +60,8 @@ export default function MuokkaaTapahtumaaComponent() {
                         nimi: updatedTapahtuma.nimi,
                         paivamaara: updatedTapahtuma.paivamaara,
                         kuvaus: updatedTapahtuma.kuvaus,
-                        lippumaara: updatedTapahtuma.lippumaara
+                        lippumaara: updatedTapahtuma.lippumaara,
+                        tapahtumapaikka_id: updatedTapahtuma.tapahtumapaikka_id,
                     })
                 });
                 if (response.ok) {
@@ -72,8 +75,10 @@ export default function MuokkaaTapahtumaaComponent() {
             }
         }
 
+        fetchTapahtumat();
         saveTapahtumat();
         setSelectedTapahtuma(null);
+
     };
 
     return (
@@ -113,7 +118,17 @@ export default function MuokkaaTapahtumaaComponent() {
                                         <td>{tapahtuma.nimi}</td>
                                         <td>{tapahtuma.paivamaara}</td>
                                         <td>{tapahtuma.kuvaus}</td>
-                                        <td>{tapahtuma.tapahtumapaikka || "-"}</td>
+                                        <td>
+                                            {tapahtuma.tapahtumapaikka ? (
+                                                <div>
+                                                    {tapahtuma.tapahtumapaikka.nimi}<br />
+                                                    osoite: {tapahtuma.tapahtumapaikka.katuosoite}<br />
+                                                    max liput: {tapahtuma.tapahtumapaikka.maksimi_osallistujat}
+                                                </div>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </td>
                                         <td style={{ minWidth: "22ch", maxWidth: "32ch", overflow: "hidden" }}>
                                             {tapahtuma.tapahtuman_lipputyypit ? (
                                                 tapahtuma.tapahtuman_lipputyypit.map((lipputyyppiObj: any, index: number) => (
