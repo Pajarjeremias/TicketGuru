@@ -25,6 +25,8 @@ export type TTapahtumapaikka = {
     tapahtuma_id: number,
 }
 
+const base_url = 'http://localhost:8080/api';
+
 export default function LuoTapahtumaComponent() {
     const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("");
     const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("");
@@ -59,7 +61,7 @@ export default function LuoTapahtumaComponent() {
             }
 
             try {
-                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
+                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {             
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
