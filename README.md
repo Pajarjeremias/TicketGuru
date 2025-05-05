@@ -80,7 +80,23 @@ Suunnitelma käyttöliittymästä:
 
 Toteutunut käyttöliittymä: 
 
+**Lippujen myynti**
+![alt text](myylippuja.png "Käyttöliittymä")
 
+**Lipun tarkastaminen**
+![alt text](tarkastalippu.png "Käyttöliittymä")
+
+**Tapahtuman hallinta**
+![alt text](tapahtumanhallinta.png "Käyttöliittymä")
+
+**Lipputyyppien hallinta**
+![alt text](lipputyyppienhallinta.png "Käyttöliittymä")
+
+**Tapahtuman lipputyyppien lisääminen**
+![alt text](tapahtlipptyypluonti.png "Käyttöliittymä")
+
+**Myyntiraportit**
+![alt text](myyntiraportteja.png "Käyttöliittymä")
 
 ## Tietokanta
 
