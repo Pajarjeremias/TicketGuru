@@ -11,7 +11,7 @@ export type Tapahtuma = {
     nimi: string;
     paivamaara: string;
     kuvaus: string;
-    lippumaara: string;
+    lippumaara: number;
 };
 
 export type TTapahtumapaikka = {
@@ -25,16 +25,14 @@ export type TTapahtumapaikka = {
     tapahtuma_id: number,
 }
 
-const base_url = 'http://localhost:8080/api';
-
 export default function LuoTapahtumaComponent() {
     const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("");
     const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("");
     const [paivaMaara, setPaivaMaara] = useState<string>(new Date().toISOString().slice(0, 16));;
-    const [lippuMaara, setLippuMaara] = useState("0");
+    const [lippuMaara, setLippuMaara] = useState<number>(0);
     const [message, setMessage] = useState("");
     const [uusiTapahtuma, setUusiTapahtuma] = useState<Tapahtuma | null>(null);
-    const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
+   // const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
     const [valittuTapahtumapaikka, setValittuTapahtumapaikka] = useState<number | null>(null);
     const [tapahtumapaikat, setTapahtumapaikat] = useState<TTapahtumapaikka[]>([]);
 
@@ -44,21 +42,14 @@ export default function LuoTapahtumaComponent() {
 
         const createTapahtuma = async () => {
             // Luodaan tapahtuma mutta tarkastetaan ensin, että jos tapahtumapaikka on valittu, lisätään se
+            const paivaMaaraISO = `${paivaMaara}:00.000+0000`;
+          
             let jsondata = JSON.stringify({
                 nimi: tapahtumanNimi,
-                paivamaara: paivaMaara,
+                paivamaara: paivaMaaraISO,
                 kuvaus: tapahtumanKuvaus,
                 lippumaara: lippuMaara,
             });
-            if (!valittuTapahtumapaikka===null){
-                    jsondata = JSON.stringify({
-                    nimi: tapahtumanNimi,
-                    paivamaara: paivaMaara,
-                    kuvaus: tapahtumanKuvaus,
-                    lippumaara: lippuMaara,
-                    tapahtumapaikka_id : valittuTapahtumapaikka,
-        });
-            }
 
             try {
                 const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {             
@@ -73,40 +64,15 @@ export default function LuoTapahtumaComponent() {
                     throw new Error("Failed to create tapahtuma");
                 }
                 const data = await response.json();
-                setUusiTapahtuma(data);
-                if (uusiTapahtuma !== null) {
-                    setMessage('Tapahtuma luotu tietokantaan onnistuneesti');
-                }
-
+                setUusiTapahtuma(data);          
+                setMessage('Tapahtuma luotu tietokantaan onnistuneesti');
             } catch (error) {
-                window.alert("uuden tapahtuman luonti epäonnistui");
+                window.alert("uuden tapahtuman luonti epäonnistui. "+error);
                 console.error("Virhe luotaessa tapahtumaa: ", error);
                 setMessage('Virhe tapahtuman luonnissa');
             }
         };
 
-        const fetchLipputyypit = async () => {
-            console.log("LIPPUTYYPIT OSOITTEESTA:",`${scrummeriConfig.apiBaseUrl}/lipputyypit`);
-            try {
-                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/lipputyypit`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`,
-                    }
-                })
-                if (!response.ok) {
-                    window.alert("Lipputyyppien haku epäonnistui");
-                    throw new Error("Failed to fetch lipputyypit");
-                }
-                const data = await response.json();
-                setLipputyypit(data._embedded.lipputyypit || []);
-                if (lipputyypit != null) {
-                    console.log('haettiin lipputyypit', lipputyypit);
-                }
-            } catch (e) {
-                console.error(e)
-            }
-        }
 
         const fetchTapahtumapaikat = async () => {
 
@@ -141,9 +107,7 @@ export default function LuoTapahtumaComponent() {
     
 
         useEffect(() => {
-            fetchLipputyypit();
             fetchTapahtumapaikat();
-            console.log("Lipputyypit:",lipputyypit);
         }, []);
 
         return (
@@ -185,7 +149,7 @@ export default function LuoTapahtumaComponent() {
                         <label htmlFor="maara-input" className="form-label">Myytävien lippujen määrä</label>
                         <input
                             value={lippuMaara}
-                            onChange={e => setLippuMaara(e.target.value)}
+                            onChange={e => setLippuMaara(Number(e.target.value))}
                             min={1}
                             max={500000}
                             type="number"

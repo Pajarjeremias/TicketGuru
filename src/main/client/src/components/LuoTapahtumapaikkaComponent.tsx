@@ -218,7 +218,7 @@ export default function LuoTapahtumaPaikkaComponent() {
             {uusiTapahtumaPaikka && (
                 <div className="row my-4">
                     <div className="col-12">
-                        <h3>Uuden tapahtuman tiedot</h3>
+                        <h3>Uuden tapahtumapaikann tiedot</h3>
                         <table className="table mb-4">
                             <tbody>
                                 <tr>
