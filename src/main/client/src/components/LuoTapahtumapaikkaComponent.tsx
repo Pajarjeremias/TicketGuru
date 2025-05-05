@@ -37,10 +37,10 @@ export default function LuoTapahtumaPaikkaComponent() {
     const [postinumero, setPostinumero] = useState<string>("");
     const [kaupunki, setKaupunki] = useState<string>("");
     const [maa, setMaa] = useState<string>("");
-    const [maxOsallistujat, setMaxOsallistujat] = useState("0");
+    const [maxOsallistujat, setMaxOsallistujat] = useState<number>(0);
     const [message, setMessage] = useState("");
     const [uusiTapahtumaPaikka, setUusiTapahtumaPaikka] = useState<TTapahtumapaikka | null>(null);
-    const [valittuTapahtuma, setValittuTapahtuma] = useState<number | null>(null);
+    const [valittuTapahtuma, setValittuTapahtuma] = useState<number | null>(-1);
     const [tapahtumat, setTapahtumat] = useState<Tapahtuma[]>([]);
     //    const [tapahtumaid, setTapahtumaid] = useState("-1");
     //   const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
@@ -49,16 +49,35 @@ export default function LuoTapahtumaPaikkaComponent() {
 
 
     const createTapahtumapaikka = async () => {
-
-        const jsonrivi = JSON.stringify({
+        let jsonrivi = "--";
+        if (valittuTapahtuma===-1) {
+            jsonrivi = JSON.stringify({
+                nimi: paikanNimi,
+                katuosoite: katuosoite,
+                postinumero: {
+                    postinumero: postinumero,
+                    postitoimipaikka: kaupunki,
+                    maa: maa
+                  },
+                kaupunki: kaupunki,
+                maa: maa,
+                maksimi_osallistujat: maxOsallistujat,
+            });
+        } else  {
+             jsonrivi = JSON.stringify({
             nimi: paikanNimi,
             katuosoite: katuosoite,
-            postinumero: postinumero,
+            postinumero: {
+                postinumero: postinumero,
+                postitoimipaikka: kaupunki,
+                maa: maa
+              },
             kaupunki: kaupunki,
             maa: maa,
             maksimi_osallistujat: maxOsallistujat,
             tapahtuma_id: valittuTapahtuma,
         });
+    }
         console.log('JSONINA lähetetaan paikkatiedot: ',jsonrivi);
         // Luodaan tapahtumapaikka
         try {
@@ -68,25 +87,15 @@ export default function LuoTapahtumaPaikkaComponent() {
                     'Content-Type': 'application/json',
                     'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`
                 },
-                body: JSON.stringify({
-                    nimi: paikanNimi,
-                    katuosoite: katuosoite,
-                    postinumero: postinumero,
-                    kaupunki: kaupunki,
-                    maa: maa,
-                    maksimi_osallistujat: maxOsallistujat,
-                    tapahtuma_id: valittuTapahtuma,
-                })
+                body: jsonrivi
             })
             if (!response.ok) {
-                throw new Error("Failed to create tapahtumapaikka");
+                const errorText = await response.text();
+                throw new Error(`Failed to create tapahtumapaikka: ${response.status} -${errorText}`);
             }
             const data = await response.json();
             setUusiTapahtumaPaikka(data);
-            if (uusiTapahtumaPaikka !== null) {
                 setMessage('Tapahtumapaikka luotu tietokantaan onnistuneesti');
-            }
-
         } catch (error) {
             window.alert("uuden tapahtuman luonti epäonnistui");
             console.error("Virhe luotaessa tapahtumaa: ", error);
@@ -183,7 +192,7 @@ export default function LuoTapahtumaPaikkaComponent() {
                     <label htmlFor="maara-input" className="form-label">Maksimi osallistujien määrä.</label>
                     <input
                         value={maxOsallistujat}
-                        onChange={e => setMaxOsallistujat(e.target.value)}
+                        onChange={e => setMaxOsallistujat(Number(e.target.value))}
                         min={1}
                         max={500000}
                         type="number"
