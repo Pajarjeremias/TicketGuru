@@ -17,9 +17,6 @@ export type Tapahtuma = {
 export default function TapahtumaLipputyyppiComponent() {
     const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
     const [uusiLipputyyppi, setUusiLipputyyppi] = useState<string>("");
-    const [lipputyyppiHinta, setLipputyyppiHinta] = useState<number>(0);
-    const [tapahtumat, setTapahtumat] = useState<Tapahtuma[]>([]);
-    const [valittuTapahtuma, setValittuTapahtuma] = useState<number | null>(null);
     const [muokattuLipputyypinId, setMuokattuLipputyypinId] = useState<number | null>(null);
     const [muokattuLipputyypinNimi, setMuokattuLipputyypinNimi] = useState<string>("");
     const [muokattuHinta, setMuokattuHinta] = useState<number>(0);
@@ -30,7 +27,6 @@ export default function TapahtumaLipputyyppiComponent() {
 
     useEffect(() => {
         fetchLipputyypit();
-        fetchTapahtumat();
     }, []);
 
     const fetchLipputyypit = async () => {
@@ -51,17 +47,6 @@ export default function TapahtumaLipputyyppiComponent() {
         }
     };
 
-    const fetchTapahtumat = async () => {
-        try {
-            const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {
-                headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
-            });
-            const data = await response.json();
-            setTapahtumat(data);
-        } catch (e) {
-            console.error(e);
-        }
-    };
 
     const createLipputyyppi = async (nimi: string) => {
         const response = await fetch(`${scrummeriConfig.apiBaseUrl}/lipputyypit`, {
@@ -81,30 +66,6 @@ export default function TapahtumaLipputyyppiComponent() {
         return await response.json();
     };
 
-    const createTapahtumanLipputyyppi = async (tapahtumaId: number, lipputyyppiId: number, hinta: number) => {
-        const response = await fetch(
-            `${scrummeriConfig.apiBaseUrl}/tapahtumanlipputyypit`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Basic ${btoa('yllapitaja:yllapitaja')}`,
-                },
-                body: JSON.stringify({
-                tapahtuma_id: tapahtumaId,
-                lipputyyppi_id: lipputyyppiId,
-                hinta: hinta,
-                }),
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error('Tapahtuman lipputyypin liittäminen epäonnistui');
-        }
-
-        return await response.json();
-    };
-
     const handleLipputyyppiLuonti = async () => {
         setLuontiViesti(null);
         setLuontiVirheViesti(null);
@@ -119,22 +80,10 @@ export default function TapahtumaLipputyyppiComponent() {
             return;
         }
 
-        if (!valittuTapahtuma) {
-            setLuontiVirheViesti("Valitse tapahtuma.");
-            return;
-        }
-
-        if (lipputyyppiHinta <= 0) {
-            setLuontiVirheViesti("Hinnan on oltava suurempi kuin 0.");
-            return;
-        }
-
         try {
             const uusi = await createLipputyyppi(uusiLipputyyppi);
-            await createTapahtumanLipputyyppi(valittuTapahtuma, uusi.lipputyyppi_id, lipputyyppiHinta);
-            setLuontiViesti(`Lipputyyppi "${uusi.lipputyyppi}" lisätty tapahtumaan onnistuneesti.`);
+            setLuontiViesti(`Lipputyyppi "${uusi.lipputyyppi}" lisätty onnistuneesti.`);
             setUusiLipputyyppi("");
-            setLipputyyppiHinta(0);
             fetchLipputyypit();
         } catch (err: any) {
             setLuontiVirheViesti(err.message ?? "Tuntematon virhe lipputyyppin luonnissa.");
@@ -149,25 +98,7 @@ export default function TapahtumaLipputyyppiComponent() {
             setMuokattuLipputyypinNimi(selected.lipputyyppi);
         }
     };
-    /*
-    const updateTapahtumanLipputyyppiHinta = async (lipputyyppiId: number, hinta: number) => {
-    const response = await fetch(
-        `${scrummeriConfig.apiBaseUrl}/tapahtumanlipputyypit/${lipputyyppiId}`,
-        {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Basic ${btoa('yllapitaja:yllapitaja')}`,
-            },
-            body: JSON.stringify({ hinta }),
-        }
-    );
     
-
-    if (!response.ok) {
-        throw new Error('Hinnan päivittäminen epäonnistui');
-    }
-};*/
 
 
     const handleUpdateLipputyyppi = async () => {
@@ -212,20 +143,6 @@ export default function TapahtumaLipputyyppiComponent() {
                 <div className="tab-content">
                     <div className="tab-pane fade show active my-4" id="luonti" role="tabpanel" aria-labelledby="luonti-tab">
                         <h2>Lipputyypin luonti</h2>
-                        <div className="mb-3">
-                            <label className="form-label">Valitse tapahtuma</label>
-                            <select
-                                className="form-select"
-                                value={valittuTapahtuma || ""}
-                                onChange={(e) => setValittuTapahtuma(Number(e.target.value))}>
-                                <option value="">Valitse tapahtuma</option>
-                                {tapahtumat.map(tapahtuma => (
-                                    <option key={tapahtuma.tapahtuma_id} value={tapahtuma.tapahtuma_id}>
-                                        {tapahtuma.nimi}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
 
                         <div className="mb-3">
                             <label className="form-label">Lipputyyppi</label>
@@ -235,16 +152,6 @@ export default function TapahtumaLipputyyppiComponent() {
                                 value={uusiLipputyyppi}
                                 onChange={(e) => setUusiLipputyyppi(e.target.value)}
                                 placeholder="Esim. Aikuinen"/>
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="form-label">Lipputyypin hinta</label>
-                            <input
-                                className="form-control"
-                                type="number"
-                                value={lipputyyppiHinta}
-                                onChange={(e) => setLipputyyppiHinta(Number(e.target.value))}
-                                placeholder="Lipun hinta"/>
                         </div>
 
                         <button className="btn btn-primary" onClick={handleLipputyyppiLuonti}>Luo lipputyyppi</button>

@@ -4,6 +4,8 @@ import MyyLippuComponentUusi from "./MyyLippuComponentUusi";
 import MyyntiraportitComponent from "./MyyntiraportitComponent";
 import TapahtumatComponent from "./TapahtumatComponent";
 import TapahtumaLipputyyppiComponent from "./TapahtumanLipputyyppiComponent";
+import TapahtumanLipputyyppiComponentUusi from "./TapahtumanLipputyyppiComponentUusi";
+import LipputyyppienHallintaComponent from "./LipputyyppienHallintaComponent";
 
 
 export default function MainComponent() {
@@ -30,11 +32,15 @@ export default function MainComponent() {
             <a id="3" className={"nav-link " + (activeTab === 3 ? "active" : "")} onClick={e => switchTab(e)}>Tapahtumat</a>
           </li> 
           <li className="nav-item">
-            <a id="4" className={"nav-link " + (activeTab === 4 ? "active" : "")} onClick={e => switchTab(e)}>Lipputyypit</a>
+            <a id="4" className={"nav-link " + (activeTab === 4 ? "active" : "")} onClick={e => switchTab(e)}>Lipputyyppien hallinta</a>
           </li>
           <li className="nav-item">
-            <a id="5" className={"nav-link " + (activeTab === 5 ? "active" : "")} onClick={e => switchTab(e)}>Myyntiraportit</a>
+            <a id="5" className={"nav-link " + (activeTab === 5 ? "active" : "")} onClick={e => switchTab(e)}>Tapahtumien lipputyypit</a>
           </li>
+          <li className="nav-item">
+            <a id="6" className={"nav-link " + (activeTab === 6 ? "active" : "")} onClick={e => switchTab(e)}>Myyntiraportit</a>
+          </li>
+          
         </ul>
      
         {/***** Tab 1 - Myy lippu *****/}
@@ -54,13 +60,20 @@ export default function MainComponent() {
 
         {/***** Tab 4 - Tapahtuman lipputyypit *****/}
         <div className={"container " + (activeTab === 4 ? "" : "display-none")}>
-          <TapahtumaLipputyyppiComponent />
+          <LipputyyppienHallintaComponent />
+        </div>
+        
+        {/***** Tab 5 - Tapahtuman lipputyypit uusi *****/}
+        <div className={"container " + (activeTab === 5 ? "" : "display-none")}>
+          <TapahtumanLipputyyppiComponentUusi />
         </div>
 
-        {/***** Tab 5 - Myyntiraportit *****/}
-        <div className={"container " + (activeTab === 5 ? "" : "display-none")}>
+        {/***** Tab 6 - Myyntiraportit *****/}
+        <div className={"container " + (activeTab === 6 ? "" : "display-none")}>
           <MyyntiraportitComponent />
         </div>
+
+        
 
       </div>
     </>
