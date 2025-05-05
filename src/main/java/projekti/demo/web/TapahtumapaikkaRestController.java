@@ -23,7 +23,7 @@ public class TapahtumapaikkaRestController {
     }
 
     // hae yksittäinen tapahtumapaikka
-    @GetMapping("/api/tapahtumapaikat/{id}}")
+    @GetMapping("/api/tapahtumapaikat/{id}")
     public ResponseEntity<Tapahtumapaikka> getById(@PathVariable Long id) {
         Optional<Tapahtumapaikka> result = repository.findById(id);
         return result.map(ResponseEntity::ok)
