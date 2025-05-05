@@ -4,22 +4,9 @@ import EditTapahtuma from "./EditTapahtuma";
 // import DatePicker from "react-datepicker";
 
 export default function LuoTapahtumaComponent() {
-    const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("null");
-    const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("null");
-    const [paivaMaara, setPaivaMaara] = useState<string>(new Date().toISOString().slice(0, 16));
-    const [lippuMaara, setLippuMaara] = useState("0");
-    const [message, setMessage] = useState("");
     const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
-    const [uusiTapahtuma, setUusiTapahtuma] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true); // Loading state
-    const [valittuTapahtumaId, setValittuTapahtumaId] = useState("-1");
-    const [liput, setLiput] = useState<any[]>([]);
     const [selectedTapahtuma, setSelectedTapahtuma] = useState<any>();
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPaivaMaara(e.target.value); // Päivittää valitulla arovolla
-    };
-
 
     useEffect(() => {
         fetchTapahtumat();
@@ -56,7 +43,7 @@ export default function LuoTapahtumaComponent() {
         setSelectedTapahtuma({ tapahtuma, index });
     };
 
-    const handleSave = (updatedTapahtuma: any, index: number) => {
+    const handleSave = (updatedTapahtuma: any) => {
         console.log("MUOKATTU TAPAHTUMA:", updatedTapahtuma);
 
         const saveTapahtumat = async () => {
@@ -76,20 +63,11 @@ export default function LuoTapahtumaComponent() {
                     })
                 });
                 if (response.ok) {
-                    const data = await response.json();
-                    setMessage("Tapahtuma päivitetty tietokantaan onnistuneesti");
                     fetchTapahtumat();
-                    {/*        
-        const updatedKaikkiTapahtumat = [...kaikkiTapahtumat];
-        updatedKaikkiTapahtumat[index] = updatedTapahtuma; 
-        setKaikkiTapahtumat(updatedKaikkiTapahtumat);
-                    */}
                 }
-
             } catch (error) {
                 window.alert("Virhe tapahtuman muokkauksen tallennuksessa");
                 console.error("Virhe muokatessa tapahtumaa:", error);
-                setMessage("Virhe tapahtuman muokatessa");
             }
         }
 
@@ -124,7 +102,7 @@ export default function LuoTapahtumaComponent() {
                                     <th>Tapahtumapaikka</th>
                                     <th>Lipputyypit</th>
                                     <th>Lippujen määrä</th>
-                                    <th>URL</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>

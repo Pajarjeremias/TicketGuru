@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { config as scrummeriConfig } from "../config/scrummerit";
-// import DatePicker from "react-datepicker";
 
 export type TLipputyyppi = {
     lipputyyppi_id: Number;
@@ -22,14 +21,11 @@ export default function LuoTapahtumaComponent() {
     const [lippuMaara, setLippuMaara] = useState("0");
     const [message, setMessage] = useState("");
     const [uusiTapahtuma, setUusiTapahtuma] = useState<Tapahtuma | null>(null);
-    const [uusiLipputyyppi, setUusiLipputyyppi] = useState<string>("");
     const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
-    const [lippuhinta, setLippuhinta] = useState("0");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPaivaMaara(e.target.value); // Päivittää valitulla arovolla
     };
-
 
         const createTapahtuma = async () => {
             // Luodaan tapahtuma ja otetaan talteen tapahtumaiId
@@ -86,7 +82,6 @@ export default function LuoTapahtumaComponent() {
             }
         }
 
-
         useEffect(() => {
             fetchLipputyypit();
             console.log("Lipputyypit:",lipputyypit);
@@ -138,41 +133,6 @@ export default function LuoTapahtumaComponent() {
                             className="form-control"
                             id="maara-input">
                         </input>
-
-                        {/* Input lipputyypit ja lipputyypin hinta */}
-                        <label htmlFor="maara-input" className="form-label">Lisää lipputyyppi tapahtumalle (demo, ei tallennu)</label>
-                        <input
-                            value={uusiLipputyyppi}
-                            onChange={e => setUusiLipputyyppi(e.target.value)}
-                            placeholder="Lipun tyyppi (esim. aikuinen)"
-                            className="form-control mb-2"
-                        /> Lipun hinta (demo, ei tallennu)
-                        <input
-                            value={lippuhinta}
-                            onChange={e => setLippuhinta(e.target.value)}
-                            min={1}
-                            max={50000}
-                            type="number"
-                            className="form-control"
-                            id="maara-input">
-                        </input>
-
-                        {/* Dropdown for Existing Lipputyypit */}
-                        <label className="form-label">Valitse lipputyyppi (demo, ei tallennu)</label>
-                        <select
-                            className="form-select mb-2"
-                            value={uusiLipputyyppi}
-                            onChange={(e) => setUusiLipputyyppi(e.target.value)}
-                        >
-                            <option value="">Valitse lipputyyppi</option>
-                            {lipputyypit.map((lipputyyppi) => (
-                                <option key={lipputyyppi.lipputyyppi_id as number} 
-                                        value={lipputyyppi.lipputyyppi as string}>
-                                    {lipputyyppi.lipputyyppi}
-                                </option>
-                            ))}
-                        </select>
-
 
                         <button
                             className="btn btn-primary mt-3"
