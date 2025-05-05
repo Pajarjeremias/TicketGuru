@@ -35,7 +35,7 @@ public class TapahtumanLippuTyypitRestController {
     }
 
     //Luo uusi tapahtuman lipputyyppi
-    @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
+   /*  @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
     @PostMapping("/api/tapahtumanlipputyypit")
     public Tapahtuman_lipputyyppi createTapahtumanLipputyyppi(@RequestParam Long tapahtumaId, @RequestParam Long lipputyyppiId, @RequestParam Float hinta) {
 
@@ -53,7 +53,7 @@ public class TapahtumanLippuTyypitRestController {
         } else {
             throw new RuntimeException("Tapahtumaa tai lipputyyppiä ei löytynyt");
         }
-    }
+    }*/
 
     //Muuta yksittäistä tapahtuman lipputyyppiä
     @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")
@@ -88,6 +88,22 @@ public List<Tapahtuman_lipputyyppi> getByTapahtuma(@PathVariable Long tapahtumaI
         return tapahtumanLipputyyppiRepository.findByTapahtuma(tapahtuma.get());
     } else {
         throw new RuntimeException("Tapahtumaa ei löydy");
+    }
+}
+@PostMapping("/api/tapahtumanlipputyypit")
+public Tapahtuman_lipputyyppi createTapahtumanLipputyyppi(@RequestBody Map<String, Object> request) {
+    Long tapahtumaId = ((Number) request.get("tapahtuma_id")).longValue();
+    Long lipputyyppiId = ((Number) request.get("lipputyyppi_id")).longValue();
+    Float hinta = ((Number) request.get("hinta")).floatValue();
+
+    Optional<Tapahtuma> tapahtuma = tapahtumaRepository.findById(tapahtumaId);
+    Optional<Lipputyyppi> lipputyyppi = lipputyyppiRepository.findById(lipputyyppiId);
+
+    if (tapahtuma.isPresent() && lipputyyppi.isPresent()) {
+        Tapahtuman_lipputyyppi uusi = new Tapahtuman_lipputyyppi(tapahtuma.get(), lipputyyppi.get(), hinta);
+        return tapahtumanLipputyyppiRepository.save(uusi);
+    } else {
+        throw new RuntimeException("Tapahtumaa tai lipputyyppiä ei löytynyt");
     }
 }
 }
