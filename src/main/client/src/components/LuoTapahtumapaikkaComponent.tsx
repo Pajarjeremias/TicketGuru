@@ -42,8 +42,9 @@ export default function LuoTapahtumaPaikkaComponent() {
     const [uusiTapahtumaPaikka, setUusiTapahtumaPaikka] = useState<TTapahtumapaikka | null>(null);
     const [valittuTapahtuma, setValittuTapahtuma] = useState<number | null>(null);
       const [tapahtumat, setTapahtumat] = useState<Tapahtuma[]>([]);
-    const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
-    const [loading, setLoading] = useState<boolean>(true); // Loading state
+ //    const [tapahtumaid, setTapahtumaid] = useState("-1");
+ //   const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
+ //   const [loading, setLoading] = useState<boolean>(true); // Loading state
  //   const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
 
 
@@ -63,6 +64,7 @@ export default function LuoTapahtumaPaikkaComponent() {
                         kaupunki : kaupunki,
                         maa : maa,
                         maksimi_osallistujat : maxOsallistujat,
+                        tapahtuma_id : valittuTapahtuma,
                     })
                 })
                 if (!response.ok) {
