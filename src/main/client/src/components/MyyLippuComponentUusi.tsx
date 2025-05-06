@@ -266,7 +266,7 @@ export default function MyyLippuComponentUusi() {
           <div className="row mb-3 pb-3">
             <div className="col-12 col-sm-6" style={{fontSize: "1em"}}>
               <div className="mb-1">Myynti ID: <b>{myyntiYhteenveto.id}</b></div>
-              <div className="mb-1">Maksettu: <b>{`${format(myyntiYhteenveto.aika, "dd.MM.yyyy")} klo ${format(myyntiYhteenveto.aika, "hh:mm")}`}</b></div>
+              <div className="mb-1">Maksettu: <b>{`${format(myyntiYhteenveto.aika, "dd.MM.yyyy")} klo ${format(myyntiYhteenveto.aika, "H:mm")}`}</b></div>
               <div className="mb-1">Summa: <b>€{myyntiYhteenveto.summa.toFixed(2)}</b></div>
             </div>
 
@@ -366,7 +366,7 @@ export default function MyyLippuComponentUusi() {
                           <h2 className="accordion-header" id={`header-${index}`}>
                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse-${index}`} aria-expanded="true" aria-controls="collapseOne">
                               <b className="col-6">{tapahtuma.nimi}</b>
-                              <span className="ms-auto me-5">{`${format(tapahtuma.aika, "dd.MM.yyyy")} klo ${format(tapahtuma.aika, "hh:mm")}`}</span>
+                              <span className="ms-auto me-5">{`${format(tapahtuma.aika, "dd.MM.yyyy")} klo ${format(tapahtuma.aika, "H:mm")}`}</span>
                             </button>
                           </h2>
                           <div id={`collapse-${index}`} className="accordion-collapse collapse collapse" aria-labelledby={`header-${index}`} data-bs-parent={`#accordion-${index}`}>
