@@ -49,7 +49,6 @@ export default function EditTapahtuma({ tapahtuma, index, onSave }: EditTapahtum
     }
 
     const fetchTapahtumapaikat = async () => {
-
         try {
             const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
                 headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
@@ -57,8 +56,10 @@ export default function EditTapahtuma({ tapahtuma, index, onSave }: EditTapahtum
             const data = await response.json();
             if (Array.isArray(data)) {
                 setTapahtumapaikat(data);
+                console.log("DATA TPAIKAT: ",data);
             } else if (data._embedded?.tapahtumapaikat) {
                 setTapahtumapaikat(data._embedded.tapahtumapaikat);
+                console.log("DATA EMBEDDED TPAIKAT: ", data._embedded.tapahtumapaikat)
             } else {
                 throw new Error("Tapahtumapaikat puuttuvat vastauksesta");
             }

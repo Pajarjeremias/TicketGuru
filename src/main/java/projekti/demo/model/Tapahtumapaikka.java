@@ -71,6 +71,16 @@ public class Tapahtumapaikka {
         this.tapahtuma = tapahtuma;
     }
 
+    public Tapahtumapaikka(
+            @NotEmpty(message = "paikalla täytyy olla nimi") @Size(min = 1, max = 200, message = "Täytyy olla 2-200 merkkiä") String nimi,
+            @Size(max = 30, message = "täytyy mahtua 30 merkkiin") String katuosoite, Postitoimipaikka postinumero,
+            int maksimi_osallistujat) {
+        this.nimi = nimi;
+        this.katuosoite = katuosoite;
+        this.postinumero = postinumero;
+        this.maksimi_osallistujat = maksimi_osallistujat;
+    }
+
     public String getNimi() {
         return nimi;
     }

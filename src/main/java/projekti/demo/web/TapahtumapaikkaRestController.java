@@ -1,8 +1,10 @@
 package projekti.demo.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.slf4j.Logger;
 import jakarta.validation.Valid;
 import projekti.demo.model.Tapahtumapaikka;
@@ -43,25 +45,59 @@ public class TapahtumapaikkaRestController {
 
     // tallenna uusi tapahtumapaikka
     @PostMapping(value = { "/api/tapahtumapaikat", "/api/tapahtumapaikat/" })
-    public ResponseEntity<Tapahtumapaikka> create(@Valid @RequestBody Tapahtumapaikka uusiTapahtumapaikka) {
-        if (uusiTapahtumapaikka.getPostinumero() != null
-                && uusiTapahtumapaikka.getPostinumero().getPostinumero() != null) {
+    public ResponseEntity<Tapahtumapaikka> create(@Valid @RequestBody TapahtumapaikkaDto uusiTapahtumapaikka) {
+        System.out.println(uusiTapahtumapaikka);
+        if (uusiTapahtumapaikka.postinumero != null) {
             Optional<Postitoimipaikka> postipaikka = prepository
-                    .findById(uusiTapahtumapaikka.getPostinumero().getPostinumero());
-            System.out.println("ANNETTU POSTINUMERO: " + uusiTapahtumapaikka.getPostinumero().getPostinumero());
-            System.out.println("ANNETTU POSTINUMERO: " + uusiTapahtumapaikka.getPostinumero().getPostitoimipaikka());
-            System.out.println("ANNETTU POSTINUMERO: " + uusiTapahtumapaikka.getPostinumero().getMaa());
+                    .findById(uusiTapahtumapaikka.postinumero);
+            System.out.println("ANNETTU POSTINUMERO: " + uusiTapahtumapaikka.postinumero);
+            System.out.println("ANNETTU postitoimipaikka: " + uusiTapahtumapaikka.postitoimipaikka);
+            System.out.println("ANNETTU maa: " + uusiTapahtumapaikka.maa);
+
+            Postitoimipaikka postitoimipaikka;
 
             if (postipaikka.isPresent()) {
+                postitoimipaikka = postipaikka.get();
 
             } else {
-                Postitoimipaikka postitoimipaikka = uusiTapahtumapaikka.getPostinumero();
+                postitoimipaikka = new Postitoimipaikka(
+                        uusiTapahtumapaikka.postinumero,
+                        uusiTapahtumapaikka.postitoimipaikka,
+                        uusiTapahtumapaikka.maa);
                 prepository.save(postitoimipaikka);
             }
 
+            Tapahtumapaikka saveTapahtumapaikka = new Tapahtumapaikka(
+                    uusiTapahtumapaikka.getNimi(),
+                    uusiTapahtumapaikka.getKatuosoite(),
+                    postitoimipaikka,
+                    uusiTapahtumapaikka.getMaksimi_osallistujat());
+            return ResponseEntity.ok(repository.save(saveTapahtumapaikka));
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Postinumero puuttuu, tapahtuman luominen epäonnistui");
         }
-        return ResponseEntity.ok(repository.save(uusiTapahtumapaikka));
-      
+        /*
+         * if (uusiTapahtumapaikka.getPostinumero() != null
+         * && uusiTapahtumapaikka.getPostinumero().getPostinumero() != null) {
+         * Optional<Postitoimipaikka> postipaikka = prepository
+         * .findById(uusiTapahtumapaikka.getPostinumero().getPostinumero());
+         * System.out.println("ANNETTU POSTINUMERO: " +
+         * uusiTapahtumapaikka.getPostinumero().getPostinumero());
+         * System.out.println("ANNETTU POSTINUMERO: " +
+         * uusiTapahtumapaikka.getPostinumero().getPostitoimipaikka());
+         * System.out.println("ANNETTU POSTINUMERO: " +
+         * uusiTapahtumapaikka.getPostinumero().getMaa());
+         * 
+         * if (postipaikka.isPresent()) {
+         * 
+         * } else {
+         * Postitoimipaikka postitoimipaikka = uusiTapahtumapaikka.getPostinumero();
+         * prepository.save(postitoimipaikka);
+         * 
+         * }
+         */
+
     }
 
     // muokkaa tapahtumapaikkaa

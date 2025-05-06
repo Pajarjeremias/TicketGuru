@@ -2,13 +2,26 @@ import { useEffect, useState } from "react";
 import { config as scrummeriConfig } from "../config/scrummerit";
 import EditTapahtuma from "./EditTapahtuma";
 
+export type TTapahtumapaikka = {
+    tapahtumapaikka_id: number;
+    nimi: string;
+    katuosoite: string;
+    postinumero: string;
+    kaupunki: string;
+    maa: string;
+    maksimi_osallistujat: number,
+    tapahtuma_id: number,
+}
+
 export default function MuokkaaTapahtumaaComponent() {
     const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true); // Loading state
     const [selectedTapahtuma, setSelectedTapahtuma] = useState<any>();
+    const [tapahtumapaikat, setTapahtumapaikat] = useState<TTapahtumapaikka[]>([]);
 
     useEffect(() => {
         fetchTapahtumat();
+        fetchTapahtumapaikat();
         console.log("TAPAHTUMISTA HAETTIIN NÄMÄ TIEDOT", kaikkiTapahtumat);
     }, []);
 
@@ -21,7 +34,6 @@ export default function MuokkaaTapahtumaaComponent() {
                     "Authorization": `Basic ${btoa("yllapitaja:yllapitaja")}`,
                 },
             });
-
             if (result.ok) {
                 const data = await result.json();
                 setKaikkiTapahtumat(data);
@@ -35,6 +47,41 @@ export default function MuokkaaTapahtumaaComponent() {
             setLoading(false);
         }
         console.log("HAETUT TAPAHTUMAT:", kaikkiTapahtumat);
+    };
+
+
+    const fetchTapahtumapaikat = async () => {
+        try {
+            const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
+                headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
+            });
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                setTapahtumapaikat(data);
+            } else if (data._embedded?.tapahtumapaikat) {
+                setTapahtumapaikat(data._embedded.tapahtumapaikat);
+            } else {
+                throw new Error("Tapahtumapaikat puuttuvat vastauksesta");
+            }
+            console.log("TAPAHTUMAPAIKAT: " + tapahtumapaikat);
+
+        } catch (e) {
+            console.error("API epäonnistui, lisätään testidata", e);
+            const TTpaikka: TTapahtumapaikka = {
+                tapahtumapaikka_id: 1,
+                nimi: "Monitoimiareena Merirosvo - testidata",
+                katuosoite: "Areenakatu 2",
+                postinumero: "02100",
+                kaupunki: "Espoo",
+                maa: "Suomi",
+                maksimi_osallistujat: 50000,
+                tapahtuma_id: 1,
+            }
+            setTapahtumapaikat([TTpaikka]);
+        }
+        useEffect(() => {
+            console.log("TAPAHTUMAPAIKAT päivittyi:", tapahtumapaikat);
+        }, [tapahtumapaikat]);
     };
 
     const handleEdit = (index: number) => {
@@ -76,9 +123,10 @@ export default function MuokkaaTapahtumaaComponent() {
         }
 
         fetchTapahtumat();
+        fetchTapahtumapaikat();
         saveTapahtumat();
         setSelectedTapahtuma(null);
-
+        console.log("TAPAHTUMAT: ", kaikkiTapahtumat);
     };
 
     return (
@@ -112,7 +160,9 @@ export default function MuokkaaTapahtumaaComponent() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {kaikkiTapahtumat.map((tapahtuma, index) => (
+                                {kaikkiTapahtumat.map((tapahtuma, index) => {
+    const paikka = tapahtumapaikat.find(p => p.tapahtumapaikka_id === tapahtuma.tapahtumapaikka?.tapahtumapaikka_id);
+    return(
                                     <tr key={tapahtuma.tapahtuma_id}>
                                         <td>{tapahtuma.tapahtuma_id}</td>
                                         <td>{tapahtuma.nimi}</td>
@@ -122,7 +172,8 @@ export default function MuokkaaTapahtumaaComponent() {
                                             {tapahtuma.tapahtumapaikka ? (
                                                 <div>
                                                     {tapahtuma.tapahtumapaikka.nimi}<br />
-                                                    osoite: {tapahtuma.tapahtumapaikka.katuosoite}<br />
+                                                    {tapahtuma.tapahtumapaikka.katuosoite}<br />
+                                                    {paikka?.kaupunki ?? "Tuntematon kaupunki"}<br />
                                                     max liput: {tapahtuma.tapahtumapaikka.maksimi_osallistujat}
                                                 </div>
                                             ) : (
@@ -143,7 +194,7 @@ export default function MuokkaaTapahtumaaComponent() {
                                         <td>{tapahtuma.lippumaara}</td>
                                         <td className="edit-column"><button className="btn btn-success" onClick={() => handleEdit(index)}>Edit</button></td>
                                     </tr>
-                                ))}
+                                )})}
                             </tbody>
                         </table>
                     ) : (
