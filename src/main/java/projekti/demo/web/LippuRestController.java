@@ -187,22 +187,6 @@ public class LippuRestController {
     }
   }
 
-  /*
-   * //Hae kaikki liput
-   * 
-   * @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')"
-   * )
-   * 
-   * @GetMapping(value = {"/api/liput", "/api/liput/"})
-   * public Iterable<Lippu> getAllLiput(){
-   * try{
-   * return lippuRepository.findAll();
-   * } catch (DataAccessException e) {
-   * throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-   * "Tietokantavirhe: ei voitu hakea lippuja", e);
-   * }
-   * }
-   */
 
   // päivitä lippua enemmillä tiedoilla
   @PreAuthorize("hasAnyAuthority('Yllapitaja', 'Tapahtumavastaava', 'Lipunmyyja')")

@@ -80,7 +80,23 @@ Suunnitelma käyttöliittymästä:
 
 Toteutunut käyttöliittymä: 
 
+**Lippujen myynti**
+![alt text](myylippuja.png "Käyttöliittymä")
 
+**Lipun tarkastaminen**
+![alt text](tarkastalippu.png "Käyttöliittymä")
+
+**Tapahtuman hallinta**
+![alt text](tapahtumanhallinta.png "Käyttöliittymä")
+
+**Lipputyyppien hallinta**
+![alt text](lipputyyppienhallinta.png "Käyttöliittymä")
+
+**Tapahtuman lipputyyppien lisääminen**
+![alt text](tapahtlipptyypluonti.png "Käyttöliittymä")
+
+**Myyntiraportit**
+![alt text](myyntiraportteja.png "Käyttöliittymä")
 
 ## Tietokanta
 
@@ -247,24 +263,13 @@ Rajapinnat: Käytössä on REST-rajapinta. Endpointit ovat kaikki muodossa /api/
 
 Turvallisuus on varmistettu HTTP Basic-autentikoinnilla. Rajapinnan metodien käyttöoikeudet on määritelty käyttäjätyyppien mukaan. Sovelluksen käyttäjien salasanat on hash-koodattu. Tietokannan kirjautumistiedoton tallennettu Rahtiin ympäristömuuttujiin, eikä niitä ole kovakoodattu tai julkaistu versionhallinnassa. 
 
-### Tämän lisäksi
-
--   ohjelmakoodin tulee olla kommentoitua
--   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
-    johdonmukaisia nimeämiskäytäntöjä
--   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
-    vältytään
-
 ## Testaus
 
 Järjestelmää testataan yksikkötesteillä, integraatiotesteillä ja end-to-end testeillä.
-Yksikkötesteillä testataan entieettejä ja niiden metodeja ja repositoryja. Integraatiotesteillä testataan sovelluksen ja tietokannan välistä toimintaa: controlleireita ja repositorioita. Yksikkö- ja integraatiotesteissä käytetään ajonaikaista testitietokantaa.
+Yksikkötesteillä testataan entieettejä ja niiden metodeja ja repositoryja. Integraatiotesteillä testataan sovelluksen ja tietokannan välistä toimintaa: controlleireita ja repositorioita. Yksikkö- ja integraatiotesteissä käytetään ajonaikaista testitietokantaa ja niille on omat testiluokat.
+End-to-End testit tehdään manuaalisesti käyttöliittymän kautta.
 
 Tarkemmat testikuvaukset löytyvät erillisestä dokumentista: [testausdokumentaatio](testausdokumentaatio.pdf)
-
-### Korjausta vaativat ongelmat
-
-Ei taida olla?
 
 ## Asennustiedot
 
@@ -273,6 +278,7 @@ Järjestelmän kehitysympäristön rakentaminen toiseen koneeseen:
 
 Vaatimukset:
 - Java
+- React
 - Node.js
 - PostgreSQL
 - Ohjelmointiympäristö, esim VS Code
@@ -287,7 +293,7 @@ Kloonaa Repository ja suorita asennukset clientia varten samoin, kuin kehitysymp
 Järjestelmä on suunniteltu julkaistavaksi CSC Rahti -palevelussa. Ottaaksesi uuden tuotantoympäristön käyttöön:
 - luo uusi projekti my.csc.fi -sivulla ja linkitä siihen tämä repository
 - luo projekti rahti.csc.fi -sivulla ja yhdistä se CSC projektiin
-- lisää projektille PostgreSQL tietokanta ja ympäristömuuttujiin URL, dbname, username, password, profiles_active 
+- lisää projektille PostgreSQL tietokanta ja ympäristömuuttujiin URL, dbname, username, password, profiles_active. Kirjautumistiedot saa pyydettäessä kehitystiimiltä.
 
 
 ## Käynnistys- ja käyttöohje
@@ -295,5 +301,4 @@ Järjestelmä on suunniteltu julkaistavaksi CSC Rahti -palevelussa. Ottaaksesi u
 Käynnistykseen tarvittava URL: https://ticket-guru-2-ticketguru4ever2.2.rahtiapp.fi/login
 Tunnukset ylläpitäjänä kirjautumiseen:
 Käyttäjätunnus: yllapitaja
-Salasana:
-"
+Salasana: pyydetään kehitystiimiltä

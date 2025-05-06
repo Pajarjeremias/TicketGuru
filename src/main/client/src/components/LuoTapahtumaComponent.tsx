@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { config as scrummeriConfig } from "../config/scrummerit";
 
 export type TLipputyyppi = {
@@ -11,7 +11,7 @@ export type Tapahtuma = {
     nimi: string;
     paivamaara: string;
     kuvaus: string;
-    lippumaara: string;
+    lippumaara: number;
 };
 
 export type TTapahtumapaikka = {
@@ -25,18 +25,14 @@ export type TTapahtumapaikka = {
     tapahtuma_id: number,
 }
 
-//const base_url = 'http://localhost:8080/api';
-
 export default function LuoTapahtumaComponent() {
     const [tapahtumanNimi, setTapahtumanNimi] = useState<string>("");
     const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>("");
     const [paivaMaara, setPaivaMaara] = useState<string>(new Date().toISOString().slice(0, 16));;
-    const [lippuMaara, setLippuMaara] = useState("0");
+    const [lippuMaara, setLippuMaara] = useState<number>(0);
     const [message, setMessage] = useState("");
     const [uusiTapahtuma, setUusiTapahtuma] = useState<Tapahtuma | null>(null);
-    const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
-    const [valittuTapahtumapaikka, setValittuTapahtumapaikka] = useState<number | null>(null);
-    const [tapahtumapaikat, setTapahtumapaikat] = useState<TTapahtumapaikka[]>([]);
+   // const [lipputyypit, setLipputyypit] = useState<TLipputyyppi[]>([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPaivaMaara(e.target.value); // Päivittää valitulla arovolla
@@ -44,21 +40,15 @@ export default function LuoTapahtumaComponent() {
 
         const createTapahtuma = async () => {
             // Luodaan tapahtuma mutta tarkastetaan ensin, että jos tapahtumapaikka on valittu, lisätään se
+          
             let jsondata = JSON.stringify({
                 nimi: tapahtumanNimi,
                 paivamaara: paivaMaara,
                 kuvaus: tapahtumanKuvaus,
                 lippumaara: lippuMaara,
             });
-            if (!valittuTapahtumapaikka===null){
-                    jsondata = JSON.stringify({
-                    nimi: tapahtumanNimi,
-                    paivamaara: paivaMaara,
-                    kuvaus: tapahtumanKuvaus,
-                    lippumaara: lippuMaara,
-                    tapahtumapaikka_id : valittuTapahtumapaikka,
-        });
-            }
+
+            console.log("TAPAHTUMAN JSON DATA: ",jsondata);
 
             try {
                 const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumat`, {             
@@ -73,78 +63,15 @@ export default function LuoTapahtumaComponent() {
                     throw new Error("Failed to create tapahtuma");
                 }
                 const data = await response.json();
-                setUusiTapahtuma(data);
-                if (uusiTapahtuma !== null) {
-                    setMessage('Tapahtuma luotu tietokantaan onnistuneesti');
-                }
-
+                setUusiTapahtuma(data);          
+                setMessage('Tapahtuma luotu tietokantaan onnistuneesti');
             } catch (error) {
-                window.alert("uuden tapahtuman luonti epäonnistui");
+                window.alert("uuden tapahtuman luonti epäonnistui. "+error);
                 console.error("Virhe luotaessa tapahtumaa: ", error);
                 setMessage('Virhe tapahtuman luonnissa');
             }
         };
 
-        const fetchLipputyypit = async () => {
-            console.log("LIPPUTYYPIT OSOITTEESTA:",`${scrummeriConfig.apiBaseUrl}/lipputyypit`);
-            try {
-                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/lipputyypit`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}`,
-                    }
-                })
-                if (!response.ok) {
-                    window.alert("Lipputyyppien haku epäonnistui");
-                    throw new Error("Failed to fetch lipputyypit");
-                }
-                const data = await response.json();
-                setLipputyypit(data._embedded.lipputyypit || []);
-                if (lipputyypit != null) {
-                    console.log('haettiin lipputyypit', lipputyypit);
-                }
-            } catch (e) {
-                console.error(e)
-            }
-        }
-
-        const fetchTapahtumapaikat = async () => {
-
-            try {
-                const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
-                    headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
-                });
-                const data = await response.json();
-                if (Array.isArray(data)) {
-                    setTapahtumapaikat(data);
-                } else if (data._embedded?.tapahtumapaikat) {
-                    setTapahtumapaikat(data._embedded.tapahtumapaikat);
-                } else {
-                    throw new Error("Tapahtumapaikat puuttuvat vastauksesta");
-                }
-
-            } catch (e) {
-                console.error("API epäonnistui, lisätään testidata",e);
-                const TTpaikka: TTapahtumapaikka = {
-                    tapahtumapaikka_id: 1,
-                    nimi: "Monitoimiareena Merirosvo - testidata",
-                    katuosoite: "Areenakatu 2",
-                    postinumero: "02100",
-                    kaupunki: "Espoo",
-                    maa: "Suomi",
-                    maksimi_osallistujat: 50000,
-                    tapahtuma_id: 1,
-                }
-                setTapahtumapaikat([TTpaikka]);
-            }
-        };
-    
-
-        useEffect(() => {
-            fetchLipputyypit();
-            fetchTapahtumapaikat();
-            console.log("Lipputyypit:",lipputyypit);
-        }, []);
 
         return (
             <>
@@ -185,26 +112,13 @@ export default function LuoTapahtumaComponent() {
                         <label htmlFor="maara-input" className="form-label">Myytävien lippujen määrä</label>
                         <input
                             value={lippuMaara}
-                            onChange={e => setLippuMaara(e.target.value)}
+                            onChange={e => setLippuMaara(Number(e.target.value))}
                             min={1}
                             max={500000}
                             type="number"
                             className="form-control"
                             id="maara-input">
                         </input>
-
-                        <label className="form-label">Valitse tapahtumapaikka</label>
-                        <select
-                            className="form-select"
-                            value={valittuTapahtumapaikka || ""}
-                            onChange={(e) => setValittuTapahtumapaikka(Number(e.target.value))}>
-                            <option value="">Valitse tapahtumapaikka</option>
-                            {tapahtumapaikat.map(tapahtumapaikka => (
-                                <option key={tapahtumapaikka.tapahtumapaikka_id} value={tapahtumapaikka.tapahtumapaikka_id}>
-                                    {tapahtumapaikka.nimi}
-                                </option>
-                            ))}
-                        </select>
 
                         <button
                             className="btn btn-primary mt-3"

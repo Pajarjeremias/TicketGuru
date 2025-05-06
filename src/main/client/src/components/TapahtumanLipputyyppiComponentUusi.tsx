@@ -116,15 +116,12 @@ export default function TapahtumanLipputyyppiComponentUusi() {
             <div className="tabs">
                 <ul className="nav nav-tabs" role="tablist">
                     <li className="nav-item">
-                        <a className="nav-link active" id="luonti-tab" data-bs-toggle="tab" href="#luonti" role="tab">Lipputyypin luonti</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" id="muokkaus-tab" data-bs-toggle="tab" href="#muokkaus" role="tab">Lipputyypin muokkaus</a>
+                        <a className="nav-link active" id="luonti-tab" data-bs-toggle="tab" href="#luonti" role="tab">Tapahtuman lipputyypin luonti</a>
                     </li>
                 </ul>
                 <div className="tab-content">
                     <div className="tab-pane fade show active my-4" id="luonti" role="tabpanel" aria-labelledby="luonti-tab">
-                        <h2>Lipputyypin luonti</h2>
+                        <h2>Tapahtuman lipputyypin luonti</h2>
                         <div className="mb-3">
                             <label className="form-label">Valitse tapahtuma</label>
                             <select

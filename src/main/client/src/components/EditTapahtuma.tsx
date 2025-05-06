@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { config as scrummeriConfig } from "../config/scrummerit";
 
 type EditTapahtumaProps = {
     tapahtuma: any;
@@ -6,12 +7,27 @@ type EditTapahtumaProps = {
     onSave: (updatedTapahtuma: any, index: number) => void;
 };
 
+
+export type TTapahtumapaikka = {
+    tapahtumapaikka_id: number;
+    nimi: string;
+    katuosoite: string;
+    postinumero: string;
+    kaupunki: string;
+    maa: string;
+    maksimi_osallistujat: number,
+    tapahtuma_id: number,
+}
+
 export default function EditTapahtuma({ tapahtuma, index, onSave }: EditTapahtumaProps) {
     const [tapahtuma_id] = useState<number>(tapahtuma.tapahtuma_id);
     const [tapahtumanNimi, setTapahtumanNimi] = useState<string>(tapahtuma.nimi);
     const [tapahtumanKuvaus, setTapahtumanKuvaus] = useState<string>(tapahtuma.kuvaus);
     const [paivaMaara, setPaivaMaara] = useState<string>(tapahtuma.paivamaara);
     const [lippuMaara, setLippuMaara] = useState<number>(tapahtuma.lippumaara);
+    const [tapahtumapaikat, setTapahtumapaikat] = useState<TTapahtumapaikka[]>([]);
+    const [valittuTapahtumapaikka, setValittuTapahtumapaikka] = useState<number>(
+        tapahtuma.tapahtumapaikka?.tapahtumapaikka_id || 0 );
     console.log("EDIT TAPAHTUMAAN TULI ", tapahtuma);
 
 
@@ -23,6 +39,7 @@ export default function EditTapahtuma({ tapahtuma, index, onSave }: EditTapahtum
             kuvaus: tapahtumanKuvaus,
             paivamaara: paivaMaara,
             lippumaara: lippuMaara,
+            tapahtumapaikka_id : valittuTapahtumapaikka,
         };
         onSave(updatedTapahtuma, index);
     };
@@ -30,6 +47,43 @@ export default function EditTapahtuma({ tapahtuma, index, onSave }: EditTapahtum
     const handleCancel = () => {
         onSave(tapahtuma, index);
     }
+
+    const fetchTapahtumapaikat = async () => {
+
+        try {
+            const response = await fetch(`${scrummeriConfig.apiBaseUrl}/tapahtumapaikat`, {
+                headers: { 'Authorization': `Basic ${btoa('yllapitaja:yllapitaja')}` }
+            });
+            const data = await response.json();
+            if (Array.isArray(data)) {
+                setTapahtumapaikat(data);
+            } else if (data._embedded?.tapahtumapaikat) {
+                setTapahtumapaikat(data._embedded.tapahtumapaikat);
+            } else {
+                throw new Error("Tapahtumapaikat puuttuvat vastauksesta");
+            }
+            console.log("TAPAHTUMAPAIKAT: "+tapahtumapaikat);
+
+        } catch (e) {
+            console.error("API epäonnistui, lisätään testidata", e);
+            const TTpaikka: TTapahtumapaikka = {
+                tapahtumapaikka_id: 1,
+                nimi: "Monitoimiareena Merirosvo - testidata",
+                katuosoite: "Areenakatu 2",
+                postinumero: "02100",
+                kaupunki: "Espoo",
+                maa: "Suomi",
+                maksimi_osallistujat: 50000,
+                tapahtuma_id: 1,
+            }
+            setTapahtumapaikat([TTpaikka]);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchTapahtumapaikat();
+    }, []);
 
     return (
         <>
@@ -77,8 +131,19 @@ export default function EditTapahtuma({ tapahtuma, index, onSave }: EditTapahtum
                             className="form-control"
                         />
 
-                        {/* Lipputyypit */}
-
+                        {/* tapahtumapaikan valinta */}
+                        <label className="form-label">Valitse tapahtumapaikka</label>
+                        <select
+                            className="form-select"
+                            value={valittuTapahtumapaikka || ""}
+                            onChange={(e) => setValittuTapahtumapaikka(Number(e.target.value))}>
+                            <option value="">Valitse tapahtumapaikka</option>
+                            {tapahtumapaikat.map(tapahtumapaikka => (
+                                <option key={tapahtumapaikka.tapahtumapaikka_id} value={tapahtumapaikka.tapahtumapaikka_id}>
+                                    {tapahtumapaikka.nimi}
+                                </option>
+                            ))}
+                        </select>
 
 
                         <div >

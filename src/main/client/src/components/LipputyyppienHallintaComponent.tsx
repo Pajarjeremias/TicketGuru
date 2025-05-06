@@ -19,7 +19,6 @@ export default function TapahtumaLipputyyppiComponent() {
     const [uusiLipputyyppi, setUusiLipputyyppi] = useState<string>("");
     const [muokattuLipputyypinId, setMuokattuLipputyypinId] = useState<number | null>(null);
     const [muokattuLipputyypinNimi, setMuokattuLipputyypinNimi] = useState<string>("");
-    const [muokattuHinta, setMuokattuHinta] = useState<number>(0);
     const [muokkausViesti, setMuokkausViesti] = useState<string | null>(null);
     const [muokkausVirheViesti, setMuokkausVirheViesti] = useState<string | null>(null);
     const [luontiViesti, setLuontiViesti] = useState<string | null>(null);
@@ -183,15 +182,6 @@ export default function TapahtumaLipputyyppiComponent() {
                                         className="form-control"
                                         value={muokattuLipputyypinNimi}
                                         onChange={(e) => setMuokattuLipputyypinNimi(e.target.value)}/>
-                                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label">Uusi hinta</label>
-                                    <input
-                                        type="number"
-                                        className="form-control"
-                                        value={muokattuHinta}
-                                        onChange={(e) => setMuokattuHinta(Number(e.target.value))}/>
                                 </div>
 
                                 <button className="btn btn-success" onClick={handleUpdateLipputyyppi}>Tallenna muutokset</button>
