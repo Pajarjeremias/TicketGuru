@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { config as scrummeriConfig } from "../config/scrummerit";
 
 export type TLipputyyppi = {
