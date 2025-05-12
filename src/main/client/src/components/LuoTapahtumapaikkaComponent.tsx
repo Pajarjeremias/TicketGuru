@@ -38,6 +38,9 @@ export default function LuoTapahtumaPaikkaComponent() {
     const [message, setMessage] = useState("");
     const [uusiTapahtumaPaikka, setUusiTapahtumaPaikka] = useState<TTapahtumapaikka | null>(null);
     const [valittuTapahtuma, setValittuTapahtuma] = useState<number | null>(-1);
+    const [postinumero, setPostinumero] = useState<string>("");
+    const [kaupunki, setKaupunki] = useState<string>("");
+    const [maa, setMaa] = useState<string>("");
    // const [tapahtumat, setTapahtumat] = useState<Tapahtuma[]>([]);
     //    const [tapahtumaid, setTapahtumaid] = useState("-1");
     //   const [kaikkiTapahtumat, setKaikkiTapahtumat] = useState<any[]>([]);
@@ -51,11 +54,9 @@ export default function LuoTapahtumaPaikkaComponent() {
             jsonrivi = JSON.stringify({
                 nimi: paikanNimi,
                 katuosoite: katuosoite,
-  //              postinumero: {
-  //                  postinumero: postinumero,
-  //                  postitoimipaikka: kaupunki,
-  //                  maa: maa
-  //                },
+                    postinumero: postinumero,
+                    postitoimipaikka: kaupunki,
+                    maa: maa,
                 maksimi_osallistujat: maxOsallistujat,
             });
         } else  {
@@ -117,6 +118,36 @@ export default function LuoTapahtumaPaikkaComponent() {
                         className="form-control mb-2"
                     />
 
+                    
+                    {/* Input paikan postinumero */}
+                    <label htmlFor="maara-input" className="form-label">Postinumero</label>
+                    <input
+                        value={postinumero}
+                        onChange={e => setPostinumero(e.target.value)}
+                        placeholder="Katuosoite"
+                        className="form-control mb-2"
+                    />
+
+                    
+                    {/* Input paikan Kaupunki */}
+                    <label htmlFor="maara-input" className="form-label">Kaupunki</label>
+                    <input
+                        value={kaupunki}
+                        onChange={e => setKaupunki(e.target.value)}
+                        placeholder="Katuosoite"
+                        className="form-control mb-2"
+                    />
+
+                    
+                    {/* Input paikan Maa */}
+                    <label htmlFor="maara-input" className="form-label">Maa</label>
+                    <input
+                        value={maa}
+                        onChange={e => setMaa(e.target.value)}
+                        placeholder="Katuosoite"
+                        className="form-control mb-2"
+                    />
+
                     {/* Input maksimiosallistujat */}
                     <label htmlFor="maara-input" className="form-label">Maksimi osallistujien määrä.</label>
                     <input
@@ -161,6 +192,10 @@ export default function LuoTapahtumaPaikkaComponent() {
                                 <tr>
                                     <th scope="row">Katuosoite</th>
                                     <td>{uusiTapahtumaPaikka.katuosoite}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Kaupunki</th>
+                                    <td>{uusiTapahtumaPaikka.kaupunki}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Maksimi osallistujat</th>
